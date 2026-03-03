@@ -35,6 +35,7 @@ import 'package:vx/utils/geodata.dart';
 import 'package:vx/widgets/circular_progress_indicator.dart';
 import 'package:flutter_common/services/auto_update.dart';
 // import 'package:flutter_sparkle/flutter_sparkle.dart';
+import 'package:flutter_sparkle/flutter_sparkle.dart';
 
 class GeneralSettingPage extends StatelessWidget {
   const GeneralSettingPage({super.key, this.showAppBar = true});
@@ -168,21 +169,21 @@ class GeneralSettingPage extends StatelessWidget {
                   ),
                 ],
               ),
-            // if (isPkg)
-            //   Column(children: [
-            //     Divider(),
-            //     Padding(
-            //         padding: EdgeInsets.only(
-            //             top: 10, bottom: 10, left: 16, right: 16),
-            //         child: TextButton(
-            //           onPressed: () async {
-            //             FlutterSparkle.checkMacUpdate(isProduction()
-            //                 ? 'https://download.5vnetwork.com/appcast.xml'
-            //                 : 'https://pub-f52ca93bef2c463eabe42dfcf7d05b21.r2.dev/appcast.xml');
-            //           },
-            //           child: Text(AppLocalizations.of(context)!.checkUpdate),
-            //         ))
-            //   ])
+            if (isPkg)
+              Column(children: [
+                Divider(),
+                Padding(
+                    padding: EdgeInsets.only(
+                        top: 10, bottom: 10, left: 16, right: 16),
+                    child: TextButton(
+                      onPressed: () async {
+                        FlutterSparkle.checkMacUpdate(isProduction()
+                            ? 'https://download.5vnetwork.com/appcast.xml'
+                            : 'https://pub-f52ca93bef2c463eabe42dfcf7d05b21.r2.dev/appcast.xml');
+                      },
+                      child: Text(AppLocalizations.of(context)!.checkUpdate),
+                    ))
+              ])
           ],
         ),
       ),
