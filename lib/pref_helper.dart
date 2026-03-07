@@ -609,6 +609,99 @@ extension PrefHelperExtension on SharedPreferences {
     setInt('tun46Setting', setting.value);
   }
 
+  bool get rejectIpv6 {
+    return getBool('rejectIpv6') ?? true;
+  }
+
+  void setRejectIpv6(bool enable) {
+    setBool('rejectIpv6', enable);
+  }
+
+  bool get rejectQuic {
+    return getBool('rejectQuic') ?? true;
+  }
+
+  void setRejectQuic(bool enable) {
+    setBool('rejectQuic', enable);
+  }
+
+  /// TUN device IPv4 CIDR (e.g. 172.23.27.1/24). Null or empty = use default.
+  String get tunCidr4 {
+    final v = getString('tunCidr4');
+    return (v == null || v.trim().isEmpty) ? '172.23.27.1/24' : v;
+  }
+
+  void setTunCidr4(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      remove('tunCidr4');
+    } else {
+      setString('tunCidr4', value.trim());
+    }
+  }
+
+  /// TUN device IPv6 CIDR (e.g. fc20::1/120). Null or empty = use default.
+  String get tunCidr6 {
+    final v = getString('tunCidr6');
+    return (v == null || v.trim().isEmpty) ? 'fc20::1/120' : v;
+  }
+
+  void setTunCidr6(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      remove('tunCidr6');
+    } else {
+      setString('tunCidr6', value.trim());
+    }
+  }
+
+  /// TUN device DNS IPv4 servers, comma-separated (e.g. 172.23.27.2). Null or empty = use default.
+  String get tunDns4 {
+    final v = getString('tunDns4');
+    return (v == null || v.trim().isEmpty) ? '172.23.27.2' : v;
+  }
+
+  void setTunDns4(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      remove('tunDns4');
+    } else {
+      setString('tunDns4', value.trim());
+    }
+  }
+
+  /// TUN device DNS IPv6 servers, comma-separated (e.g. fc20::2). Null or empty = use default.
+  String get tunDns6 {
+    final v = getString('tunDns6');
+    return (v == null || v.trim().isEmpty) ? 'fc20::2' : v;
+  }
+
+  void setTunDns6(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      remove('tunDns6');
+    } else {
+      setString('tunDns6', value.trim());
+    }
+  }
+
+  /// TUN device MTU. Null = use platform default.
+  int get tunMtu {
+    final v = getInt('tunMtu');
+    if (v == null || v <= 0) {
+      if (Platform.isMacOS || Platform.isIOS) {
+        return 4064;
+      } else {
+        return 8000;
+      }
+    }
+    return v;
+  }
+
+  void setTunMtu(int? value) {
+    if (value == null || value <= 0) {
+      remove('tunMtu');
+    } else {
+      setInt('tunMtu', value);
+    }
+  }
+
   ThemeMode get themeMode {
     final mode = getInt('themeMode');
     if (mode == null) return ThemeMode.system;

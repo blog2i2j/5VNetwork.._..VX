@@ -13,7 +13,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -65,7 +64,7 @@ class AdvancedScreen extends StatelessWidget {
             const Padding(
               padding:
                   EdgeInsets.only(top: 10, bottom: 10, left: 16, right: 16),
-              child: TunIpv6Settings(),
+              child: TunSetting(),
             ),
             const Divider(),
             const SystemProxySetting(),
@@ -231,6 +230,188 @@ class _FallbackSettingState extends State<FallbackSetting> {
                   )),
         ],
       ),
+    );
+  }
+}
+
+/// Widget for TUN-related settings: tun IPv4/IPv6 (tun46Setting),
+/// reject IPv6, and reject QUIC (all map to [TunConfig] fields).
+class TunSetting extends StatefulWidget {
+  const TunSetting({super.key});
+
+  @override
+  State<TunSetting> createState() => _TunSettingState();
+}
+
+class _TunSettingState extends State<TunSetting> {
+  bool _rejectIpv6 = false;
+  bool _rejectQuic = false;
+  late final TextEditingController _cidr4Controller;
+  late final TextEditingController _cidr6Controller;
+  late final TextEditingController _dns4Controller;
+  late final TextEditingController _dns6Controller;
+  late final TextEditingController _mtuController;
+
+  @override
+  void initState() {
+    super.initState();
+    final pref = context.read<SharedPreferences>();
+    _rejectIpv6 = pref.rejectIpv6;
+    _rejectQuic = pref.rejectQuic;
+    _cidr4Controller = TextEditingController(text: pref.tunCidr4 ?? '');
+    _cidr6Controller = TextEditingController(text: pref.tunCidr6 ?? '');
+    _dns4Controller = TextEditingController(text: pref.tunDns4 ?? '');
+    _dns6Controller = TextEditingController(text: pref.tunDns6 ?? '');
+    _mtuController = TextEditingController(
+        text: pref.tunMtu != null ? '${pref.tunMtu}' : '');
+  }
+
+  @override
+  void dispose() {
+    _cidr4Controller.dispose();
+    _cidr6Controller.dispose();
+    _dns4Controller.dispose();
+    _dns6Controller.dispose();
+    _mtuController.dispose();
+    super.dispose();
+  }
+
+  void _saveCidr4(String value) {
+    context.read<SharedPreferences>().setTunCidr4(value.isEmpty ? null : value);
+    context.read<XController>().restart();
+  }
+
+  void _saveCidr6(String value) {
+    context.read<SharedPreferences>().setTunCidr6(value.isEmpty ? null : value);
+    context.read<XController>().restart();
+  }
+
+  void _saveDns4(String value) {
+    context.read<SharedPreferences>().setTunDns4(value.isEmpty ? null : value);
+    context.read<XController>().restart();
+  }
+
+  void _saveDns6(String value) {
+    context.read<SharedPreferences>().setTunDns6(value.isEmpty ? null : value);
+    context.read<XController>().restart();
+  }
+
+  void _saveMtu(String value) {
+    final v = value.trim();
+    final parsed = v.isEmpty ? null : int.tryParse(v);
+    context
+        .read<SharedPreferences>()
+        .setTunMtu(parsed != null && parsed > 0 ? parsed : null);
+    context.read<XController>().restart();
+  }
+
+  void _toggleRejectIpv6(bool value) {
+    context.read<SharedPreferences>().setRejectIpv6(value);
+    setState(() => _rejectIpv6 = value);
+    context.read<XController>().restart();
+  }
+
+  void _toggleRejectQuic(bool value) {
+    context.read<SharedPreferences>().setRejectQuic(value);
+    setState(() => _rejectQuic = value);
+    context.read<XController>().restart();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const TunIpv6Settings(),
+        const Gap(16),
+        TextField(
+          controller: _cidr4Controller,
+          decoration: InputDecoration(
+            labelText: l10n.tunCidr4,
+            hintText: l10n.tunCidr4Hint,
+            border: const OutlineInputBorder(),
+            isDense: true,
+          ),
+          textInputAction: TextInputAction.next,
+          onSubmitted: _saveCidr4,
+          onEditingComplete: () => _saveCidr4(_cidr4Controller.text),
+        ),
+        const Gap(10),
+        TextField(
+          controller: _cidr6Controller,
+          decoration: InputDecoration(
+            labelText: l10n.tunCidr6,
+            hintText: l10n.tunCidr6Hint,
+            border: const OutlineInputBorder(),
+            isDense: true,
+          ),
+          textInputAction: TextInputAction.next,
+          onSubmitted: _saveCidr6,
+          onEditingComplete: () => _saveCidr6(_cidr6Controller.text),
+        ),
+        const Gap(10),
+        TextField(
+          controller: _dns4Controller,
+          decoration: InputDecoration(
+            labelText: l10n.tunDns4,
+            hintText: l10n.tunDns4Hint,
+            border: const OutlineInputBorder(),
+            isDense: true,
+          ),
+          textInputAction: TextInputAction.next,
+          onSubmitted: _saveDns4,
+          onEditingComplete: () => _saveDns4(_dns4Controller.text),
+        ),
+        const Gap(10),
+        TextField(
+          controller: _dns6Controller,
+          decoration: InputDecoration(
+            labelText: l10n.tunDns6,
+            hintText: l10n.tunDns6Hint,
+            border: const OutlineInputBorder(),
+            isDense: true,
+          ),
+          textInputAction: TextInputAction.next,
+          onSubmitted: _saveDns6,
+          onEditingComplete: () => _saveDns6(_dns6Controller.text),
+        ),
+        const Gap(10),
+        TextField(
+          controller: _mtuController,
+          decoration: InputDecoration(
+            labelText: l10n.tunMtu,
+            hintText: l10n.tunMtuHint,
+            border: const OutlineInputBorder(),
+            isDense: true,
+          ),
+          keyboardType: TextInputType.number,
+          textInputAction: TextInputAction.done,
+          onSubmitted: _saveMtu,
+          onEditingComplete: () => _saveMtu(_mtuController.text),
+        ),
+        const Gap(16),
+        SwitchListTile(
+          title: Text(l10n.tunRejectIpv6,
+              style: Theme.of(context).textTheme.bodyLarge),
+          subtitle: Text(l10n.tunRejectIpv6Desc,
+              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  )),
+          value: _rejectIpv6,
+          onChanged: _toggleRejectIpv6,
+        ),
+        SwitchListTile(
+          title: Text(l10n.tunRejectQuic,
+              style: Theme.of(context).textTheme.bodyLarge),
+          subtitle: Text(l10n.tunRejectQuicDesc,
+              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  )),
+          value: _rejectQuic,
+          onChanged: _toggleRejectQuic,
+        ),
+      ],
     );
   }
 }

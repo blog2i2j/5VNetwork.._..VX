@@ -520,6 +520,18 @@
   "alwaysEnableIpv6": "Всегда включать IPv6",
   "dependsOnDefaultNic": "Зависит от физической сетевой карты по умолчанию",
   "dependsOnDefaultNicDesc": "Если физическая сетевая карта по умолчанию поддерживает IPv6, то сетевая карта TUN также будет поддерживать IPv6, в противном случае IPv6 не поддерживается.",
+  "tunRejectIpv6": "Отклонять IPv6",
+  "tunRejectQuic": "Отклонять QUIC",
+  "tunCidr4": "Адрес TUN IPv4 (CIDR)",
+  "tunCidr6": "Адрес TUN IPv6 (CIDR)",
+  "tunCidr4Hint": "напр. 172.23.27.1/24",
+  "tunCidr6Hint": "напр. fc20::1/120",
+  "tunDns4": "TUN DNS IPv4",
+  "tunDns6": "TUN DNS IPv6",
+  "tunDns4Hint": "напр. 172.23.27.2 (несколько через запятую)",
+  "tunDns6Hint": "напр. fc20::2 (несколько через запятую)",
+  "tunMtu": "TUN MTU",
+  "tunMtuHint": "Пусто = по умолчанию",
   "failedToCreateAllFirstLaunch": "Не удалось создать таблицы базы данных: {value}",
   "@failedToCreateAllFirstLaunch": {
     "placeholders": {

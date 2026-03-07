@@ -237,12 +237,7 @@ class XConfigHelper {
     if (_persistentStateRepo.inboundMode != InboundMode.tun) {
       return null;
     }
-    int mtu = 1500;
-    if (Platform.isMacOS || Platform.isIOS) {
-      mtu = 4064;
-    } else {
-      mtu = 8000;
-    }
+    final mtu = _persistentStateRepo.tunMtu;
 
     if (Platform.isWindows) {
       try {
@@ -288,30 +283,21 @@ class XConfigHelper {
 
     return TunConfig(
         tag: 'tun',
-        // android use custom ways to prevent route loop
         shouldBindDevice: true,
         mode: Platform.isWindows || Platform.isAndroid || Platform.isLinux
             ? Mode.MODE_SYSTEM
             : Mode.MODE_GVISOR,
         tun46Setting: _persistentStateRepo.tun46Setting,
-        // alwaysEnableIpv6: _persistentStateRepo.tunAlwaysEnableIpv6,
-        // on android, this field is not used
-        // defaultNicHasGlobalIpv6:
-        //     _persistentStateRepo.tun46Setting == TunConfig_TUN46Setting.BOTH ||
-        //             (Platform.isAndroid || Platform.isWindows)
-        //         ? true
-        //         : await xApiClient.defaultNICHasGlobalV6().catchError((e) {
-        //             logger.e('defaultNICHasGlobalV6', error: e);
-        //             return true;
-        //           }),
+        rejectIpv6: _persistentStateRepo.rejectIpv6,
+        rejectQuic: _persistentStateRepo.rejectQuic,
         device: TunDeviceConfig(
           name: tunName,
           mtu: mtu,
-          dns4: ['172.23.27.2'],
-          cidr4: '172.23.27.1/24',
+          dns4: [_persistentStateRepo.tunDns4],
+          cidr4: _persistentStateRepo.tunCidr4,
           routes4: ['0.0.0.0/0'],
-          cidr6: 'fc20::1/120',
-          dns6: ['fc20::2'],
+          cidr6: _persistentStateRepo.tunCidr6,
+          dns6: [_persistentStateRepo.tunDns6],
           routes6: ['::/0'],
           path: await getWintunDir(),
           blackListApps: blackListApps,

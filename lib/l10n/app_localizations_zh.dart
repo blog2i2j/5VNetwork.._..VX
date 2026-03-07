@@ -1253,6 +1253,36 @@ class AppLocalizationsZh extends AppLocalizations {
   String get tunIpv4Desc => '此设置下，在Windows/Linux上，如果物理网卡支持IPv6，IPv6流量将不会被VX TUN处理，而是会被物理网卡处理，也就是说它们会由物理网卡直接发出；在Android/iOS/macOS上，IPv6流量将被阻止。';
 
   @override
+  String get tunRejectIpv6 => '拒绝 IPv6';
+
+  @override
+  String get tunRejectIpv6Desc => '如果根据目标、源、应用（如果有）匹配到的节点不支持IPv6，则拒绝该连接';
+
+  @override
+  String get tunRejectQuic => '拒绝 QUIC';
+
+  @override
+  String get tunRejectQuicDesc => '如果根据目标、源、应用（如果有）匹配到的节点不是直连且请求是QUIC，则拒绝该连接';
+
+  @override
+  String get tunCidr4 => 'TUN IPv4 地址 (CIDR)';
+
+  @override
+  String get tunCidr6 => 'TUN IPv6 地址 (CIDR)';
+
+  @override
+  String get tunCidr4Hint => '例如 172.23.27.1/24';
+
+  @override
+  String get tunCidr6Hint => '例如 fc20::1/120';
+  String get tunDns4 => 'TUN DNS IPv4';
+  String get tunDns6 => 'TUN DNS IPv6';
+  String get tunDns4Hint => '例如 172.23.27.2（多个用逗号分隔）';
+  String get tunDns6Hint => '例如 fc20::2（多个用逗号分隔）';
+  String get tunMtu => 'TUN MTU';
+  String get tunMtuHint => '留空为系统默认';
+
+  @override
   String failedToCreateAllFirstLaunch(String value) {
     return '初始化数据库失败: $value';
   }

@@ -1303,6 +1303,36 @@ class AppLocalizationsRu extends AppLocalizations {
   String get tunIpv4Desc => 'On Windows/Linux, if your physical NIC supports IPv6, IPv6 traffic will not be handled by VX TUN, they will be handled by your physical NIC; on Android/iOS/macOS, IPv6 traffic will be blocked anyway.';
 
   @override
+  String get tunRejectIpv6 => 'Отклонять IPv6';
+
+  @override
+  String get tunRejectIpv6Desc => 'Match a connection based on destination, source, application (if available), if the matched handler does not support IPv6, reject the connection';
+
+  @override
+  String get tunRejectQuic => 'Отклонять QUIC';
+
+  @override
+  String get tunRejectQuicDesc => 'Match a connection based on destination, source, application (if available), if the matched handler is not direct and the request is QUIC, reject the connection';
+
+  @override
+  String get tunCidr4 => 'Адрес TUN IPv4 (CIDR)';
+
+  @override
+  String get tunCidr6 => 'Адрес TUN IPv6 (CIDR)';
+
+  @override
+  String get tunCidr4Hint => 'напр. 172.23.27.1/24';
+
+  @override
+  String get tunCidr6Hint => 'напр. fc20::1/120';
+  String get tunDns4 => 'TUN DNS IPv4';
+  String get tunDns6 => 'TUN DNS IPv6';
+  String get tunDns4Hint => 'напр. 172.23.27.2 (несколько через запятую)';
+  String get tunDns6Hint => 'напр. fc20::2 (несколько через запятую)';
+  String get tunMtu => 'TUN MTU';
+  String get tunMtuHint => 'Пусто = по умолчанию';
+
+  @override
   String failedToCreateAllFirstLaunch(String value) {
     return 'Не удалось создать таблицы базы данных: $value';
   }
