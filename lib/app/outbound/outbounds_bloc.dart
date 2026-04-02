@@ -933,21 +933,6 @@ class OutboundBloc extends Bloc<OutboundEvent, OutboundState> {
     emit(state.copyWith(testingArea: false));
   }
 
-  // Future<void> _subscriptionDisableToggle(
-  //     SubscriptionToggleDisableEvent e, Emitter<OutboundState> emit) async {
-  //   await outboundRepo.updateSubscription(e.sub.id, enabled: e.enabled);
-  //   final handlers = await _outboundRepo.getHandlers(subId: e.sub.id);
-  //   await outboundRepo.updateHandlerFields(handlers.map((h) => h.id).toList(),
-  //       enabled: e.enabled);
-  //   emit(state.copyWith(
-  //       handlers: _sortHandlers(await _getHandlers(), state.sortCol)));
-  //   if (e.enabled) {
-  //     _xController.handlerEnabled(handlers);
-  //   } else {
-  //     _xController.handlerDisabled(handlers);
-  //   }
-  // }
-
   Future<void> _onSubscriptionUpdated(
     SubscriptionUpdatedEvent e,
     Emitter<OutboundState> emit,
@@ -965,33 +950,6 @@ class OutboundBloc extends Bloc<OutboundEvent, OutboundState> {
     Emitter<OutboundState> emit,
   ) async {
     add(StatusTestEvent(handlers: handlers, pingMode: PingMode.Real));
-    // try {
-    //   final futures = <Future>[];
-    //   final handlersWithIp = <OutboundHandler>[];
-    //   for (int i = 0; i < handlers.length; i++) {
-    //     final handler = handlers[i];
-    //     futures.add(testHandler(handler, _outboundRepo).then((h) {
-    //       if (h != null && h.serverIp.isNotEmpty) {
-    //         handlersWithIp.add(h);
-    //       }
-    //     }));
-    //   }
-    //   await Future.wait(futures);
-    //   final rsp = await xApiClient.geoIP(
-    //       GeoIPRequest(ips: handlersWithIp.map((h) => h.serverIp).toList()));
-    //   for (int i = 0; i < handlersWithIp.length; i++) {
-    //     final handler = handlersWithIp[i];
-    //     final countryCode = rsp.countries[i];
-    //     if (countryCode.isNotEmpty) {
-    //       await _outboundRepo.updateHandler(handler.id, country: countryCode);
-    //     }
-    //   }
-    //   emit(state.copyWith(
-    //       handlers: _sortHandlers(await _getHandlers(), state.sortCol)));
-    // } catch (e) {
-    //   logger.e('updateCountry error', error: e);
-    //   // reportError(e, StackTrace.current);
-    // }
   }
 
   void _multiSelect(MultiSelectEvent e, Emitter<OutboundState> emit) {

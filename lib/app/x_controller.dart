@@ -16,6 +16,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
@@ -802,6 +803,12 @@ class XController implements MessageFlutterApi {
   void _onSubscriptionUpdate(SubscriptionUpdated subscriptionUpdate) {
     logger.d("subscription update");
     _autoSubscriptionUpdater.onSubscriptionUpdated();
+    _databaseProvider.database.notifyUpdates({
+      TableUpdate.onTable(
+        _databaseProvider.database.subscriptions,
+        kind: UpdateKind.update,
+      ),
+    });
   }
 
   void _onHandlerError(HandlerError handlerError) async {
