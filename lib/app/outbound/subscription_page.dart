@@ -54,6 +54,7 @@ class SubscriptionPage extends StatefulWidget {
 class _SubscriptionPageState extends State<SubscriptionPage> {
   // Predefined intervals in minutes
   final List<int> _intervals = [
+    5,
     10,
     20,
     30,
