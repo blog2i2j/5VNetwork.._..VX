@@ -4516,7 +4516,7 @@ abstract class AppLocalizations {
   /// No description provided for @directDialingTimeoutHint.
   ///
   /// In en, this message translates to:
-  /// **'The dial timeout for direct connection. If failed to establish TCP connection within this timeout, the connection will fail. Shorter dial timeout means faster fallback.'**
+  /// **'The dial timeout for direct connection. If failed to establish TCP connection within this timeout, the connection will fail.'**
   String get directDialingTimeoutHint;
 
   /// No description provided for @globalDialTimeout.
@@ -4528,7 +4528,7 @@ abstract class AppLocalizations {
   /// No description provided for @globalDialTimeoutHint.
   ///
   /// In en, this message translates to:
-  /// **'The dial timeout for all nodes. If failed to establish TCP connection within this timeout, the connection will fail. Shorter dial timeout means faster fallback.'**
+  /// **'The dial timeout for all nodes. If failed to establish TCP connection within this timeout, the connection will fail.'**
   String get globalDialTimeoutHint;
 
   /// No description provided for @reset.

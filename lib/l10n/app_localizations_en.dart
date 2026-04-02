@@ -2373,13 +2373,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get directDialingTimeout => 'Direct Dialing Timeout';
 
   @override
-  String get directDialingTimeoutHint => 'The dial timeout for direct connection. If failed to establish TCP connection within this timeout, the connection will fail. Shorter dial timeout means faster fallback.';
+  String get directDialingTimeoutHint => 'The dial timeout for direct connection. If failed to establish TCP connection within this timeout, the connection will fail.';
 
   @override
   String get globalDialTimeout => 'Global Dial Timeout';
 
   @override
-  String get globalDialTimeoutHint => 'The dial timeout for all nodes. If failed to establish TCP connection within this timeout, the connection will fail. Shorter dial timeout means faster fallback.';
+  String get globalDialTimeoutHint => 'The dial timeout for all nodes. If failed to establish TCP connection within this timeout, the connection will fail.';
 
   @override
   String get reset => 'Reset';

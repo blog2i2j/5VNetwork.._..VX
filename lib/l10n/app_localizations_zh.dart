@@ -2323,13 +2323,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get directDialingTimeout => '直连拨号超时时间';
 
   @override
-  String get directDialingTimeoutHint => '直连拨号超时时间。如果在拨号超时时间内无法与目的地建立TCP连接，则连接失败。更短的拨号时间意味着更快的回退';
+  String get directDialingTimeoutHint => '直连拨号超时时间。如果在拨号超时时间内无法与目的地建立TCP连接，则连接失败。';
 
   @override
   String get globalDialTimeout => '节点拨号超时时间';
 
   @override
-  String get globalDialTimeoutHint => '代理连接拨号超时时间。如果在拨号超时时间内无法与代理节点建立TCP连接，则连接失败。更短的拨号时间意味着更快的回退';
+  String get globalDialTimeoutHint => '代理连接拨号超时时间。如果在拨号超时时间内无法与代理节点建立TCP连接，则连接失败。';
 
   @override
   String get reset => '重置';

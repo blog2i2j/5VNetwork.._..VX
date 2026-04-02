@@ -148,7 +148,7 @@
   "language": "Язык",
   "mannual": "Руководство",
   "updatedAt": "Обновлено в",
-  "min": "{value} {value, plural, =0{Протокол} =1{Минута} =0{Протокол}}",
+  "min": "{value} {value, plural, =0{Протокол} =1{Минута} other{Минуты}}",
   "@min": {
     "placeholders": {
       "value": {
@@ -157,7 +157,7 @@
       }
     }
   },
-  "hour": "{value} {value, plural, =0{Часы} =1{Час} =0{Часы}}",
+  "hour": "{value} {value, plural, =0{Часы} =1{Час} other{Часов}}",
   "@hour": {
     "placeholders": {
       "value": {

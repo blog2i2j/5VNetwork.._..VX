@@ -12,7 +12,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get node => 'Узел';
 
   @override
-  String get inbound => 'Входящий';
+  String get inbound => 'Входящие';
 
   @override
   String get start => 'Начинать';
@@ -21,7 +21,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get log => 'Бревно';
 
   @override
-  String get logLevel => 'Уровень журнала';
+  String get logLevel => 'Уровень лога';
 
   @override
   String get settings => 'Настройки';
@@ -39,7 +39,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get whileList => 'CN';
 
   @override
-  String get gfw => 'ГФВ';
+  String get gfw => 'GFW';
 
   @override
   String get proxyAll => 'Прокси Все';
@@ -72,22 +72,22 @@ class AppLocalizationsRu extends AppLocalizations {
   String get add => 'Добавлять';
 
   @override
-  String get addToHomeScreen => 'Add to home screen';
+  String get addToHomeScreen => 'Добавить на главный экран';
 
   @override
   String get name => 'Имя';
 
   @override
-  String get domainStrategy => 'Стратегия домена';
+  String get domainStrategy => 'Стратегия предметной области';
 
   @override
-  String get enableMux => 'Включить мультиплексор';
+  String get enableMux => 'Включить мультиплексирование';
 
   @override
   String get address => 'Адрес';
 
   @override
-  String get ipOrDomain => 'IP-адрес/домен';
+  String get ipOrDomain => 'IP-адрес / Домен';
 
   @override
   String get port => 'Порт';
@@ -108,13 +108,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get connecting => 'Подключение';
 
   @override
-  String get connected => 'Подключен';
+  String get connected => 'Подключено';
 
   @override
   String get disconnecting => 'Отключение';
 
   @override
-  String get disconnected => 'Отключен';
+  String get disconnected => 'Отключено';
 
   @override
   String get subscription => 'Подписка';
@@ -135,16 +135,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get speedTest => 'Тест скорости';
 
   @override
-  String get statusTest => 'Тест пригодности к использованию';
+  String get statusTest => 'Пригодный для использования тест';
 
   @override
-  String get selfhost => 'Селфхостинг';
+  String get selfhost => 'Самостоятельный хостинг';
 
   @override
   String get free => 'Бесплатно';
 
   @override
-  String get reconnecting => 'Повторное подключение';
+  String get reconnecting => 'Восстановление связи';
 
   @override
   String get cancel => 'Отмена';
@@ -162,7 +162,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get delete => 'Удалить';
 
   @override
-  String get hide => 'Скрыть с главной';
+  String get hide => 'Спрятаться от дома';
 
   @override
   String get gettingNodesSubscriptions => 'Получение узлов/подписок';
@@ -171,7 +171,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get emptyClipboard => 'Пустой буфер обмена';
 
   @override
-  String get decodeQrCode => 'Не удалось декодировать QR-код';
+  String get decodeQrCode => 'Не удалось расшифровать QR-код.';
 
   @override
   String get proxy => 'Прокси';
@@ -186,10 +186,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get domainsOrIps => 'Домены/IP-адреса';
 
   @override
-  String get addProxyDomainIp => 'Добавить прокси-домен/IP';
+  String get addProxyDomainIp => 'Добавить домен/IP-адрес прокси';
 
   @override
-  String get addDirectDomainIp => 'Добавить прямой домен/IP';
+  String get addDirectDomainIp => 'Добавить прямой домен/IP-адрес';
 
   @override
   String get domain => 'Домен';
@@ -198,10 +198,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get type => 'Тип';
 
   @override
-  String get invalidIp => 'Неверный IP-адрес';
+  String get invalidIp => 'Недействительный IP-адрес';
 
   @override
-  String get invalidCidr => 'Неверный CIDR';
+  String get invalidCidr => 'Недействительный CIDR';
 
   @override
   String get exact => 'Точный';
@@ -225,7 +225,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get sshKey => 'SSH-ключ';
 
   @override
-  String get selectFromFile => 'Выбрать из файла';
+  String get selectFromFile => 'Выберите из файла';
 
   @override
   String get sudoPassword => 'Пароль Sudo';
@@ -243,7 +243,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get invalidAddress => 'Неверный адрес';
 
   @override
-  String get failedToAddServer => 'Не удалось добавить сервер';
+  String get failedToAddServer => 'Не удалось добавить сервер.';
 
   @override
   String get memory => 'Память';
@@ -255,7 +255,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get serverPubKey => 'Открытый ключ сервера';
 
   @override
-  String get serverPubKeyHelper => 'Если поле не заполнено, будет принят любой открытый ключ, отправленный сервером при первом подключении, затем открытый ключ будет использоваться при последующих подключениях.';
+  String get serverPubKeyHelper => 'Если поле не заполнено, будет принят любой открытый ключ, отправленный сервером при первом соединении, после чего этот открытый ключ будет использоваться при последующих соединениях.';
 
   @override
   String get failedConnectServer => 'Не удалось подключиться';
@@ -264,7 +264,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get retry => 'Повторить попытку';
 
   @override
-  String get keyPassphrase => 'Ключевая фраза-пароль';
+  String get keyPassphrase => 'Ключевая кодовая фраза';
 
   @override
   String get showRealtimeStatus => 'Показать статус в реальном времени';
@@ -288,7 +288,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get addToProxy => 'Добавить в прокси?';
 
   @override
-  String get addToDirect => 'Добавить в Direct?';
+  String get addToDirect => 'Добавить в прямую рассылку?';
 
   @override
   String get default0 => 'По умолчанию';
@@ -297,7 +297,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get website => 'Веб-сайт';
 
   @override
-  String get endTime => 'Конец Времени';
+  String get endTime => 'Конец времени';
 
   @override
   String get remainingData => 'Оставшиеся данные';
@@ -312,16 +312,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get updateInterval => 'Интервал обновления';
 
   @override
-  String get testArea => 'Тестовая зона';
+  String get testArea => 'Испытательная зона';
 
   @override
-  String get autoDownload => 'Automatically Download New Version';
+  String get autoDownload => 'Автоматическая загрузка новой версии';
 
   @override
-  String get unableToGetNodes => 'Не удалось получить узлы, ваш буфер обмена не содержит URL-адрес подписки, который VX может проанализировать.';
+  String get unableToGetNodes => 'Не удалось получить узлы, ваш буфер обмена не содержит URL-адрес подписки, который VX может обработать.';
 
   @override
-  String get unableToGetNodesEmptyClipboard => 'Не удалось получить узлы, буфер обмена пуст';
+  String get unableToGetNodesEmptyClipboard => 'Не удалось получить узлы, буфер обмена пуст.';
 
   @override
   String get subscriptionAddress => 'Адрес подписки';
@@ -330,16 +330,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get empty => 'Пустой';
 
   @override
-  String get invalidHttp => 'Неверный URL-адрес HTTPS';
+  String get invalidHttp => 'Недействительный HTTPS-адрес';
 
   @override
   String get noNode => 'Нет узла';
 
   @override
-  String get failedToChangeOutboundMode => 'Не удалось изменить исходящий режим';
+  String get failedToChangeOutboundMode => 'Не удалось изменить режим исходящего трафика.';
 
   @override
-  String get failedToChangeFakeDns => 'Не удалось изменить поддельный DNS';
+  String get failedToChangeFakeDns => 'Не удалось изменить поддельный DNS.';
 
   @override
   String get failedToChangeRoutingMode => 'Не удалось изменить режим маршрутизации.';
@@ -351,13 +351,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get area => 'Область';
 
   @override
-  String get remark => 'Замечание';
+  String get remark => 'Примечание';
 
   @override
-  String get remarkAddress => 'Замечание и адрес';
+  String get remarkAddress => 'Примечание и адрес';
 
   @override
-  String get usable => 'Годен к использованию';
+  String get usable => 'Пригодный для использования';
 
   @override
   String get speed => 'Скорость';
@@ -366,43 +366,43 @@ class AppLocalizationsRu extends AppLocalizations {
   String get latency => 'Задержка';
 
   @override
-  String get recent => 'Недавние';
+  String get recent => 'Недавний';
 
   @override
   String get selectOneOutbound => 'Выбирать';
 
   @override
-  String get addFailedUniqueConstraint => 'Добавление не удалось, так как правило противоречит существующему правилу.';
+  String get addFailedUniqueConstraint => 'Добавление не удалось, поскольку правило противоречит уже существующему правилу.';
 
   @override
   String get enableInAuto => 'Включить в автоматическом режиме';
 
   @override
-  String get homeCustomizeDragHint => 'Drag cards to reorder. Hidden cards move to the bottom tray.';
+  String get homeCustomizeDragHint => 'Перетаскивайте карточки, чтобы изменить порядок. Скрытые карточки перемещаются в нижний лоток.';
 
   @override
-  String get homeCustomizeResetOrder => 'Reset order';
+  String get homeCustomizeResetOrder => 'Сбросить порядок';
 
   @override
-  String get homeCustomizeHiddenTitle => 'Hidden';
+  String get homeCustomizeHiddenTitle => 'Скрытый';
 
   @override
-  String get homeCustomizeDropHere => 'Drop here to add at bottom';
+  String get homeCustomizeDropHere => 'Перетащите сюда, чтобы добавить внизу';
 
   @override
-  String get homeCustomizeMergeWith => 'Merge with…';
+  String get homeCustomizeMergeWith => 'Объединиться с…';
 
   @override
-  String get homeCustomizeNoMergeTargets => 'No mergeable widgets';
+  String get homeCustomizeNoMergeTargets => 'Нет виджетов, которые можно объединить.';
 
   @override
-  String get compact => 'Compact';
+  String get compact => 'Компактный';
 
   @override
-  String get medium => 'Medium';
+  String get medium => 'Середина';
 
   @override
-  String get large => 'Large';
+  String get large => 'Большой';
 
   @override
   String get showClient => 'Показать клиента';
@@ -422,10 +422,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get quit => 'Покидать';
 
   @override
-  String get iosAppRoutingNoSupport => 'Маршрутизация на основе приложений в настоящее время не поддерживается на iOS.';
+  String get iosAppRoutingNoSupport => 'В настоящее время маршрутизация через приложение не поддерживается на iOS.';
 
   @override
-  String get failedToChangeInboundMode => 'Не удалось изменить входящий';
+  String get failedToChangeInboundMode => 'Не удалось изменить входящий рейс';
 
   @override
   String get language => 'Язык';
@@ -449,7 +449,7 @@ class AppLocalizationsRu extends AppLocalizations {
       locale: localeName,
       other: 'Минуты',
       one: 'Минута',
-      zero: 'Минуты',
+      zero: 'Протокол',
     );
     return '$valueString $_temp0';
   }
@@ -465,7 +465,7 @@ class AppLocalizationsRu extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       value,
       locale: localeName,
-      other: 'Часы',
+      other: 'Часов',
       one: 'Час',
       zero: 'Часы',
     );
@@ -479,19 +479,19 @@ class AppLocalizationsRu extends AppLocalizations {
   String get contactUs => 'Связаться с нами';
 
   @override
-  String get openSourceSoftwareNotice => 'Уведомление о программном обеспечении с открытым исходным кодом';
+  String get openSourceSoftwareNotice => 'Уведомление об открытом программном обеспечении';
 
   @override
-  String get copy => 'Копировать';
+  String get copy => 'Копия';
 
   @override
-  String get privacyPolicySummary => 'VX собирает журналы диагностики только при включенном переключателе ниже. Эти журналы не содержат персональных данных. Нажмите кнопку ниже, чтобы ознакомиться с подробной политикой конфиденциальности.';
+  String get privacyPolicySummary => 'VX собирает диагностические журналы только в том случае, если кнопка переключения ниже включена. Эти журналы не содержат персональных данных. Для ознакомления с подробной политикой конфиденциальности нажмите кнопку ниже.';
 
   @override
-  String get diagnosticLogDoesNotContainPersonalData => 'Диагностические журналы не связаны с вами и не содержат персональных данных.';
+  String get diagnosticLogDoesNotContainPersonalData => 'Журналы диагностики не связаны с вами и не содержат персональных данных.';
 
   @override
-  String get shareDiagnosticLogWithDeveloper => 'Делитесь журналами диагностики с разработчиками';
+  String get shareDiagnosticLogWithDeveloper => 'Делитесь диагностическими журналами с разработчиками.';
 
   @override
   String get yes => 'Да';
@@ -500,10 +500,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get no => 'Нет';
 
   @override
-  String get contactUsSummary => 'Вы можете связаться с нами следующими способами. Спасибо!';
+  String get contactUsSummary => 'Связаться с нами можно следующими способами. Спасибо!';
 
   @override
-  String get contactUsFreely => 'Если у вас есть вопросы, пожалуйста, свяжитесь с нами.';
+  String get contactUsFreely => 'Если у вас возникнут какие-либо вопросы, пожалуйста, свяжитесь с нами.';
 
   @override
   String get bugAreWelcome => 'Сообщения об ошибках и предложения приветствуются, большое спасибо!';
@@ -512,7 +512,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get copiedToClipboard => 'Скопировано в буфер обмена';
 
   @override
-  String get sourceCodeUrl => 'URL к исходному коду';
+  String get sourceCodeUrl => 'URL исходного кода';
 
   @override
   String get email => 'Электронная почта';
@@ -527,7 +527,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get login => 'Авторизоваться';
 
   @override
-  String get loginWithEmail => 'Вход по электронной почте';
+  String get loginWithEmail => 'Вход в электронную почту';
 
   @override
   String get loginWithGoogle => 'Google';
@@ -536,16 +536,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get loginWithApple => 'Яблоко';
 
   @override
-  String get loginWithMicrosoft => 'Майкрософт';
+  String get loginWithMicrosoft => 'Microsoft';
 
   @override
-  String get newUserTrialText => 'Новые пользователи могут попробовать Pro в течение 7 дней бесплатно.';
+  String get newUserTrialText => 'Новые пользователи могут бесплатно попробовать Pro-версию в течение 7 дней.';
 
   @override
   String get proExpiredAt => 'Срок действия Pro';
 
   @override
-  String get lifetimeProAccount => 'Пожизненная учетная запись Pro';
+  String get lifetimeProAccount => 'Пожизненный профессиональный аккаунт';
 
   @override
   String get addGroup => 'Добавить группу';
@@ -566,25 +566,25 @@ class AppLocalizationsRu extends AppLocalizations {
   String get noSelectedNode => 'Узел не выбран';
 
   @override
-  String get pleaseSelectNode => 'Пожалуйста, выберите узел';
+  String get pleaseSelectNode => 'Пожалуйста, выберите узел.';
 
   @override
   String get pleaseSelectSelector => 'Пожалуйста, выберите селектор';
 
   @override
-  String get pleaseEnterRuleName => 'Пожалуйста, введите название правила';
+  String get pleaseEnterRuleName => 'Пожалуйста, введите название правила.';
 
   @override
-  String get ruleName => 'Имя соответствующего правила';
+  String get ruleName => 'Название правила соответствия';
 
   @override
   String get matchAll => 'Совпадение всех';
 
   @override
-  String get ruleMatchCondition => 'Правило срабатывает, когда выполняются все условия. Если условий нет, правило не сработает никогда.';
+  String get ruleMatchCondition => 'Если все условия выполнены, правило срабатывает. Если условий нет, правило никогда не сработает.';
 
   @override
-  String get inboundLabel => 'Входящий';
+  String get inboundLabel => 'Входящие';
 
   @override
   String get domainSet => 'Набор доменов';
@@ -605,25 +605,25 @@ class AppLocalizationsRu extends AppLocalizations {
   String get editRule => 'Редактировать правило';
 
   @override
-  String get addRouter => 'Добавить режим маршрута';
+  String get addRouter => 'Добавить режим маршрутизации';
 
   @override
   String get copyDefault => 'Копировать по умолчанию';
 
   @override
-  String get ruleOrder => 'Правила сопоставляются сверху вниз';
+  String get ruleOrder => 'Правила согласованы сверху вниз.';
 
   @override
   String get nodeChain => 'Цепочка узлов';
 
   @override
-  String get nodeChainDesc => 'Выбранные узлы будут использовать следующие узлы в цепочке. Последний узел в цепочке является посадочным. Другими словами: [Ваш трафик] -> [Узлы, выбранные селектором] -> [Первый узел в списке ниже] -> ... -> [Последний узел в списке ниже] -> [Финальный пункт назначения]';
+  String get nodeChainDesc => 'Выбранные этим селектором узлы образуют цепочку узлов с узлами, указанными ниже. Последний узел в списке ниже является целевым узлом. [Ваш трафик] -> [Узел(и), выбранные селектором] -> [Первый узел в списке ниже] -> ... -> [Последний узел в списке ниже] -> [Конечный пункт назначения]';
 
   @override
   String get addSelector => 'Добавить селектор';
 
   @override
-  String get selectorNameDuplicate => 'Имя селектора не может быть дублировано.';
+  String get selectorNameDuplicate => 'Имя селектора не может быть продублировано.';
 
   @override
   String get renameSelector => 'Переименовать селектор';
@@ -635,10 +635,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get partialNodes => 'Частичные узлы';
 
   @override
-  String get nodeGroup => 'Группа узлов';
+  String get nodeGroup => 'Группа';
 
   @override
-  String get lowestLatency => 'Самая низкая задержка';
+  String get lowestLatency => 'Минимальная задержка';
 
   @override
   String get lowLatency => 'Низкая задержка';
@@ -647,13 +647,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get highThroughput => 'Высокоскоростной';
 
   @override
-  String get nameCannotBeEmpty => 'Имя не может быть пустым';
+  String get nameCannotBeEmpty => 'Имя не может быть пустым.';
 
   @override
-  String get setNameDuplicate => 'Имя набора не может быть дублировано.';
+  String get setNameDuplicate => 'Название набора не может быть продублировано.';
 
   @override
-  String get mutuallyExclusiveSetName => 'Взаимоисключающее имя набора';
+  String get mutuallyExclusiveSetName => 'Взаимоисключающее название набора';
 
   @override
   String get include => 'Включать';
@@ -668,7 +668,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get advanced => 'Передовой';
 
   @override
-  String get customDirect => 'Прямой заказ';
+  String get customDirect => 'Custom Direct';
 
   @override
   String get customProxy => 'Пользовательский прокси';
@@ -680,73 +680,73 @@ class AppLocalizationsRu extends AppLocalizations {
   String get private => 'Частный';
 
   @override
-  String get gfwWithoutCustomDirect => 'GFW (без прямого кастомного заказа)';
+  String get gfwWithoutCustomDirect => 'GFW (без пользовательского прямого подключения)';
 
   @override
-  String get gfwModeProxyDomains => 'Прокси-домены режима GFW';
+  String get gfwModeProxyDomains => 'Прокси-домены в режиме GFW';
 
   @override
-  String get gfwModeProxyIps => 'IP-адреса прокси-сервера режима GFW';
+  String get gfwModeProxyIps => 'IP-адреса прокси в режиме GFW';
 
   @override
-  String get cnModeProxyDomains => 'Прокси-домены режима CN';
+  String get cnModeProxyDomains => 'Прокси-домены в режиме CN';
 
   @override
-  String get cnModeDirectDomains => 'Прямые домены режима CN';
+  String get cnModeDirectDomains => 'Прямые домены в режиме CN';
 
   @override
-  String get cnModeDirectIps => 'Прямые IP-адреса режима CN';
+  String get cnModeDirectIps => 'Прямые IP-адреса в режиме CN';
 
   @override
-  String get proxyAllModeProxyDomains => 'Прокси-домены в режиме Proxy-All';
+  String get proxyAllModeProxyDomains => 'Режим Proxy-All, домены прокси';
 
   @override
-  String get proxyAllModeDirectDomains => 'Прямые домены в режиме Proxy-All';
+  String get proxyAllModeDirectDomains => 'Режим Proxy-All Direct Domains';
 
   @override
-  String get proxyAllModeDirectIps => 'Прямые IP-адреса в режиме Proxy-All';
+  String get proxyAllModeDirectIps => 'Режим прокси-всех, прямые IP-адреса';
 
   @override
-  String get ruBlockModeProxyDomains => 'Прокси-домены в режиме RU-Block';
+  String get ruBlockModeProxyDomains => 'Прокси-домены в режиме RU-блока';
 
   @override
-  String get ruBlockModeProxyIps => 'IP-адреса прокси-серверов в режиме RU-Block';
+  String get ruBlockModeProxyIps => 'IP-адреса прокси-сервера в режиме RU-блока';
 
   @override
-  String get ruBlockAllModeProxyDomains => 'Прокси-домены в режиме RU-Block(All)';
+  String get ruBlockAllModeProxyDomains => 'Прокси-домены в режиме RU-блока (всех доменов)';
 
   @override
-  String get ruBlockAllModeProxyIps => 'IP-адреса прокси-серверов в режиме RU-Block(All)';
+  String get ruBlockAllModeProxyIps => 'IP-адреса прокси в режиме RU-Block (все режимы)';
 
   @override
-  String get ipToDomain => 'IP -> Домен';
+  String get ipToDomain => 'IP-адрес -> Домен';
 
   @override
-  String get showSessionOngoingIndicator => 'Show session ongoing indicator';
+  String get showSessionOngoingIndicator => 'Показать индикатор текущей сессии';
 
   @override
-  String get hideSessionOngoingIndicator => 'Hide session ongoing indicator';
+  String get hideSessionOngoingIndicator => 'Скрыть индикатор текущей сессии';
 
   @override
-  String get showRealtimeUsage => 'Show realtime usage';
+  String get showRealtimeUsage => 'Отображение использования в реальном времени';
 
   @override
-  String get hideRealtimeUsage => 'Hide realtime usage';
+  String get hideRealtimeUsage => 'Скрыть использование в режиме реального времени';
 
   @override
-  String get proFeatureDescription => 'Это функция Pro. Перейдите на Pro, чтобы получить доступ ко всем функциям.';
+  String get proFeatureDescription => 'Это функция версии Pro. Для разблокировки всех функций перейдите на версию Pro.';
 
   @override
   String get becomePermanentPro => 'Станьте постоянным пользователем Pro';
 
   @override
-  String get becomePermanentProDescription => 'Станьте постоянным пользователем Pro';
+  String get becomePermanentProDescription => 'Станьте постоянным пользователем Pro.';
 
   @override
   String get tryPro => 'Попробуйте Pro';
 
   @override
-  String get newUserProTrial => 'Новые пользователи могут попробовать Pro в течение 7 дней';
+  String get newUserProTrial => 'Новые пользователи могут попробовать Pro-версию в течение 7 дней.';
 
   @override
   String get purchase => 'Покупка';
@@ -755,10 +755,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get purchaseCancelled => 'Покупка отменена';
 
   @override
-  String get verifyingPurchase => 'Подтверждение покупки...';
+  String get verifyingPurchase => 'Проверка покупки...';
 
   @override
-  String get restoringPurchase => 'Restoring Purchase...';
+  String get restoringPurchase => 'Восстановление покупки...';
 
   @override
   String purchaseVerificationFailed(String reason) {
@@ -767,14 +767,14 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String ifYouHavePaid(String orderId) {
-    return 'Если вы оплатили заказ, не волнуйтесь: магазин автоматически вернёт вам деньги. Если у вас есть вопросы, свяжитесь с нами. Номер заказа: $orderId';
+    return 'Если вы уже оплатили, не волнуйтесь, ваш платеж будет автоматически возвращен магазином. Если у вас возникнут вопросы, пожалуйста, свяжитесь с нами. Идентификатор заказа: $orderId';
   }
 
   @override
   String get invalidPurchase => 'Недействительная покупка';
 
   @override
-  String get purchaseSuccessful => 'Покупка успешна';
+  String get purchaseSuccessful => 'Покупка прошла успешно';
 
   @override
   String purchaseFailed(String status) {
@@ -782,36 +782,36 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get unableToConnectToStore => 'Невозможно подключиться к магазину';
+  String get unableToConnectToStore => 'Не удалось подключиться к магазину.';
 
   @override
   String get loginBeforePurchase => 'Пожалуйста, войдите в систему перед покупкой. Новые пользователи могут попробовать Pro-версию в течение 7 дней.';
 
   @override
-  String get loginBeforeRestore => 'Пожалуйста, войдите в систему перед восстановлением покупки.';
+  String get loginBeforeRestore => 'Пожалуйста, войдите в систему, прежде чем восстанавливать покупку.';
 
   @override
-  String get upgradeToPermanentPro => 'Обновление до Pro';
+  String get upgradeToPermanentPro => 'Перейти на Pro';
 
   @override
-  String get caseInsensitive => 'Без учета регистра';
+  String get caseInsensitive => 'Регистр не имеет значения';
 
   @override
   String get startFailed => 'Не удалось запустить';
 
   @override
   String startFailedWithReason(String reason, String stackTrace) {
-    return 'Не удалось запустить: $reason';
+    return 'Не удалось запустить: $reason. Трассировка стека: $stackTrace';
   }
 
   @override
-  String get startFailedReasonTunNeedAdmin => 'Входящий трафик Tun доступен только при запуске от имени администратора. Перезапустите VX от имени администратора или измените режим входящего трафика.';
+  String get startFailedReasonTunNeedAdmin => 'Функция входящего трафика доступна только при запуске от имени администратора. Перезапустите VX от имени администратора или измените режим входящего трафика.';
 
   @override
   String get startFailedReasonNoNode => 'Нет узла';
 
   @override
-  String get startFailedReasonNoEnabledNode => 'Нет включенных узлов, включите хотя бы один узел';
+  String get startFailedReasonNoEnabledNode => 'Нет включенных узлов, включите хотя бы один узел.';
 
   @override
   String get startFailedReasonNoSelected => 'Узел не выбран';
@@ -822,10 +822,10 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get failedToAddSubscription => 'Не удалось добавить подписку, существует существующая подписка с такой же ссылкой.';
+  String get failedToAddSubscription => 'Не удалось добавить подписку, уже существует подписка с той же ссылкой.';
 
   @override
-  String get tunNeedAdmin => 'Чтобы использовать tun, перезапустите VX от имени администратора.';
+  String get tunNeedAdmin => 'Для использования tun перезапустите VX от имени администратора.';
 
   @override
   String decodeResult(num value1, num value2) {
@@ -850,7 +850,7 @@ class AppLocalizationsRu extends AppLocalizations {
       value2,
       locale: localeName,
       other: 'узлы вышли из строя',
-      one: 'узел не удался',
+      one: 'узел вышел из строя',
     );
     return 'Успешно получено $value1String $_temp0, $value2String $_temp1';
   }
@@ -902,14 +902,14 @@ class AppLocalizationsRu extends AppLocalizations {
       other: 'узлы',
       one: 'узел',
     );
-    return 'Успешно обновлено $value1String $_temp0, $value2String $_temp1 не удалось. Добавлено $value3String $_temp2, не удалось проанализировать $value4String $_temp3';
+    return 'Успешно обновлено $value1String $_temp0, $value2String $_temp1 не удалось. $value3String $_temp2 добавлено, $value4String $_temp3 не удалось разобрать.';
   }
 
   @override
-  String get failedToUpdateCountry => 'Не удалось обновить области';
+  String get failedToUpdateCountry => 'Не удалось обновить данные по областям.';
 
   @override
-  String get keepAlivePeriodMustBeBetween2And60 => 'Возраст должен быть от 2 до 60 лет.';
+  String get keepAlivePeriodMustBeBetween2And60 => 'Должно быть в диапазоне от 2 до 60';
 
   @override
   String get showApp => 'Показать приложение';
@@ -924,7 +924,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hideSystemApps => 'Скрыть системные приложения';
 
   @override
-  String get doubleTapToDelete => 'Дважды нажмите, чтобы удалить';
+  String get doubleTapToDelete => 'Дважды коснитесь, чтобы удалить';
 
   @override
   String get method => 'Метод';
@@ -933,19 +933,19 @@ class AppLocalizationsRu extends AppLocalizations {
   String get sshKeyPath => 'Путь к файлу ключа SSH';
 
   @override
-  String get useCommonSshKey => 'Использовать добавленный ключ SSH';
+  String get useCommonSshKey => 'Используйте добавленный SSH-ключ.';
 
   @override
   String get addCommonSshKey => 'Добавить SSH-ключ';
 
   @override
-  String get sshKeyContentOrPathRequired => 'Требуется как минимум одно из следующего: содержимое ключа SSH или путь к файлу ключа SSH.';
+  String get sshKeyContentOrPathRequired => 'Необходимо указать как минимум один из следующих параметров: содержимое SSH-ключа или путь к файлу SSH-ключа.';
 
   @override
-  String get failedToAddCommonSshKey => 'Не удалось добавить ключ SSH.';
+  String get failedToAddCommonSshKey => 'Не удалось добавить SSH-ключ.';
 
   @override
-  String get failedToAddCommonSshKeyDueToDuplicateName => 'Не удалось добавить ключ SSH, так как существует ключ с таким же именем.';
+  String get failedToAddCommonSshKeyDueToDuplicateName => 'Не удалось добавить SSH-ключ, поскольку уже существует ключ с таким же именем.';
 
   @override
   String get quickDeploy => 'Быстрое развертывание';
@@ -958,17 +958,17 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String deploySuccess(String deploy, String server) {
-    return '$deploy на сервере-$server успешно выполнено';
+    return '$deploy на сервере $server успешно';
   }
 
   @override
   String bbrError(String error) {
-    return 'Failed to enable BBR: $error';
+    return 'Не удалось включить BBR: $error';
   }
 
   @override
   String firewallError(String error) {
-    return 'Failed to disable OS firewall: $error';
+    return 'Не удалось отключить брандмауэр ОС: $error';
   }
 
   @override
@@ -997,13 +997,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get appKeyword => 'Ключевое слово приложения';
 
   @override
-  String get sniffDomain => 'Домен Sniff';
+  String get sniffDomain => 'Домен Сниффа';
 
   @override
   String get trafficStats => 'Статистика трафика';
 
   @override
-  String get useSshKey => 'Использовать SSH-ключ';
+  String get useSshKey => 'Используйте SSH-ключ';
 
   @override
   String get errorOnly => 'Только ошибка';
@@ -1012,7 +1012,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get all => 'Все';
 
   @override
-  String get failedToUndoBlockDns => 'Не удалось удалить фильтр WFP для блокировки DNS-трафика основной сетевой карты. Закройте это приложение, которое может удалить фильтр.';
+  String get failedToUndoBlockDns => 'Не удалось удалить фильтр WFP, блокирующий DNS-трафик основного сетевого адаптера. Пожалуйста, закройте это приложение, которое может удалить фильтр.';
 
   @override
   String get failedToRemoveSystemProxy => 'Не удалось удалить системный прокси-сервер. Пожалуйста, удалите его вручную в разделе «Настройки» > «Системный прокси-сервер».';
@@ -1023,7 +1023,7 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get failureDetail => 'Подробности отказа';
+  String get failureDetail => 'Подробности неисправности';
 
   @override
   String get failedNodes => 'Неисправные узлы';
@@ -1032,7 +1032,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get failedSub => 'Неудачные подписки';
 
   @override
-  String get addRemark => 'Добавить замечание?';
+  String get addRemark => 'Добавить комментарий?';
 
   @override
   String get multiSelect => 'Множественный выбор';
@@ -1041,22 +1041,22 @@ class AppLocalizationsRu extends AppLocalizations {
   String get share => 'Делиться';
 
   @override
-  String get quickAction => 'Быстрое действие';
+  String get quickAction => 'Быстрые действия';
 
   @override
-  String get deleteUnusable => 'Удалить неиспользуемые узлы';
+  String get deleteUnusable => 'Удалить неработающие узлы';
 
   @override
-  String get smallScreenPreference => 'Настройки малого экрана';
+  String get smallScreenPreference => 'Настройки маленького экрана';
 
   @override
   String get chainProxy => 'Цепной прокси';
 
   @override
-  String get singleNode => 'Одиночный узел';
+  String get singleNode => 'Одноузловой';
 
   @override
-  String get multipleNodes => 'Несколько узлов';
+  String get multipleNodes => 'Множественные узлы';
 
   @override
   String get balanceStrategy => 'Стратегия баланса';
@@ -1065,7 +1065,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get manualNodeMode => 'Ручной режим';
 
   @override
-  String get outboundMode => 'Исходящий';
+  String get outboundMode => 'Исходящие';
 
   @override
   String get random => 'Случайный';
@@ -1080,10 +1080,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get selectingStrategy => 'Выберите стратегию';
 
   @override
-  String get mostThroughput => 'Скорость самая высокая';
+  String get mostThroughput => 'Максимальная скорость';
 
   @override
-  String get allOk => 'Годен к использованию';
+  String get allOk => 'Пригодный для использования';
 
   @override
   String get yourDevices => 'Ваши устройства';
@@ -1098,7 +1098,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get useExistingNode => 'Использовать существующий узел';
 
   @override
-  String get atLeastTwoNodes => 'Требуется не менее двух узлов.';
+  String get atLeastTwoNodes => 'Требуется как минимум два узла.';
 
   @override
   String get advancedMode => 'Профессиональный режим';
@@ -1116,19 +1116,19 @@ class AppLocalizationsRu extends AppLocalizations {
   String get selector => 'Селектор';
 
   @override
-  String get atmoicDomainSet => 'Малый набор доменов';
+  String get atmoicDomainSet => 'Небольшой набор доменов';
 
   @override
   String get greatDomainSet => 'Большой набор доменов';
 
   @override
-  String get atmoicIpSet => 'Малый набор IP-адресов';
+  String get atmoicIpSet => 'Небольшой набор IP-адресов';
 
   @override
   String get greatIpSet => 'Большой набор IP-адресов';
 
   @override
-  String get createGreatDomainSet => 'Создайте отличный набор доменов';
+  String get createGreatDomainSet => 'Создайте отличный набор доменных имен.';
 
   @override
   String get editGreatDomainSet => 'Редактировать большой набор доменов';
@@ -1140,10 +1140,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get editSmallDomainSet => 'Редактировать небольшой набор доменов';
 
   @override
-  String get editGreatIpSet => 'Редактировать отличный набор IP-адресов';
+  String get editGreatIpSet => 'Редактировать большой набор IP-адресов';
 
   @override
-  String get createGreatIpSet => 'Создайте отличный набор IP-адресов';
+  String get createGreatIpSet => 'Создайте отличный набор IP-адресов.';
 
   @override
   String get editAppSet => 'Редактировать набор приложений';
@@ -1167,40 +1167,40 @@ class AppLocalizationsRu extends AppLocalizations {
   String get createIpSmallSet => 'Создать небольшой набор IP-адресов';
 
   @override
-  String get editIpSmallSet => 'Редактировать IP-адрес малого набора';
+  String get editIpSmallSet => 'Редактировать IP-адрес в небольшом наборе';
 
   @override
-  String get deleteFailed => 'Удаление не удалось';
+  String get deleteFailed => 'Удаление не удалось.';
 
   @override
   String get deleteAccount => 'Удалить аккаунт';
 
   @override
-  String get deleteAccountConfirm => 'Вы уверены, что хотите удалить свою учётную запись? Это действие не может быть отменено.';
+  String get deleteAccountConfirm => 'Вы уверены, что хотите удалить свой аккаунт? Это действие необратимо.';
 
   @override
-  String get domainSetDescription => 'Следующий набор доменов использует прокси-DNS-сервер (по умолчанию 8.8.8.8 и 1.1.1.1) для разрешения, другие домены используют прямой DNS-сервер (по умолчанию это DNS-серверы вашей основной физической сетевой карты или 223.5.5.5 и 114.114.114.114, если первый неизвестен) для разрешения';
+  String get domainSetDescription => 'Для следующих доменов используется прокси-сервер DNS (по умолчанию 8.8.8.8 и 1.1.1.1), для других доменов используется прямой DNS-сервер (по умолчанию — DNS-серверы вашего основного физического сетевого адаптера или 223.5.5.5 и 114.114.114.114, если первый неизвестен) для разрешения имен.';
 
   @override
-  String get routerRuleDescription => 'Для каждого соединения правила сопоставляются одно за другим сверху вниз. Если одно правило совпало, последующие правила не учитываются. Если ни одно правило не совпало, соединение прерывается.';
+  String get routerRuleDescription => 'Для каждого соединения правила сопоставляются по одному сверху вниз; если правило совпадает, последующие правила не учитываются. Если ни одно правило не совпадает, соединение прерывается.';
 
   @override
-  String get dstIpSet => 'Набор IP-адресов назначения';
+  String get dstIpSet => 'Набор целевых IP-адресов';
 
   @override
-  String get ruleNameVXTestNodes => 'Тестирование узла VX';
+  String get ruleNameVXTestNodes => 'Тестирование VX-узлов';
 
   @override
   String get ruleNameInternalDnsProxyGoProxy => 'Внутренний DNS (CF)';
 
   @override
-  String get ruleNameInternalDnsDirectGoDirect => 'Внутренний DNS (Aliyun и CF)';
+  String get ruleNameInternalDnsDirectGoDirect => 'Внутренняя DNS (Aliyun и CF)';
 
   @override
-  String get ruleNameProxyDnsServerGoProxy => 'Прокси-DNS-сервер по умолчанию';
+  String get ruleNameProxyDnsServerGoProxy => 'DNS-сервер по умолчанию (прокси)';
 
   @override
-  String get ruleNameDirectDnsServerGoDirect => 'Прямой DNS-сервер по умолчанию';
+  String get ruleNameDirectDnsServerGoDirect => 'DNS-сервер по умолчанию';
 
   @override
   String get ruleNameDnsHijack => 'Перехват DNS: непрямой домен';
@@ -1209,13 +1209,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get ruleNameCustomDirectDomain => 'Пользовательский прямой домен';
 
   @override
-  String get ruleNameCustomDirectIp => 'Пользовательский прямой IP';
+  String get ruleNameCustomDirectIp => 'Пользовательский прямой IP-адрес';
 
   @override
   String get ruleNameCustomProxyDomain => 'Пользовательский прокси-домен';
 
   @override
-  String get ruleNameCustomProxyIp => 'Пользовательский прокси-IP';
+  String get ruleNameCustomProxyIp => 'Пользовательский IP-адрес прокси';
 
   @override
   String get ruleNameProxyApp => 'Прокси-приложение';
@@ -1224,61 +1224,61 @@ class AppLocalizationsRu extends AppLocalizations {
   String get ruleNameDirectApp => 'Прямое приложение';
 
   @override
-  String get ruleNameCnDirectIp => 'Прямые IP-адреса режима CN';
+  String get ruleNameCnDirectIp => 'Прямые IP-адреса в режиме CN';
 
   @override
   String get ruleNameDefaultProxy => 'Прокси по умолчанию';
 
   @override
-  String get ruleNameCnDirectDomain => 'Прямые домены режима CN';
+  String get ruleNameCnDirectDomain => 'Прямые домены в режиме CN';
 
   @override
-  String get ruleNameGfwProxyDomain => 'Прокси-домены режима GFW';
+  String get ruleNameGfwProxyDomain => 'Прокси-домены в режиме GFW';
 
   @override
-  String get ruleNameGfwProxyIp => 'IP-адреса прокси-сервера режима GFW';
+  String get ruleNameGfwProxyIp => 'IP-адреса прокси в режиме GFW';
 
   @override
-  String get ruleNameRuBlockProxyDomain => 'Прокси-домены в режиме RU-Block';
+  String get ruleNameRuBlockProxyDomain => 'Прокси-домены в режиме RU-блока';
 
   @override
-  String get ruleNameRuBlockProxyIp => 'IP-адреса прокси-серверов в режиме RU-Block';
+  String get ruleNameRuBlockProxyIp => 'IP-адреса прокси-сервера в режиме RU-блока';
 
   @override
-  String get ruleNameRuBlockAllProxyDomain => 'Прокси-домены в режиме RU-Block(All)';
+  String get ruleNameRuBlockAllProxyDomain => 'RU-Block(All) Mode Proxy Domains';
 
   @override
-  String get ruleNameRuBlockAllProxyIp => 'IP-адреса прокси-серверов в режиме RU-Block(All)';
+  String get ruleNameRuBlockAllProxyIp => 'RU-Block(All) Mode Proxy IPs';
 
   @override
-  String get ruleNameDefaultDirect => 'По умолчанию Прямой';
+  String get ruleNameDefaultDirect => 'Default Direct';
 
   @override
-  String get ruleNameGlobalDirectDomain => 'Прямые домены в режиме Proxy-All';
+  String get ruleNameGlobalDirectDomain => 'Proxy-All Mode Direct Domains';
 
   @override
-  String get ruleNameGlobalDirectIp => 'Прямые IP-адреса в режиме Proxy-All';
+  String get ruleNameGlobalDirectIp => 'Proxy-All Mode Direct IPs';
 
   @override
-  String get addAppSet => 'Добавить набор приложений';
+  String get addAppSet => 'Add App Set';
 
   @override
-  String get pro => 'Пожизненная учетная запись Pro';
+  String get pro => 'Lifetime Pro Account';
 
   @override
-  String get proxyShare => 'Поделиться прокси';
+  String get proxyShare => 'Proxy Share';
 
   @override
-  String get sniff => 'Нюхать';
+  String get sniff => 'Sniff';
 
   @override
-  String get proxyShareDesc => 'Включите входящие HTTP и SOCKS после запуска VPN, чтобы другие устройства в локальной сети могли подключаться к интернету через этот компьютер. Имя входящего трафика — «proxyShare», его можно использовать в правилах.';
+  String get proxyShareDesc => 'Enable HTTP and SOCKS inbound after VPN starts, so that other devices in the local network can access the internet through this machine. The inbound name is \"proxyShare\", which you can use in rules.';
 
   @override
-  String get loginSuccess => 'Успешный вход';
+  String get loginSuccess => 'Вход выполнен успешно.';
 
   @override
-  String get emailLogin => 'Войти по электронной почте';
+  String get emailLogin => 'Вход по электронной почте';
 
   @override
   String get google => 'Google';
@@ -1287,13 +1287,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get apple => 'Яблоко';
 
   @override
-  String get microsoft => 'Майкрософт';
+  String get microsoft => 'Microsoft';
 
   @override
-  String get rateApp => 'Оценить VX';
+  String get rateApp => 'Ставка VX';
 
   @override
-  String get userConsend => 'После входа в систему ваш адрес электронной почты будет храниться на нашем сервере до тех пор, пока вы не удалите свою учётную запись. Это необходимо для обеспечения возможности входа в учётную запись. Мы не передаем ваш адрес электронной почты третьим лицам. Разрешаете ли вы нам хранить ваш адрес электронной почты?';
+  String get userConsend => 'После входа в систему ваш адрес электронной почты будет храниться на нашем сервере до тех пор, пока вы не удалите свою учетную запись. Это необходимо для обеспечения возможности входа в учетную запись. Мы не передаем ваш адрес электронной почты третьим лицам. Разрешаете ли вы нам хранить ваш адрес электронной почты?';
 
   @override
   String get okay => 'Хорошо';
@@ -1305,24 +1305,24 @@ class AppLocalizationsRu extends AppLocalizations {
   String get reject => 'Отклонять';
 
   @override
-  String get greatSetDescription1 => 'Большой набор состоит из небольших наборов или других больших наборов. При определении принадлежности домена/IP-адреса к набору в первую очередь рассматриваются исключенные наборы. Если домен входит в какой-либо из исключенных наборов, то он отсутствует в наборе. ';
+  String get greatSetDescription1 => 'Большое множество состоит из малых множеств или других больших множеств. При определении принадлежности домена/IP-адреса к множеству сначала рассматриваются исключенные множества; если домен находится в каком-либо из исключенных множеств, то он не входит в данное множество. ';
 
   @override
-  String get greatSetDescription2 => 'В большом наборе может быть взаимоисключающий набор. Если домен/IP-адрес входит в набор A, то этот домен/IP-адрес не входит в свой взаимоисключающий набор.';
+  String get greatSetDescription2 => 'Большое множество может содержать взаимоисключающие множества. Если домен/IP-адрес входит в множество A, то этот домен/IP-адрес не входит в его взаимоисключающее множество.';
 
   @override
-  String get pleaseLoginFirst => 'Пожалуйста, сначала войдите в систему';
+  String get pleaseLoginFirst => 'Пожалуйста, сначала войдите в систему.';
 
   @override
   String get telegram => 'Телеграмма';
 
   @override
   String failedToDownloadGeoData(String value) {
-    return 'Не удалось загрузить GeoData: $value';
+    return 'Не удалось загрузить геоданные: $value';
   }
 
   @override
-  String get doNotUse1080IOS => 'Не используйте 1080 на iOS';
+  String get doNotUse1080IOS => 'Не используйте разрешение 1080p на iOS.';
 
   @override
   String get deletedNode => 'Удаленный узел';
@@ -1333,55 +1333,55 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get tunIpv6Settings => 'Настройки IP TUN';
+  String get tunIpv6Settings => 'Настройки TUN';
 
   @override
-  String get alwaysEnableIpv6 => 'Всегда включать IPv6';
+  String get alwaysEnableIpv6 => 'Всегда включайте IPv6';
 
   @override
-  String get dependsOnDefaultNic => 'Зависит от физической сетевой карты по умолчанию';
+  String get dependsOnDefaultNic => 'Зависит от используемого по умолчанию физического сетевого адаптера.';
 
   @override
-  String get dependsOnDefaultNicDesc => 'Если физическая сетевая карта по умолчанию поддерживает IPv6, то сетевая карта TUN также будет поддерживать IPv6, в противном случае IPv6 не поддерживается.';
+  String get dependsOnDefaultNicDesc => 'Если стандартный физический сетевой адаптер поддерживает IPv6, то и сетевой адаптер TUN будет поддерживать IPv6; в противном случае поддержка IPv6 отсутствует.';
 
   @override
-  String get tunIpv4Desc => 'On Windows/Linux, if your physical NIC supports IPv6, IPv6 traffic will not be handled by VX TUN, they will be handled by your physical NIC; on Android/iOS/macOS, IPv6 traffic will be blocked anyway.';
+  String get tunIpv4Desc => 'В Windows/Linux, если ваша физическая сетевая карта поддерживает IPv6, трафик IPv6 не будет обрабатываться VX TUN, он будет обрабатываться вашей физической сетевой картой; в Android/iOS/macOS трафик IPv6 в любом случае будет заблокирован.';
 
   @override
-  String get tunRejectIpv6 => 'Отклонять IPv6';
+  String get tunRejectIpv6 => 'Отклонить IPv6, если узел его не поддерживает.';
 
   @override
-  String get tunRejectIpv6Desc => 'Match a connection based on destination, source, application (if available), if the matched handler does not support IPv6, reject the connection';
+  String get tunRejectIpv6Desc => 'Сопоставьте соединение на основе адреса назначения, источника и приложения (если доступно). Если соответствующий обработчик не поддерживает IPv6, отклоните соединение.';
 
   @override
-  String get tunCidr4 => 'Адрес TUN IPv4 (CIDR)';
+  String get tunCidr4 => 'IPv4-адрес TUN (CIDR)';
 
   @override
-  String get tunCidr6 => 'Адрес TUN IPv6 (CIDR)';
+  String get tunCidr6 => 'IPv6-адрес TUN (CIDR)';
 
   @override
-  String get tunCidr4Hint => 'напр. 172.23.27.1/24';
+  String get tunCidr4Hint => 'например 172.23.27.1/24';
 
   @override
-  String get tunCidr6Hint => 'напр. fc20::1/120';
+  String get tunCidr6Hint => 'например fc20::1/120';
 
   @override
-  String get tunDns4 => 'TUN DNS IPv4';
+  String get tunDns4 => 'TU DNS IPv4';
 
   @override
-  String get tunDns6 => 'TUN DNS IPv6';
+  String get tunDns6 => 'TU DNS IPv6';
 
   @override
-  String get tunDns4Hint => 'напр. 172.23.27.2 (несколько через запятую)';
+  String get tunDns4Hint => 'например 172.23.27.2';
 
   @override
-  String get tunDns6Hint => 'напр. fc20::2 (несколько через запятую)';
+  String get tunDns6Hint => 'например fc20::2';
 
   @override
-  String get tunMtu => 'TUN MTU';
+  String get tunMtu => 'ТУН МТУ';
 
   @override
-  String get tunMtuHint => 'Пусто = по умолчанию';
+  String get tunMtuHint => 'Пусто = значение по умолчанию для платформы';
 
   @override
   String failedToCreateAllFirstLaunch(String value) {
@@ -1395,7 +1395,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String newVersionDownloadedDialog(String version) {
-    return 'Новая версия $version загружена, установить ее?';
+    return 'Новая версия $version загружена, установите её?';
   }
 
   @override
@@ -1405,14 +1405,14 @@ class AppLocalizationsRu extends AppLocalizations {
   String get install => 'Установить';
 
   @override
-  String get later => 'Напомнить мне позже';
+  String get later => 'Напомни мне позже';
 
   @override
-  String get autoCheck => 'Automatically Check New Version';
+  String get autoCheck => 'Автоматическая проверка новой версии';
 
   @override
   String downloading(String version) {
-    return 'Загрузка $version...';
+    return 'Загрузка...';
   }
 
   @override
@@ -1436,19 +1436,19 @@ class AppLocalizationsRu extends AppLocalizations {
   String get general => 'Общий';
 
   @override
-  String get customizeHomeWidgets => 'Настроить главную';
+  String get customizeHomeWidgets => 'обустройте свой дом по своему вкусу';
 
   @override
-  String get customizeHomeWidgetsDesc => 'Выберите, какие блоки показывать на главном экране.';
+  String get customizeHomeWidgetsDesc => 'Выберите, какие разделы отображать на главном экране.';
 
   @override
   String get homeWidgetStats => 'Скорость и статистика';
 
   @override
-  String get homeWidgetNodesHelper => 'Помощник узлов';
+  String get homeWidgetNodesHelper => 'Вспомогательный модуль для узлов';
 
   @override
-  String get homeWidgetNodes => 'Список узлов';
+  String get homeWidgetNodes => 'Текущие узлы';
 
   @override
   String get light => 'Свет';
@@ -1466,46 +1466,46 @@ class AppLocalizationsRu extends AppLocalizations {
   String get serverError => 'Ошибка сервера';
 
   @override
-  String get gfwDesc => 'Все домены/IP-адреса, заблокированные GFW, подключаются через прокси, остальные — напрямую.';
+  String get gfwDesc => 'Все домены/IP-адреса, заблокированные GFW, перенаправляются через прокси, остальные — напрямую.';
 
   @override
-  String get cnDesc => 'Все домены/IP-адреса материкового Китая переходят на прямой доступ, остальные — на прокси-сервер.';
+  String get cnDesc => 'Все домены/IP-адреса материкового Китая перенаправляются напрямую, остальные — через прокси.';
 
   @override
-  String get proxyAllDesc => 'Все нечастные домены/IP-адреса переходят на прокси-сервер';
+  String get proxyAllDesc => 'Все не частные домены/IP-адреса переходят на прокси.';
 
   @override
   String get dnsRule => 'Правила DNS';
 
   @override
-  String get dnsRuleNameGfwProxyFake => 'Прокси-домены режима GFW (A/AAAA)';
+  String get dnsRuleNameGfwProxyFake => 'Прокси-домены в режиме GFW (A/AAAA)';
 
   @override
-  String get dnsRuleNameGfwProxy => 'Прокси-домены режима GFW';
+  String get dnsRuleNameGfwProxy => 'Прокси-домены в режиме GFW';
 
   @override
-  String get dnsRuleNameRuBlockProxyFake => 'Прокси-домены в режиме RU-Block (A/AAAA)';
+  String get dnsRuleNameRuBlockProxyFake => 'Прокси-домены в режиме RU-блока (A/AAAA)';
 
   @override
-  String get dnsRuleNameRuBlockProxy => 'Прокси-домены в режиме RU-Block';
+  String get dnsRuleNameRuBlockProxy => 'Прокси-домены в режиме RU-блока';
 
   @override
-  String get dnsRuleNameRuBlockAllProxyFake => 'Прокси-домены режима RU-Block(All) (A/AAAA)';
+  String get dnsRuleNameRuBlockAllProxyFake => 'Прокси-домены в режиме RU-блока (все) (A/AAAA)';
 
   @override
-  String get dnsRuleNameRuBlockAllProxy => 'Прокси-домены в режиме RU-Block(All)';
+  String get dnsRuleNameRuBlockAllProxy => 'Прокси-домены в режиме RU-блока (всех доменов)';
 
   @override
-  String get dnsRuleNameCnProxyFake => 'Прокси-домены режима CN (A/AAAA)';
+  String get dnsRuleNameCnProxyFake => 'Прокси-домены в режиме CN (A/AAAA)';
 
   @override
-  String get dnsRuleNameCnProxy => 'Прокси-домены режима CN';
+  String get dnsRuleNameCnProxy => 'Прокси-домены в режиме CN';
 
   @override
-  String get dnsRuleNameProxyAllProxyFake => 'Прокси-домены в режиме Proxy-All (A/AAAA)';
+  String get dnsRuleNameProxyAllProxyFake => 'Режим прокси-сервера для всех доменов (A/AAAA)';
 
   @override
-  String get dnsRuleNameProxyAllProxy => 'Прокси-домены в режиме Proxy-All';
+  String get dnsRuleNameProxyAllProxy => 'Режим Proxy-All, домены прокси';
 
   @override
   String get dnsRuleNameDefaultDirect => 'Другие';
@@ -1514,16 +1514,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get routerRules => 'Правила маршрутизатора';
 
   @override
-  String get dnsRuleDesc => 'Для каждого DNS-запроса правила сопоставляются по одному, начиная с самого верха. Если правило совпало, следующее правило не учитывается. DNS-сервер, указанный в правиле, будет использоваться для обработки DNS-запроса.';
+  String get dnsRuleDesc => 'Для каждого DNS-запроса правила сопоставляются по одному, начиная сверху. Если правило совпадает, следующее правило не будет учитываться. Для обработки DNS-запроса будет использоваться DNS-сервер, указанный в правиле. Если ни одно правило не совпадает, возвращается пустой результат DNS.';
 
   @override
   String get dnsServer => 'DNS-сервер';
 
   @override
-  String get howDnsRuleMatch => 'Если все условия совпадают или ни одно условие не включено, правило DNS срабатывает.';
+  String get howDnsRuleMatch => 'Если все условия выполнены или ни одно из условий не выполнено, правило DNS считается выполненным.';
 
   @override
-  String get selectAtleastOneDnsServer => 'Выберите хотя бы один DNS-сервер';
+  String get selectAtleastOneDnsServer => 'Выберите как минимум один DNS-сервер';
 
   @override
   String get dnsType => 'Тип DNS';
@@ -1532,28 +1532,28 @@ class AppLocalizationsRu extends AppLocalizations {
   String get directDnsServer => 'Прямой DNS-сервер';
 
   @override
-  String get proxyDnsServer => 'Прокси DNS-сервер';
+  String get proxyDnsServer => 'Прокси-сервер DNS';
 
   @override
   String get addDnsServer => 'Добавить DNS-сервер';
 
   @override
-  String get useDefaultDnsServer => 'Используйте DNS-серверы сетевой карты по умолчанию. Если не удаётся получить доступ к серверам, используйте указанные выше серверы.';
+  String get useDefaultDnsServer => 'Используйте DNS-серверы сетевого адаптера по умолчанию. Если получить доступ к серверам не удаётся, используйте указанные выше серверы в качестве резервного варианта.';
 
   @override
-  String get useDefaultNicDnsServer => 'Используйте DNS-серверы сетевой карты по умолчанию. Если не удаётся получить доступ к серверам, используйте следующее:';
+  String get useDefaultNicDnsServer => 'Используйте DNS-серверы сетевого адаптера по умолчанию. Если получить доступ к серверам не удаётся, используйте следующее:';
 
   @override
-  String get addDnsAddressHint => 'Поддерживается несколько адресов. Разделяйте их запятыми. Каждый DNS-запрос будет отправлен на все адреса одновременно, будет использован первый ответ.';
+  String get addDnsAddressHint => 'Поддерживается отправка нескольких адресов. Используйте запятую для разделения. Каждый DNS-запрос будет отправлен одновременно на все адреса, будет использован первый полученный ответ.';
 
   @override
-  String get invalidUrl => 'Неверный URL-адрес';
+  String get invalidUrl => 'Неверный URL';
 
   @override
-  String get duplicateDnsServerName => 'Дублирующееся имя DNS-сервера';
+  String get duplicateDnsServerName => 'Повторяющееся имя DNS-сервера';
 
   @override
-  String get dnsTypeConditionDesc => 'Если флажок установлен, это условие включено. Условие выполняется только в том случае, если тип DNS-запроса соответствует выбранному типу.';
+  String get dnsTypeConditionDesc => 'Если этот флажок установлен, то условие выполняется. Условие истинно только в том случае, если тип DNS-запроса относится к выбранному типу.';
 
   @override
   String enabledConditions(num number) {
@@ -1563,7 +1563,7 @@ class AppLocalizationsRu extends AppLocalizations {
     );
     final String numberString = numberNumberFormat.format(number);
 
-    return 'Включенные условия: $numberString';
+    return 'Условия включения: $numberString';
   }
 
   @override
@@ -1573,7 +1573,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hideSelector => 'Скрыть селектор';
 
   @override
-  String get showHandler => 'Показать обработчик';
+  String get showHandler => 'Хендлер выставки';
 
   @override
   String get hideHandler => 'Скрыть селектор';
@@ -1588,28 +1588,28 @@ class AppLocalizationsRu extends AppLocalizations {
   String get upload => 'Загрузить';
 
   @override
-  String get saveToDownloadFolder => 'Сохранить для загрузки';
+  String get saveToDownloadFolder => 'Сохранить для скачивания';
 
   @override
-  String get saveToDownloadFolderDesc => 'Переместите журналы в папку «Загрузки».';
+  String get saveToDownloadFolderDesc => 'Переместите файлы журналов в папку «Загрузки».';
 
   @override
-  String get debugLogDesc => 'Если у вас возникли проблемы при использовании VX, вы можете включить кнопку и дождаться повторного возникновения проблемы, затем нажать кнопку «Загрузить», чтобы загрузить логи. Не забудьте закрыть её и удалить логи после загрузки. Журналы разработчика не загружаются автоматически, поскольку содержат информацию о вашей сетевой активности, включая используемые вами веб-сайты и приложения. Мы удаляем логи сразу после их обработки.';
+  String get debugLogDesc => 'Если у вас возникли проблемы при использовании VX, вы можете активировать кнопку и подождать, пока проблема не возникнет снова, затем нажать кнопку «Загрузить», чтобы отправить нам журналы. Не забудьте закрыть кнопку и удалить журналы после загрузки. Журналы для разработчиков не загружаются автоматически, поскольку они содержат информацию о вашей сетевой активности, включая используемые вами веб-сайты и приложения. Мы немедленно удаляем журналы после их обработки.';
 
   @override
-  String get clashFormatSupported => 'Поддерживаются только файлы правил коллизий.';
+  String get clashFormatSupported => 'Only Clash Rule files are supported';
 
   @override
-  String get network => 'Сеть';
+  String get network => 'Network';
 
   @override
-  String get source => 'Источник';
+  String get source => 'Source';
 
   @override
-  String get fallbackToProxy => 'Возврат к прокси-серверу';
+  String get fallbackToProxy => 'Fallback To Proxy';
 
   @override
-  String get fallbackToProxySetting => 'При сбое прямого соединения используется резервный прокси-сервер. Будет использован узел, выбранный селектором «Прокси». Если селектор не существует, будет выбран случайный узел.';
+  String get fallbackToProxySetting => 'When a direct connection failed, fallback to use proxy. The node selected by the \"Proxy\" selector will be used, if the selector does not exist, a random nodes will be selected';
 
   @override
   String get changeIpv6ToDomain => 'Change IPv6 to Domain';
@@ -1618,24 +1618,24 @@ class AppLocalizationsRu extends AppLocalizations {
   String get changeIpv6ToDomainDesc => 'If the matched node does not support IPv6, but the target address is IPv6, and the domain is sniffed, change target address to the domain.';
 
   @override
-  String get installAsWinService => 'Добавить VX в службу Windows';
+  String get installAsWinService => 'Add VX to Windows Service';
 
   @override
-  String get installAsWinServiceDesc => 'Перед использованием TUN необходимо добавить VX в службу Windows. Нажмите «Да», чтобы установить VX как службу. Для этого потребуется дать разрешение в следующем окне запроса UAC.';
+  String get installAsWinServiceDesc => 'Before use TUN, VX needs to be added into Windows Service. Click Yes to install VX as a service, which would require you to give permission in the following UAC prompt window.';
 
   @override
-  String get placeOnTop => 'Вершина';
+  String get placeOnTop => 'Top';
 
   @override
-  String get stopPlaceOnTop => 'Untop';
+  String get stopPlaceOnTop => 'Верхняя часть';
 
   @override
   String fallbackTo(String node) {
-    return 'Возврат к $node';
+    return 'Вернемся к $node';
   }
 
   @override
-  String get pingTestMethod => 'Метод проверки задержки';
+  String get pingTestMethod => 'Метод тестирования задержки';
 
   @override
   String get pingReal => 'Реальная задержка';
@@ -1647,13 +1647,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get startOnBoot => 'Запуск при загрузке';
 
   @override
-  String get startOnBootDesc => 'Запускать VX автоматически при запуске';
+  String get startOnBootDesc => 'Автоматический запуск VX при загрузке системы.';
 
   @override
-  String get alwaysOn => 'Всегда включен';
+  String get alwaysOn => 'Всегда включено';
 
   @override
-  String get alwaysOnDesc => 'Пока вы не нажали кнопку «Отключить», всегда старайтесь оставаться подключенным, когда приложение запущено.';
+  String get alwaysOnDesc => 'Пока вы не нажимали кнопку «Отключиться», всегда старайтесь оставаться подключенными, когда приложение запущено.';
 
   @override
   String get checkAndUpdate => 'Проверить и обновить';
@@ -1662,10 +1662,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get noNewVersion => 'Нет новых версий';
 
   @override
-  String get enableSystemExtension => 'Включите VX SystemExtension, перейдя в Системные настройки -> Общие -> Элементы входа и расширения -> Сетевые расширения.';
+  String get enableSystemExtension => 'Включите VX SystemExtension, перейдя в «Системные настройки» -> «Общие» -> «Элементы авторизации и расширения» -> «Сетевые расширения».';
 
   @override
-  String get systemProxyPortSetting => 'Настройка порта системного прокси-сервера';
+  String get systemProxyPortSetting => 'Настройка порта системного прокси';
 
   @override
   String get randomPorts => 'Случайные порты';
@@ -1674,7 +1674,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get staticPorts => 'Статические порты';
 
   @override
-  String get whenNoDomain => 'Снифф, когда нет информации о домене';
+  String get whenNoDomain => 'Проверка при отсутствии информации о домене.';
 
   @override
   String get enable => 'Давать возможность';
@@ -1686,7 +1686,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get checkUpdate => 'Проверить обновление';
 
   @override
-  String get handlerCopiedSuccess => 'Копирование выполнено успешно. Узел добавлен в группу по умолчанию.';
+  String get handlerCopiedSuccess => 'Копирование прошло успешно. Узел добавлен в группу по умолчанию.';
 
   @override
   String get hysteriaRejectQuic => 'Истерия отвергает QUIC';
@@ -1701,10 +1701,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get cloudSyncDesc1 => 'Синхронизируйте базу данных между несколькими устройствами. ';
 
   @override
-  String get cloudSyncDesc2 => 'Для устройств Android с установленными сервисами Google и устройств Apple, которые могут взаимодействовать с серверами Google FCM, синхронизация выполняется в режиме реального времени. В противном случае синхронизация будет происходить каждые 5 минут.';
+  String get cloudSyncDesc2 => 'Для устройств Android с установленными сервисами Google и включенными уведомлениями, а также для устройств Apple, способных взаимодействовать с серверами Google FCM, синхронизация происходит в режиме реального времени. В противном случае синхронизация будет происходить каждые 5 минут. Вы можете нажать на значок V в верхнем левом углу, чтобы запустить синхронизацию вручную.';
 
   @override
-  String get cloudSyncDesc3 => 'Данные синхронизации будут автоматически удалены из облака после того, как ваше устройство их скачает. Если ваше устройство не скачает их в течение 7 дней, данные будут удалены из облака.';
+  String get cloudSyncDesc3 => 'Данные синхронизации будут автоматически удалены из облака после того, как ваше устройство их получит. Если ваше устройство не получало данные в течение 7 дней, данные будут удалены из облака.';
 
   @override
   String get nodeSub => 'Узел/Подписка';
@@ -1725,16 +1725,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get sync => 'Синхронизация';
 
   @override
-  String get conditaionWarn1 => 'В большинстве случаев условия домена и условия IP-адреса не должны существовать одновременно. Если они присутствуют одновременно, правило сработает только в том случае, если запрос содержит информацию как о домене, так и об IP-адресе, что случается не всегда.';
+  String get conditaionWarn1 => 'В большинстве случаев условия, касающиеся домена и IP-адреса, не должны существовать одновременно. Если оба условия присутствуют, правило будет срабатывать только в том случае, если запрос содержит информацию как о домене, так и об IP-адресе, что бывает не всегда.';
 
   @override
-  String get setName => 'Установить имя';
+  String get setName => 'Название набора';
 
   @override
   String get addSet => 'Добавить набор';
 
   @override
-  String get domainIpAppConditionDesc => 'Если домен/IP-адрес/приложение запроса входит в любой из наборов, правило срабатывает.';
+  String get domainIpAppConditionDesc => 'Если домен/IP-адрес/приложение запроса присутствует в любом из наборов, правило выполняется.';
 
   @override
   String get backup => 'Резервное копирование базы данных';
@@ -1743,13 +1743,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get autoBackup => 'Автоматическое резервное копирование';
 
   @override
-  String get autoBackupDesc => 'Автоматически выполнять резервное копирование базы данных в облако один раз в день.';
+  String get autoBackupDesc => 'Автоматическое резервное копирование базы данных в облако один раз в день.';
 
   @override
   String get currentBackup => 'Текущая резервная копия';
 
   @override
-  String get exportToFile => 'Экспортировать в файл';
+  String get exportToFile => 'Экспорт в файл';
 
   @override
   String get uploadDb => 'Загрузить';
@@ -1758,55 +1758,55 @@ class AppLocalizationsRu extends AppLocalizations {
   String get restoreDb => 'Восстановить';
 
   @override
-  String get deleteCloudDb => 'Удалить базу данных в облаке';
+  String get deleteCloudDb => 'Удаление базы данных в облаке';
 
   @override
-  String get uploadDbSuccess => 'База данных успешно загружена';
+  String get uploadDbSuccess => 'База данных успешно загружена.';
 
   @override
-  String get restoreDbSuccess => 'Восстановление базы данных успешно завершено';
+  String get restoreDbSuccess => 'База данных успешно восстановлена.';
 
   @override
-  String get deleteDbSuccess => 'Удалить успешно';
+  String get deleteDbSuccess => 'Удаление успешно завершено';
 
   @override
-  String get gridView => 'Вид сетки';
+  String get gridView => 'Сеточный вид';
 
   @override
-  String get listView => 'Вид списка';
+  String get listView => 'Просмотр списка';
 
   @override
-  String get sort => 'Сортировать';
+  String get sort => 'Сортировка';
 
   @override
   String get clear => 'Прозрачный';
 
   @override
-  String get fallbackRetryDomain => 'Повторить домен';
+  String get fallbackRetryDomain => 'Повторная попытка для домена';
 
   @override
-  String get fallbackRetryDomainDesc => 'Если прокси-подключение использует IP-адреса и не удалось подключиться из-за тайм-аута ввода-вывода (например, из-за загрязнения DNS), используйте домен в качестве целевого и повторите попытку. Сначала будет использован домен, полученный с помощью сниффинга, а если он недоступен, будет использован домен IP-to-domain.';
+  String get fallbackRetryDomainDesc => 'Если прокси-соединение использует IP-адреса в качестве целевых и завершается с ошибкой из-за таймаута ввода-вывода (это может быть связано с загрязнением DNS), используйте домен в качестве целевого и повторите попытку. Сначала будет использован перехваченный домен соединения; если он недоступен, будет использован домен, полученный из IP-адреса.';
 
   @override
-  String get backupPasswordDesc => 'Используется для шифрования базы данных. Восстановление резервных копий возможно только с устройств с этим паролем. Пароль зашифрован и хранится локально.';
+  String get backupPasswordDesc => 'Используется для шифрования базы данных. Восстанавливать резервные копии могут только устройства, обладающие этим паролем. Пароль шифруется и хранится локально.';
 
   @override
   String get syncPasswordDesc => 'Используется для шифрования данных синхронизации. Только устройства с этим паролем могут успешно синхронизировать данные. Пароль шифруется и хранится локально.';
 
   @override
-  String get addDomainIpAppSet => 'Добавить набор доменов/приложений/IP-адресов';
+  String get addDomainIpAppSet => 'Добавить домен/приложение/IP-адрес';
 
   @override
   String get unsaved => 'Несохраненный';
 
   @override
-  String get unapplied => 'Unapplied';
+  String get unapplied => 'Неприменено';
 
   @override
-  String get unappliedChanges => 'You have unapplied changes';
+  String get unappliedChanges => 'У вас есть непримененные изменения.';
 
   @override
-  String get discard => 'Discard';
+  String get discard => 'Отказаться';
 
   @override
   String get applySuccess => 'Applied successfully';
@@ -1815,49 +1815,49 @@ class AppLocalizationsRu extends AppLocalizations {
   String get applyFailed => 'Failed to apply';
 
   @override
-  String get rememberPasswordInMemory => 'Запомните пароль sudo для дальнейшего использования.';
+  String get rememberPasswordInMemory => 'Remember sudo password in memory for later use';
 
   @override
-  String get doNotShowAgain => 'Не показывать снова';
+  String get doNotShowAgain => 'Do not show again';
 
   @override
-  String get rpmTunNotice => 'При включении TUN режим переадресации по обратному пути устанавливается на значение Loose(2) и возвращается к состоянию, которое было при отключении. Подробнее о переадресации по обратному пути можно узнать на следующем веб-сайте.';
+  String get rpmTunNotice => 'When TUN is on, Reverse Path Forwarding mode will be set to Loose(2) and reset to what it was when disconnect. You can go to the following website to learn about Reverse Path Forwarding';
 
   @override
-  String get internalDnsDesc => 'Внутренние DNS-серверы используются для разрешения доменов при исходящих звонках. Их два: один — internal-dns-proxy, который использует селектор прокси для подключения к 1.1.1.1; другой — internal-dns-direct, который использует прямое подключение к 223.5.5.5 и 1.1.1.1. Первым используется internal-dns-direct, а в случае неудачи — internal-dns-proxy.';
+  String get internalDnsDesc => 'Internal DNS servers are mainly used to resolve domains when outbounds are dialing. They will be used from left to right until one of them succeeds.';
 
   @override
-  String get nodeSetDesc => 'Существует небольшой набор доменов под названием «__node__», содержащий домены и SNI всех узлов. Также существует небольшой набор IP-адресов под названием «__node__», содержащий IP-адреса всех узлов.';
+  String get nodeSetDesc => 'There is a small domain set named \"__node__\" which contains domains and SNIs of all nodes. There is also a small IP set named \"__node__\" which contains IPs of all nodes.';
 
   @override
-  String get dnsNameDesc => 'Имя DNS-сервера можно указать во входящем условии, чтобы указать, какой узел он использует.';
+  String get dnsNameDesc => 'A DNS server\'s name can be referenced in the inbound condition to specify which node it uses.';
 
   @override
-  String get directAppSetDesc => 'На Android приложения из набора прямых приложений не будут проходить через VX (разделенный туннель)';
+  String get directAppSetDesc => 'On Android, applications in the direct app set will not go through VX (Split Tunnel)';
 
   @override
-  String get deleteDebugLogs => 'Удалить журналы отладки';
+  String get deleteDebugLogs => 'Delete Debug Logs';
 
   @override
-  String get conditionDesc => 'Если у соединения нет информации об IP-адресе, условие IP-адреса будет ложным, и правило не сработает. Аналогично, если у соединения нет информации о домене, условие домена будет ложным, и правило не сработает.';
+  String get conditionDesc => 'Если у соединения отсутствует информация об IP-адресе, условие IP будет ложным, и правило не будет выполнено. Аналогично, если у соединения отсутствует информация о домене, условие домена будет ложным, и правило не будет выполнено.';
 
   @override
   String get lookupEch => 'Поиск ECH';
 
   @override
-  String get lookupEchDesc => 'Если включено и указанная выше конфигурация ECH пуста, конфигурация ECH будет найдена на DNS-сервере. Если поиск успешен, использовать ECH, в противном случае не использовать ECH.';
+  String get lookupEchDesc => 'Если параметр включен и поле ECH Config выше пустое, конфигурация ECH будет найдена на DNS-сервере. Если поиск пройден успешно, используется ECH, в противном случае — не используется ECH.';
 
   @override
-  String get adWanted => 'Опубликовать рекламу';
+  String get adWanted => 'Разместить рекламу';
 
   @override
   String get basicQuickDeployTitle => 'Два ядра, четыре протокола';
 
   @override
-  String get basicQuickDeploySummary => 'Развертывание ядер Xray, Hysteria и настройка узлов с четырьмя распространенными протоколами';
+  String get basicQuickDeploySummary => 'Разверните ядра Xray и Hysteria и настройте узлы с использованием четырех распространенных протоколов.';
 
   @override
-  String get basicQuickDeployDetails => 'Установите Xray-core и Hysteria, а также разверните следующие четыре входящих сервера. Если на сервере уже установлены Xray или Hysteria, исходная конфигурация будет заменена. Если на сервере не включена поддержка BBR, BBR будет включен.';
+  String get basicQuickDeployDetails => 'Установите Xray-core и Hysteria, а затем разверните следующие четыре компонента на сервере. Если на сервере уже установлены Xray или Hysteria, исходная конфигурация будет заменена. Если на сервере не включена функция BBR, она будет включена.';
 
   @override
   String get basicQuickDeployContent1 => 'Vmess пять случайных портов';
@@ -1866,7 +1866,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get basicQuickDeployContent2 => 'Shadowsocks пять случайных портов';
 
   @override
-  String get basicQuickDeployContent3 => 'Порт Hysteria 443';
+  String get basicQuickDeployContent3 => 'Порт «Истерия 443»';
 
   @override
   String get basicQuickDeployContent4 => 'Порт Vless-XTLS-Vision 443';
@@ -1875,14 +1875,14 @@ class AppLocalizationsRu extends AppLocalizations {
   String get masqueradeQuickDeployTitle => 'Реальность/XHTTP';
 
   @override
-  String get masqueradeQuickDeploySummary => 'Установите Xray-core и разверните входящий трафик Reality/XHTTP. Если на сервере уже установлен Xray, исходная конфигурация будет заменена. Если на сервере не включена поддержка BBR, BBR будет включен.';
+  String get masqueradeQuickDeploySummary => 'Установите Xray-core и разверните Reality/XHTTP inbound. Если на сервере уже установлен Xray, исходная конфигурация будет заменена. Если на сервере не включена функция BBR, она будет включена.';
 
   @override
-  String get masqueradeQuickDeployDetails => 'Установите Xray-core и разверните входящий трафик Reality/XHTTP. Если на сервере уже установлен Xray, исходная конфигурация будет заменена. Если на сервере не включена поддержка BBR, BBR будет включен.';
+  String get masqueradeQuickDeployDetails => 'Установите Xray-core и разверните Reality/XHTTP inbound. Если на сервере уже установлен Xray, исходная конфигурация будет заменена. Если на сервере не включена функция BBR, она будет включена.';
 
   @override
   String fatalError(String error) {
-    return 'Произошла ошибка. Перезапустите VX. Ошибка: $error';
+    return 'Произошла ошибка. Пожалуйста, перезапустите VX. Ошибка: $error';
   }
 
   @override
@@ -1895,7 +1895,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get selectAtleastOneSelector => 'Выберите хотя бы один селектор';
 
   @override
-  String get addRouteMode => 'Добавить режим маршрута';
+  String get addRouteMode => 'Добавить режим маршрутизации';
 
   @override
   String get setNameProxyApp => 'Прокси';
@@ -1911,17 +1911,17 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String insertDefaultError(String error) {
-    return 'Не удалось вставить данные по умолчанию. Перезапустите VX и добавьте их на страницу маршрутизации. Причина: $error';
+    return 'Не удалось вставить данные по умолчанию. Пожалуйста, перезапустите VX и добавьте их на страницу маршрутизации. Причина: $error';
   }
 
   @override
-  String get pleaseSelectARoutingMode => 'Пожалуйста, выберите режим маршрутизации';
+  String get pleaseSelectARoutingMode => 'Пожалуйста, выберите режим маршрутизации.';
 
   @override
-  String get addRouteModeNotice => 'Нажмите кнопку +, чтобы добавить режим маршрутизации.';
+  String get addRouteModeNotice => 'Нажмите кнопку «+», чтобы добавить режим маршрутизации.';
 
   @override
-  String get freeUserCannotUseCustomRoutingMode => 'Пользователи бесплатной версии не могут использовать пользовательские режимы маршрутизации. Выберите режим маршрутизации по умолчанию. Вы можете добавить режимы маршрутизации по умолчанию на странице маршрутизации.';
+  String get freeUserCannotUseCustomRoutingMode => 'Бесплатные пользователи не могут использовать пользовательские режимы маршрутизации. Пожалуйста, выберите режим маршрутизации по умолчанию. Добавить режимы маршрутизации по умолчанию можно на странице маршрутизации.';
 
   @override
   String get defaultRouteModes => 'Режимы по умолчанию';
@@ -1930,79 +1930,79 @@ class AppLocalizationsRu extends AppLocalizations {
   String get custom => 'Обычай';
 
   @override
-  String get geositeUrlDesc => 'Если пусто, будет использоваться geosite.dat, предоставленный LoyalSoldier.';
+  String get geositeUrlDesc => 'Если файл пуст, будет использован файл geosite.dat, предоставленный LoyalSoldier.';
 
   @override
-  String get geoUrlDesc => 'Если пусто, будет использоваться geoip.dat, предоставленный LoyalSoldier.';
+  String get geoUrlDesc => 'Если файл пуст, будет использован файл geoip.dat, предоставленный LoyalSoldier.';
 
   @override
-  String get ruBlocked => 'Россия заблокирована';
+  String get ruBlocked => 'Россия заблокировала';
 
   @override
-  String get ruBlockedDesc => 'Заблокированные в России домены/IP-адреса переходят на прокси, остальные — на прямую.';
+  String get ruBlockedDesc => 'Домены/IP-адреса, заблокированные в России, перенаправляются через прокси, остальные — напрямую.';
 
   @override
-  String get ruBlockedAll => 'Россия заблокирована (все)';
+  String get ruBlockedAll => 'Россия заблокировала (все)';
 
   @override
-  String get ruBlockedAllDesc => 'Все домены/IP-адреса, заблокированные в России, переходят на прокси, остальные — на прямую.';
+  String get ruBlockedAllDesc => 'Все домены/IP-адреса, заблокированные в России, перенаправляются через прокси, остальные — напрямую.';
 
   @override
-  String get dnsServerProxy => 'Прокси DNS-сервер';
+  String get dnsServerProxy => 'Прокси-сервер DNS';
 
   @override
   String get dnsServerDirect => 'Прямой DNS-сервер';
 
   @override
-  String get sniffDomainForIpConnection => 'Если соединение использует целевой IP-адрес, прослушивайте домен';
+  String get sniffDomainForIpConnection => 'Если соединение использует целевой IP-адрес, перехватите домен.';
 
   @override
-  String get resolveDomain => 'Для подключений с использованием доменных адресов используйте DNS для разрешения IP-адресов. Когда каждый разрешенный IP-адрес делает условие IP-адреса истинным, условие становится истинным.';
+  String get resolveDomain => 'Для подключений с использованием доменных имен используйте DNS для разрешения IP-адресов. Если каждый разрешенный IP-адрес удовлетворяет условию, то условие считается истинным.';
 
   @override
-  String get skipSniff => 'Нет нюха';
+  String get skipSniff => 'Не нюхать';
 
   @override
-  String get resolve => 'Ресовле';
+  String get resolve => 'Рессолю';
 
   @override
-  String get skipResolve => 'Нет решимости';
+  String get skipResolve => 'Нет решения';
 
   @override
-  String get describeTheProblem => 'Опишите проблему, с которой вы столкнулись. Если вы уже обращались в службу поддержки клиентов, оставьте поле пустым.';
+  String get describeTheProblem => 'Пожалуйста, опишите возникшую проблему. Если вы уже обращались в службу поддержки, можете оставить это поле пустым.';
 
   @override
-  String get debugLogNotAvailable => 'Функция журнала разработчика недоступна в версии, отличной от магазина.';
+  String get debugLogNotAvailable => 'Функция входа в систему для разработчиков недоступна в версии, не предназначенной для использования в магазине приложений.';
 
   @override
   String get useBloomFilter => 'Используйте фильтр Блума в iOS';
 
   @override
-  String get useBloomFilterDesc => 'Фильтр Блума может сократить использование памяти, однако существует небольшая вероятность (1%) ложных срабатываний: домены, не входящие в набор, могут быть ошибочно классифицированы как входящие в набор.';
+  String get useBloomFilterDesc => 'Фильтр Блума может уменьшить потребление памяти, однако существует небольшая вероятность (1%) ложных срабатываний: домены, не входящие в набор, могут быть ошибочно классифицированы как входящие в набор.';
 
   @override
-  String get addFromClashRuleFiles => 'Добавить из файлов правил коллизий';
+  String get addFromClashRuleFiles => 'Добавить из файлов правил Clash';
 
   @override
-  String get selectFromInstalledApps => 'Выбрать из установленных приложений';
+  String get selectFromInstalledApps => 'Выберите из списка установленных приложений.';
 
   @override
-  String get ipToDomainDesc => 'Связь IP -> Домен берётся из недавней истории DNS. Поскольку многие домены могут быть преобразованы в один и тот же IP-адрес, это может быть не настоящий домен. Поэтому соединение, скорее всего, будет содержать домен, но это не гарантируется.';
+  String get ipToDomainDesc => 'IP-адрес -> Домен определяется на основе истории последних DNS-записей. Поскольку многие домены могут иметь один и тот же IP-адрес, можно лишь предположить, что соединение, скорее всего, будет связано с этим доменом, но это не гарантируется.';
 
   @override
-  String get followingAiTranslated => 'Перевод на следующие языки осуществляется с помощью искусственного интеллекта, поэтому он может быть неточным.';
+  String get followingAiTranslated => 'Перевод следующих языков выполнен искусственным интеллектом, поэтому результаты могут быть неточными.';
 
   @override
-  String get addToDefault => 'Добавить в группу по умолчанию';
+  String get addToDefault => 'Добавить в значения по умолчанию';
 
   @override
-  String get vxCore => 'VX Core';
+  String get vxCore => 'Ядро VX';
 
   @override
-  String get days => 'дней';
+  String get days => 'дни';
 
   @override
-  String get hours => 'часов';
+  String get hours => 'часы';
 
   @override
   String get minutes => 'минут';
@@ -2011,16 +2011,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get seconds => 'секунд';
 
   @override
-  String get uptime => 'Время работы';
+  String get uptime => 'Время безотказной работы';
 
   @override
-  String get outbound => 'Выход';
+  String get outbound => 'Исходящие';
 
   @override
   String get overview => 'Обзор';
 
   @override
-  String get vxCoreConfig => 'Конфигурация VX Core';
+  String get vxCoreConfig => 'Конфигурация ядра VX';
 
   @override
   String get selectorDesc1 => 'Selector is used to select nodes. The \"Proxy\" selector is a special selector because it supports manual selection, other selectors do not support this option.';
@@ -2053,136 +2053,136 @@ class AppLocalizationsRu extends AppLocalizations {
   String get securityConditionMatchAllDesc => 'Force the inbound connections to use this security protocol. When enabled, inbound connections must use this security protocol, otherwise the connection will fail, and there should only be one security protocol. When disabled, this security protocol will only be considered when the condition matches, if condition does not match, the next security protocol will be considered, if no security protocol matches, then the inbound conn will be handed to the upper layer: Transport Protocol layer.';
 
   @override
-  String get allInOneQuickDeployTitle => 'All in One';
+  String get allInOneQuickDeployTitle => 'Всё в одном';
 
   @override
-  String get allInOneQuickDeploySummary => 'Install VX core (Open Source), deploy many protocols';
+  String get allInOneQuickDeploySummary => 'Установите ядро ​​VX (с открытым исходным кодом), разверните множество протоколов.';
 
   @override
-  String get allInOneQuickDeployDetails => 'Install VX core (Open Source), deploy a combination of: (Vmess, Trojan, Anytls)x(Websocket, gRPC)x(TLS, Reality) + Hysteria. If the server has not enabled BBR, BBR will be enabled';
+  String get allInOneQuickDeployDetails => 'Установите ядро ​​VX (с открытым исходным кодом), разверните комбинацию из: (Vmess, Trojan, Anytls)x(Websocket, gRPC)x(TLS, Reality) + Hysteria. Если на сервере не включена функция BBR, она будет включена.';
 
   @override
-  String get addMulti => 'Add Multi Inbound';
+  String get addMulti => 'Добавить многоканальный входящий';
 
   @override
-  String get addSingle => 'Add Normal Inbound';
+  String get addSingle => 'Добавить обычный входящий';
 
   @override
-  String get multiDesc => 'Multi inbound can use almost all protocols on a port. It is similar to Xray fallback. It supports fallback of all layers, which means you can set multiple proxy protocols, transport protocols and security protocols. Currently, UDP fallback is not supported, so the UDP port will only be used by one protocol, Hysteria will be preferred, if it is not available, the first protocol that supports UDP will use the UDP port.';
+  String get multiDesc => 'Многоканальный входящий трафик может использовать практически все протоколы на одном порту. Это похоже на механизм резервного копирования Xray. Он поддерживает резервное копирование на всех уровнях, что означает возможность установки нескольких протоколов прокси, транспортных протоколов и протоколов безопасности. В настоящее время резервное копирование UDP не поддерживается, поэтому порт UDP будет использоваться только одним протоколом — Hysteria; если он недоступен, порт UDP будет использоваться первым протоколом, поддерживающим UDP.';
 
   @override
-  String get normalInboundDesc => 'Normal inbound is similar to V2ray inbound, it supports fallback of proxy layer, you can set multiple proxy protocols, but it does not support fallback of transport layer and security layer (Multi inbound supports fallback of all layers).';
+  String get normalInboundDesc => 'Обычный входящий трафик аналогичен входящему трафику V2ray, он поддерживает резервный режим на уровне прокси, можно установить несколько протоколов прокси, но не поддерживает резервный режим на уровне транспорта и безопасности (многоканальный входящий трафик поддерживает резервный режим на всех уровнях).';
 
   @override
-  String get optional => 'Optional';
+  String get optional => 'Необязательный';
 
   @override
-  String get allInOneRealityDesc => 'Optional. If not filled, Reality inbound will not be added';
+  String get allInOneRealityDesc => 'Необязательно. Если не заполнено, информация о входящей реальности не будет добавлена.';
 
   @override
-  String get allInOneCdnDesc => 'Optional. The SSL/TLS encryption of CDN can be flexible/full. It is recommended to use full, because it will encrypt the traffic between CDN and your server';
+  String get allInOneCdnDesc => 'Необязательно. Шифрование SSL/TLS в CDN может быть гибким/полным. Рекомендуется использовать полное шифрование, поскольку оно шифрует трафик между CDN и вашим сервером.';
 
   @override
-  String get disableOSFirewall => 'Disable OS Firewall';
+  String get disableOSFirewall => 'Отключить брандмауэр ОС';
 
   @override
-  String get disableOSFirewallDesc => 'Your VPS usually has two firewalls, one is OS firewall, the other is the firewall provided by the VPS provider. This option will ONLY disable the OS firewall. Many cloud providers such as GCP disable the OS firewall by default, but some do not. If your VPS has the OS firewall enabled, and the OS firewall does not allow inbound traffic on the above port, your nodes will be unusable until you manually configure the OS firewall to allow inbound traffic on the above port.';
+  String get disableOSFirewallDesc => 'Обычно на вашем VPS установлено два брандмауэра: один — это брандмауэр операционной системы, а другой — брандмауэр, предоставленный провайдером VPS. Эта опция отключит ТОЛЬКО брандмауэр операционной системы. Многие облачные провайдеры, такие как GCP, отключают брандмауэр операционной системы по умолчанию, но некоторые этого не делают. Если на вашем VPS включен брандмауэр операционной системы, и он не разрешает входящий трафик на указанном выше порту, ваши узлы будут недоступны, пока вы вручную не настроите брандмауэр операционной системы для разрешения входящего трафика на этом порту.';
 
   @override
-  String get vxNotRunning => 'VX is not running';
+  String get vxNotRunning => 'VX не запущен';
 
   @override
-  String get restart => 'Restart';
+  String get restart => 'Перезапуск';
 
   @override
-  String get stop => 'Stop';
+  String get stop => 'Останавливаться';
 
   @override
-  String get uninstall => 'Uninstall';
+  String get uninstall => 'Удалить';
 
   @override
-  String get installVXCoreFirst => 'Install VX-Core (Open Source) first to configure it';
+  String get installVXCoreFirst => 'Для настройки сначала установите VX-Core (с открытым исходным кодом).';
 
   @override
-  String get duplicateInboundTagName => 'Duplicate inbound tag name';
+  String get duplicateInboundTagName => 'Повторяющееся имя входящего тега';
 
   @override
-  String get addToNodes => 'Add to Nodes';
+  String get addToNodes => 'Добавить в узлы';
 
   @override
-  String get others => 'Others';
+  String get others => 'Другие';
 
   @override
-  String get generateSelfSignedCert => 'Generate Self-Signed Certificate';
+  String get generateSelfSignedCert => 'Сгенерировать самоподписанный сертификат';
 
   @override
-  String get certToBeProvidedToPeer => 'Certificate to be provided to peer';
+  String get certToBeProvidedToPeer => 'Сертификат будет выдан коллеге.';
 
   @override
-  String get verifyPeerCertDesc => 'Used to verify the certificate provided by the peer';
+  String get verifyPeerCertDesc => 'Используется для проверки сертификата, предоставленного удаленной стороной.';
 
   @override
-  String get issueCADesc => 'Used to issue certificates to peers in real time';
+  String get issueCADesc => 'Используется для выдачи сертификатов узлам в режиме реального времени.';
 
   @override
-  String get generatePassword => 'Generate Password';
+  String get generatePassword => 'Сгенерировать пароль';
 
   @override
-  String get generate => 'Generate';
+  String get generate => 'Сгенерировать';
 
   @override
-  String get clientOnly => 'Client Only';
+  String get clientOnly => 'Только для клиентов';
 
   @override
-  String get visionDesc => 'Vision will reduce the characteristics of the connection and improve performance, expecially on Linux. If you enable this, the server must also have this enabled. (This feature originates from Vision-RPRX-XTLS of VLESS, and is roughly same as the basic mode of Vision-RPRX-XTLS)';
+  String get visionDesc => 'Функция Vision снизит характеристики соединения и повысит производительность, особенно в Linux. Если вы включите эту функцию, она также должна быть включена на сервере. (Эта функция заимствована из Vision-RPRX-XTLS от VLESS и примерно идентична базовому режиму Vision-RPRX-XTLS).';
 
   @override
-  String get activeNodes => 'Active Nodes';
+  String get activeNodes => 'Активные узлы';
 
   @override
-  String get activeNodesDesc => 'Nodes that are currently being used';
+  String get activeNodesDesc => 'Узлы, которые в настоящее время используются';
 
   @override
-  String get currentNodes => 'Current Nodes';
+  String get currentNodes => 'Текущие узлы';
 
   @override
-  String get currentNodesDesc => 'Nodes that are selected';
+  String get currentNodesDesc => 'Выбранные узлы';
 
   @override
-  String get recommendedNodes => 'Recommended Nodes';
+  String get recommendedNodes => 'Рекомендуемые узлы';
 
   @override
-  String get connections => 'Connections';
+  String get connections => 'Связи';
 
   @override
-  String get realtimeRate => 'Rate';
+  String get realtimeRate => 'Ставка';
 
   @override
-  String get realtimeRateDesc => 'Observerd rate of the node: speed of downloading 10KB data.';
+  String get realtimeRateDesc => 'Наблюдаемая скорость узла: скорость загрузки данных размером 10 КБ.';
 
   @override
-  String get realtimeLatency => 'Latency';
+  String get realtimeLatency => 'Задержка';
 
   @override
-  String get realtimeLatencyDesc => 'Observerd latency of the node: the time used to get a response';
+  String get realtimeLatencyDesc => 'Наблюдаемая задержка узла: время, затраченное на получение ответа.';
 
   @override
-  String get download => 'Download';
+  String get download => 'Скачать';
 
   @override
-  String get noData => 'No data yet';
+  String get noData => 'Данные пока отсутствуют.';
 
   @override
-  String get autoTestNodes => 'Nodes Test';
+  String get autoTestNodes => 'Тест узлов';
 
   @override
-  String get autoTestNodesDesc => 'Periodically test nodes';
+  String get autoTestNodesDesc => 'Периодически тестируйте узлы.';
 
   @override
   String get autoUpdateGeoFiles => 'Автоматическое обновление геофайлов';
 
   @override
-  String get autoUpdateGeoFilesDesc => 'Автоматически обновлять геофайлы (geosite.dat и geoip.dat) с заданным интервалом';
+  String get autoUpdateGeoFilesDesc => 'Автоматическое обновление геофайлов с заданным интервалом.';
 
   @override
   String get geoUpdateInterval => 'Интервал обновления';
@@ -2191,168 +2191,168 @@ class AppLocalizationsRu extends AppLocalizations {
   String get geoUpdateNow => 'Обновить сейчас';
 
   @override
-  String get geoRestoreToDefault => 'Восстановить по умолчанию';
+  String get geoRestoreToDefault => 'Восстановить настройки по умолчанию';
 
   @override
-  String get geoUpdateSuccess => 'Обновление геофайлов успешно';
+  String get geoUpdateSuccess => 'Обновление географических данных прошло успешно.';
 
   @override
-  String get interval => 'Interval';
+  String get interval => 'Интервал';
 
   @override
-  String get shareWithVXclient => 'Share with VX clients';
+  String get shareWithVXclient => 'Поделиться с клиентами VX';
 
   @override
-  String get shareWithOtherClients => 'Share with Other Clients';
+  String get shareWithOtherClients => 'Поделиться с другими клиентами';
 
   @override
-  String get shareWithOtherClientsNotice => 'There might be incompatibility issues';
+  String get shareWithOtherClientsNotice => 'Возможны проблемы с совместимостью.';
 
   @override
-  String get homeEditStandardLayout => 'Standard';
+  String get homeEditStandardLayout => 'Стандарт';
 
   @override
-  String get homeEditCustomizableLayout => 'Customizable';
+  String get homeEditCustomizableLayout => 'Настраиваемый';
 
   @override
-  String get domainStrategyDesc => 'Determine how to resolve domains when dialing. PreferIPv4: lookup both IPv4 and IPv6(if default nic support 6), wait for the two queries to complete, then try IPv4s, if failed, try IPv6s; PreferIPv6: lookup both IPv4 and IPv6(if default nic support 6), wait for the two queries to complete, then try IPv6s first, if failed, use IPv4; IPv4Only: only lookup IPv4; IPv6Only: only lookup IPv6; Speed: lookup both A and AAAA(if default nic support 6), use the first returned result (might be IPv4s or IPv6s), if failed, use the other IPs.';
+  String get domainStrategyDesc => 'Определите способ разрешения доменов при наборе номера. PreferIPv4: выполнить поиск как IPv4, так и IPv6 (если сетевой адаптер по умолчанию поддерживает IPv6), дождаться завершения обоих запросов, затем попробовать IPv4; если не удастся, попробовать IPv6; PreferIPv6: выполнить поиск как IPv4, так и IPv6 (если сетевой адаптер по умолчанию поддерживает IPv6), дождаться завершения обоих запросов, затем сначала попробовать IPv6; если не удастся, использовать IPv4; IPv4Only: выполнить поиск только IPv4; IPv6Only: выполнить поиск только IPv6; Speed: выполнить поиск как A, так и AAAA (если сетевой адаптер по умолчанию поддерживает IPv6), использовать первый полученный результат (это могут быть IPv4 или IPv6); если не удастся, использовать другие IP-адреса.';
 
   @override
-  String get uotDesc => 'Use TCP to transport UDP (Sagernet UDP over TCP v2 protocol). The server must also support it';
+  String get uotDesc => 'Для передачи UDP (протокол Sagernet UDP поверх TCP v2) используйте TCP. Сервер также должен его поддерживать.';
 
   @override
-  String get maxConcurrency => 'Max Concurrency';
+  String get maxConcurrency => 'Максимальная параллельность';
 
   @override
-  String get maxConnection => 'Max Connection';
+  String get maxConnection => 'Максимальное соединение';
 
   @override
-  String get vxNotInstalled => 'VX-core is not installed';
+  String get vxNotInstalled => 'VX-core не установлен';
 
   @override
-  String get vxVersionTooLow => 'VX-core version is too low, please update to the latest version';
+  String get vxVersionTooLow => 'Версия VX-core слишком низкая, пожалуйста, обновите до последней версии.';
 
   @override
-  String get howToUseVX => 'For instructions, check our YouTube channel';
+  String get howToUseVX => 'Инструкции смотрите на нашем канале YouTube.';
 
   @override
-  String get welcome => 'Welcome to VX';
+  String get welcome => 'Добро пожаловать в VX';
 
   @override
-  String get sourceCodeAvailable => 'VX is a open-source proxy client powered by vx-core.';
+  String get sourceCodeAvailable => 'VX — это клиент прокси с открытым исходным кодом, работающий на базе vx-core.';
 
   @override
-  String get vxSourceCode => 'Source Code of VX';
+  String get vxSourceCode => 'Исходный код VX';
 
   @override
-  String get vxCoreSourceCode => 'Source Code of VX-Core';
+  String get vxCoreSourceCode => 'Исходный код VX-Core';
 
   @override
-  String get windowsUpdateNotice1 => 'If you update to this app from a 2.x.x version, to reuse your previous database and preference, close the app, rename the following folder: ';
+  String get windowsUpdateNotice1 => 'Если вы обновляете это приложение с версии 2.xx, чтобы использовать предыдущую базу данных и настройки, закройте приложение и переименуйте следующую папку: ';
 
   @override
-  String get windowsUpdateNotice2 => 'Then start app.';
+  String get windowsUpdateNotice2 => 'Затем запустите приложение.';
 
   @override
-  String get copyPath => 'Copy Path';
+  String get copyPath => 'Скопировать путь';
 
   @override
-  String get invalidFields => 'Form contains invalid fields, please correct them first';
+  String get invalidFields => 'В форме содержатся некорректные поля, пожалуйста, сначала исправьте их.';
 
   @override
-  String get lruSizeDesc => 'The number of fake DNS records to cache for each cidr. ';
+  String get lruSizeDesc => 'Количество фиктивных DNS-записей для кэширования для каждого CIDR. ';
 
   @override
-  String get cacheDuration => 'Cache Duration';
+  String get cacheDuration => 'Длительность кэширования';
 
   @override
-  String get cacheDurationDesc => 'How long to cache DNS record. If empty or 0, DNS records will cached until they expire';
+  String get cacheDurationDesc => 'Как долго кэшировать DNS-записи. Если поле пустое или равно 0, DNS-записи будут кэшироваться до истечения срока их действия.';
 
   @override
-  String get activate => 'Activate This Device';
+  String get activate => 'Активируйте это устройство';
 
   @override
-  String get activateDesc => 'After activation, you can use most Pro features without logging in (except for cloud sync and cloud backup). Each account can activate up to 10 devices per year.';
+  String get activateDesc => 'После активации вы можете использовать большинство функций Pro без входа в систему (за исключением синхронизации и резервного копирования в облако). Каждая учетная запись позволяет активировать до 10 устройств в год.';
 
   @override
-  String get activated => 'Activated';
+  String get activated => 'Активировано';
 
   @override
-  String get myInvitationCode => 'My Invitation Code';
+  String get myInvitationCode => 'Мой код приглашения';
 
   @override
-  String get myInvitationCodeDesc => 'Share this code to your friends, both sides will get 3 month of pro features for free';
+  String get myInvitationCodeDesc => 'Поделитесь этим кодом с друзьями, и обе стороны получат 3 месяца бесплатного доступа к функциям Pro.';
 
   @override
-  String get useInvitationCode => 'Use Invitation Code';
+  String get useInvitationCode => 'Используйте код приглашения';
 
   @override
-  String get useInvitationCodeDesc => 'Input other\'s invitation code to get 3 month of pro features for both!';
+  String get useInvitationCodeDesc => 'Введите пригласительный код другого пользователя, чтобы получить 3 месяца доступа к профессиональным функциям для обоих!';
 
   @override
-  String get apply => 'Apply';
+  String get apply => 'Применять';
 
   @override
-  String get remainingTime => 'Remaining Times';
+  String get remainingTime => 'Оставшееся время';
 
   @override
-  String get scanQrCode => 'Scan QR Code';
+  String get scanQrCode => 'Отсканируйте QR-код';
 
   @override
-  String get expired => 'Expired';
+  String get expired => 'Истекший';
 
   @override
-  String get deploySuccessWarnings => 'Deploy nodes successfully, but these tasks failed: ';
+  String get deploySuccessWarnings => 'Развертывание узлов прошло успешно, но следующие задачи завершились с ошибкой: ';
 
   @override
-  String get subString => 'Sub String';
+  String get subString => 'Подстрока';
 
   @override
-  String get echDomain => 'ECH Domain';
+  String get echDomain => 'Домен ЭЧ';
 
   @override
-  String get generateEchConfig => 'Generate ECH Config';
+  String get generateEchConfig => 'Сгенерировать конфигурацию ECH';
 
   @override
-  String get echDomainDesc => 'Outer ClientHello SNI';
+  String get echDomainDesc => 'Внешний клиент Hello SNI';
 
   @override
-  String get restoreSuccessful => 'Restore Successful';
+  String get restoreSuccessful => 'Восстановление успешно';
 
   @override
-  String get pleaseUseAnotherEmail => 'Unsupported email, please use another email';
+  String get pleaseUseAnotherEmail => 'Неподдерживаемый адрес электронной почты. Пожалуйста, используйте другой адрес электронной почты.';
 
   @override
   String dbError(String error) {
-    return 'Something wrong with database: $error. Restart VX might help.';
+    return 'Проблема с базой данных: $error. Перезапуск VX может помочь.';
   }
 
   @override
-  String get dnsRecord => 'DNS Record';
+  String get dnsRecord => 'DNS-запись';
 
   @override
-  String get addDnsRecord => 'Add DNS Record';
+  String get addDnsRecord => 'Добавить запись DNS';
 
   @override
-  String get internalDns => 'Internal DNS Servers';
+  String get internalDns => 'Внутренние DNS-серверы';
 
   @override
-  String get fallback => 'Fallback';
+  String get fallback => 'Отступать';
 
   @override
-  String get fallbackDesc => 'If the handler picked for this rule failed, use the following fallbacks. Each fallback has a list of conditions, the fallback will be used only if all conditions are true.';
+  String get fallbackDesc => 'Если обработчик, выбранный для этого правила, не сработал, используйте следующие резервные варианты. Каждый резервный вариант имеет список условий; он будет использоваться только в том случае, если все условия верны.';
 
   @override
-  String get rewriteIpToDomain => 'Rewrite IP to Domain';
+  String get rewriteIpToDomain => 'Переписать IP-адрес на домен';
 
   @override
-  String get rewriteIpToDomainDesc => 'If the request address is IP, and there is sniffed domain, then use the sniffed domain as the request address. This is a measure for DNS pollution';
+  String get rewriteIpToDomainDesc => 'Если адрес запроса — IP-адрес, и перехвачен домен, то используйте перехваченный домен в качестве адреса запроса. Это мера по борьбе с DNS-загрязнением.';
 
   @override
-  String get resultIpSet => 'Result IP Set';
+  String get resultIpSet => 'Результат: Набор IP-адресов';
 
   @override
-  String get resultIpSetDesc => 'A/AAAA records whose IPs are not in the set will be dropped';
+  String get resultIpSetDesc => 'Записи A/AAAA, IP-адреса которых отсутствуют в наборе, будут отброшены.';
 
   @override
   String get inverse => 'Inverse';
@@ -2385,22 +2385,22 @@ class AppLocalizationsRu extends AppLocalizations {
   String get reset => 'Reset';
 
   @override
-  String get resetConfirmMessage => 'This will reset your preferences and database. Your existing data will be lost. This action cannot be undone.';
+  String get resetConfirmMessage => 'Это приведет к сбросу ваших настроек и базы данных. Ваши существующие данные будут потеряны. Это действие необратимо.';
 
   @override
-  String get resetAction => 'Reset';
+  String get resetAction => 'Перезагрузить';
 
   @override
-  String get resetCompletedTitle => 'Reset complete';
+  String get resetCompletedTitle => 'Сброс завершен';
 
   @override
-  String get resetCompletedMessage => 'Database and preferences have been reset. Restart VX to continue.';
+  String get resetCompletedMessage => 'База данных и настройки сброшены. Перезапустите VX, чтобы продолжить.';
 
   @override
   String resetFailed(String error) {
-    return 'Failed to reset: $error';
+    return 'Не удалось выполнить сброс: $error';
   }
 
   @override
-  String get tutorial => 'Tutorial';
+  String get tutorial => 'Учебное пособие';
 }
