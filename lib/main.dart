@@ -40,6 +40,7 @@ import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
+import 'package:tm/protos/vx/outbound/outbound.pb.dart';
 import 'package:vx/app/blocs/inbound.dart';
 import 'package:vx/app/home/home.dart';
 import 'package:vx/app/start_close_button.dart';
@@ -485,6 +486,26 @@ void main() async {
           authBloc: ctx.read<AuthBloc>(),
         )..add(XBlocInitialEvent()),
       ),
+      BlocProvider(
+        create: (ctx) {
+          final outboundBloc = OutboundBloc(
+            ctx.read<OutboundRepo>(),
+            ctx.read<XController>(),
+            ctx.read<AutoSubscriptionUpdater>(),
+            ctx.read<AuthBloc>(),
+            ctx.read<SharedPreferences>(),
+            ctx.read<XApiClient>(),
+          )..add(InitialEvent());
+          ctx.read<SyncService>().outboundBloc = outboundBloc;
+          return outboundBloc;
+        },
+      ),
+      BlocProvider(
+        create: (ctx) => SubscriptionBloc(
+          ctx.read<OutboundRepo>(),
+          ctx.read<AutoSubscriptionUpdater>(),
+        ),
+      ),
     ],
     child: const App(),
   );
@@ -800,7 +821,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
     }
   }
 
-  void handlerAppLinks(Uri uri) {
+  void handlerAppLinks(Uri uri) async {
     logger.d(uri);
     if (uri.host == 'add') {
       if (uri.path.startsWith('/sub://')) {
@@ -812,13 +833,11 @@ class _AppState extends State<App> with WidgetsBindingObserver {
       }
     } else if (uri.host == 'install-config') {
       if (uri.queryParameters['url'] != null) {
-        final decodedUrl = Uri.decodeComponent(uri.queryParameters['url']!);
-        String name = '';
-        if (uri.queryParameters['name'] != null) {
-          name = Uri.decodeComponent(uri.queryParameters['name']!);
-        }
         context.read<SubscriptionBloc>().add(
-          AddSubscriptionEvent(name, decodedUrl),
+          AddSubscriptionEvent(
+            uri.queryParameters['name']!,
+            uri.queryParameters['url']!,
+          ),
         );
       }
     } else if (uri.host == 'login-callback') {
@@ -826,6 +845,20 @@ class _AppState extends State<App> with WidgetsBindingObserver {
       logger.d('Auth callback received: $uri');
       snack(AppLocalizations.of(context)?.loginSuccess);
       // The Supabase client should handle this automatically
+    } else if (uri.host == 'nodes') {
+      final outboundBloc = context.read<OutboundBloc>();
+      final groupName = uri.queryParameters['name'] ?? '';
+      final data = uri.queryParameters['content'] ?? '';
+      final result = await context.read<XApiClient>().decode(data);
+      final replaceAll = uri.queryParameters['replace'] == 'true';
+      logger.d('replaceAll: $replaceAll');
+      outboundBloc.add(
+        AddHandlersEvent(
+          replaceAll: replaceAll,
+          groupName: groupName,
+          result.handlers.map((e) => HandlerConfig(outbound: e)).toList(),
+        ),
+      );
     }
   }
 
@@ -852,26 +885,6 @@ class _AppState extends State<App> with WidgetsBindingObserver {
     );
     return MultiProvider(
       providers: [
-        BlocProvider(
-          create: (ctx) {
-            final outboundBloc = OutboundBloc(
-              ctx.read<OutboundRepo>(),
-              ctx.read<XController>(),
-              ctx.read<AutoSubscriptionUpdater>(),
-              ctx.read<AuthBloc>(),
-              ctx.read<SharedPreferences>(),
-              ctx.read<XApiClient>(),
-            )..add(InitialEvent());
-            ctx.read<SyncService>().outboundBloc = outboundBloc;
-            return outboundBloc;
-          },
-        ),
-        BlocProvider(
-          create: (ctx) => SubscriptionBloc(
-            ctx.read<OutboundRepo>(),
-            ctx.read<AutoSubscriptionUpdater>(),
-          ),
-        ),
         Provider(
           lazy: false,
           create: (ctx) => NodeTestService(

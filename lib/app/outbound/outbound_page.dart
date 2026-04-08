@@ -409,9 +409,6 @@ class OutboundTableState extends State<OutboundTable> {
                                                 ],
                                               );
                                             } else {
-                                              print(
-                                                'handler being used list view ${r.$1}',
-                                              );
                                               // List View
                                               return CustomScrollView(
                                                 controller: _scrollController,
