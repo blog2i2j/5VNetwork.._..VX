@@ -617,10 +617,49 @@ class OutboundBloc extends Bloc<OutboundEvent, OutboundState> {
     AddHandlersEvent e,
     Emitter<OutboundState> emit,
   ) async {
-    await _outboundRepo.insertHandlersWithGroup(
-      e.handlers,
-      groupName: e.groupName,
-    );
+    if (e.replaceAll) {
+      final existingHandlers = await _outboundRepo.getHandlersByGroup(
+        e.groupName,
+      );
+      final existingByTag = <String, OutboundHandler>{};
+      for (final handler in existingHandlers) {
+        if (handler.config.hasOutbound() &&
+            handler.config.outbound.tag.isNotEmpty) {
+          existingByTag[handler.config.outbound.tag] = handler;
+        }
+      }
+      final updatedIds = <int>{};
+      for (final config in e.handlers) {
+        final existing = existingByTag[config.outbound.tag];
+        final nextConfig = OutboundHandlerConfig()
+          ..mergeFromMessage(config.outbound);
+        if (existing != null && existing.config.hasOutbound()) {
+          nextConfig.enableMux = existing.config.outbound.enableMux;
+          nextConfig.uot = existing.config.outbound.uot;
+          nextConfig.domainStrategy = existing.config.outbound.domainStrategy;
+          await _outboundRepo.replaceHandler(
+            existing.copyWith(config: HandlerConfig(outbound: nextConfig)),
+          );
+          updatedIds.add(existing.id);
+        } else {
+          await _outboundRepo.insertHandlersWithGroup([
+            HandlerConfig(outbound: nextConfig),
+          ], groupName: e.groupName);
+        }
+      }
+      final toDelete = existingHandlers
+          .where((h) => !updatedIds.contains(h.id))
+          .map((h) => h.id)
+          .toList();
+      if (toDelete.isNotEmpty) {
+        await _outboundRepo.removeHandlersByIds(toDelete);
+      }
+    } else {
+      await _outboundRepo.insertHandlersWithGroup(
+        e.handlers,
+        groupName: e.groupName,
+      );
+    }
     final handlers = await _getHandlers();
     emit(state.copyWith(handlers: _sortHandlers(handlers, state.sortCol)));
     _xController.handlerAdded();
@@ -1107,9 +1146,16 @@ class DeleteGroupEvent extends OutboundEvent {
 }
 
 class AddHandlersEvent extends OutboundEvent {
-  const AddHandlersEvent(this.handlers, {this.groupName = defaultGroupName});
+  const AddHandlersEvent(
+    this.handlers, {
+    this.groupName = defaultGroupName,
+    this.replaceAll = false,
+  });
   final List<HandlerConfig> handlers;
   final String groupName;
+  // if true, existing handlers with same name with be updated and
+  // existing handlers that are not in the new handlers list will be deleted.
+  final bool replaceAll;
 }
 
 class SelectedGroupChangeEvent extends OutboundEvent {

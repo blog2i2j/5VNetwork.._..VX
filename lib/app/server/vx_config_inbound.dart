@@ -30,9 +30,12 @@ class _Inbounds extends StatelessWidget {
         final formData = (k.currentState as FormDataGetter).formData;
         if (formData != null) {
           final inbound = formData as MultiProxyInboundConfig;
-          final curretnConfig = (bloc.state as VXInstalledState?)?.config;
-          if (curretnConfig != null) {
-            if (curretnConfig.multiInbounds.any((e) => e.tag == inbound.tag)) {
+          final currentConfig = switch (bloc.state) {
+            VXInstalledState(:final config) => config,
+            _ => null,
+          };
+          if (currentConfig != null) {
+            if (currentConfig.multiInbounds.any((e) => e.tag == inbound.tag)) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
@@ -63,9 +66,12 @@ class _Inbounds extends StatelessWidget {
         final formData = (k.currentState as FormDataGetter).formData;
         if (formData != null) {
           final inbound = formData as ProxyInboundConfig;
-          final curretnConfig = (bloc.state as VXInstalledState?)?.config;
-          if (curretnConfig != null) {
-            if (curretnConfig.inbounds.any((e) => e.tag == inbound.tag)) {
+          final currentConfig = switch (bloc.state) {
+            VXInstalledState(:final config) => config,
+            _ => null,
+          };
+          if (currentConfig != null) {
+            if (currentConfig.inbounds.any((e) => e.tag == inbound.tag)) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
