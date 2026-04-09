@@ -93,7 +93,7 @@ class AppDatabase extends _$AppDatabase {
   }) : super(executor ?? _openConnection(path, interceptor));
 
   @override
-  int get schemaVersion => 11;
+  int get schemaVersion => 12;
 
   static QueryExecutor _openConnection(
     String path,
@@ -256,9 +256,6 @@ class AppDatabase extends _$AppDatabase {
       },
       onUpgrade: (m, from, to) async {
         try {
-          //TODO: make sure the database is not used by golang part
-          // Run migration steps without foreign keys and re-enable them later
-          // (https://drift.simonbinder.eu/docs/advanced-features/migrations/#tips)
           await customStatement('PRAGMA foreign_keys = OFF');
 
           await transaction(() async {
@@ -266,6 +263,12 @@ class AppDatabase extends _$AppDatabase {
               from: from,
               to: to,
               steps: migrationSteps(
+                from11To12: (m, schema) async {
+                  await m.addColumn(
+                    schema.atomicDomainSets,
+                    schema.atomicDomainSets.inverse,
+                  );
+                },
                 from10To11: (m, schema) async {
                   final allHandlers = await managers.outboundHandlers.get();
                   for (final handler in allHandlers) {
@@ -1248,6 +1251,7 @@ class AtomicDomainSets extends Table with TableMixin {
   TextColumn get clashRuleUrls =>
       text().nullable().map(const StringListConverter())();
   TextColumn get geoUrl => text().nullable()();
+  BoolColumn get inverse => boolean().withDefault(const Constant(false))();
   @override
   Set<Column<Object>> get primaryKey => {name};
 }

@@ -684,6 +684,7 @@ class _DomainSetWidgetState extends State<DomainSetWidget> {
       } else {
         await repo.updateAtomicDomainSet(
           set.name,
+          inverse: config.inverse,
           geositeConfig: config.geositeConfig,
           clashRuleUrls: config.clashRuleUrls,
           useBloomFilter: config.useBloomFilter,

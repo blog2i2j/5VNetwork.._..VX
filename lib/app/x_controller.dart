@@ -415,6 +415,7 @@ class XController implements MessageFlutterApi {
           sudoPassword: sudoPassword,
         );
       } else {
+        _statusStreamCtrl.add(XStatus.unknown);
         rethrow;
       }
     }

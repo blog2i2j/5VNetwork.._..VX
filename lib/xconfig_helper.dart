@@ -673,6 +673,7 @@ class XConfigHelper {
         final config = AtomicDomainSetConfig(
           name: setName,
           geosite: geositeConfig,
+          inverse: atomicSet.inverse,
           useBloomFilter: atomicSet.useBloomFilter,
         );
         for (final url in atomicSet.clashRuleUrls ?? []) {

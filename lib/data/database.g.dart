@@ -1932,6 +1932,21 @@ class $AtomicDomainSetsTable extends AtomicDomainSets
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _inverseMeta = const VerificationMeta(
+    'inverse',
+  );
+  @override
+  late final GeneratedColumn<bool> inverse = GeneratedColumn<bool>(
+    'inverse',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("inverse" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     updatedAt,
@@ -1940,6 +1955,7 @@ class $AtomicDomainSetsTable extends AtomicDomainSets
     useBloomFilter,
     clashRuleUrls,
     geoUrl,
+    inverse,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1982,6 +1998,12 @@ class $AtomicDomainSetsTable extends AtomicDomainSets
         geoUrl.isAcceptableOrUnknown(data['geo_url']!, _geoUrlMeta),
       );
     }
+    if (data.containsKey('inverse')) {
+      context.handle(
+        _inverseMeta,
+        inverse.isAcceptableOrUnknown(data['inverse']!, _inverseMeta),
+      );
+    }
     return context;
   }
 
@@ -2001,6 +2023,10 @@ class $AtomicDomainSetsTable extends AtomicDomainSets
           data['${effectivePrefix}geosite_config'],
         ),
       ),
+      inverse: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}inverse'],
+      )!,
       useBloomFilter: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}use_bloom_filter'],
@@ -2044,6 +2070,7 @@ class AtomicDomainSetsCompanion extends UpdateCompanion<AtomicDomainSet> {
   final Value<bool> useBloomFilter;
   final Value<List<String>?> clashRuleUrls;
   final Value<String?> geoUrl;
+  final Value<bool> inverse;
   final Value<int> rowid;
   const AtomicDomainSetsCompanion({
     this.updatedAt = const Value.absent(),
@@ -2052,6 +2079,7 @@ class AtomicDomainSetsCompanion extends UpdateCompanion<AtomicDomainSet> {
     this.useBloomFilter = const Value.absent(),
     this.clashRuleUrls = const Value.absent(),
     this.geoUrl = const Value.absent(),
+    this.inverse = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   AtomicDomainSetsCompanion.insert({
@@ -2061,6 +2089,7 @@ class AtomicDomainSetsCompanion extends UpdateCompanion<AtomicDomainSet> {
     this.useBloomFilter = const Value.absent(),
     this.clashRuleUrls = const Value.absent(),
     this.geoUrl = const Value.absent(),
+    this.inverse = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : name = Value(name);
   static Insertable<AtomicDomainSet> custom({
@@ -2070,6 +2099,7 @@ class AtomicDomainSetsCompanion extends UpdateCompanion<AtomicDomainSet> {
     Expression<bool>? useBloomFilter,
     Expression<String>? clashRuleUrls,
     Expression<String>? geoUrl,
+    Expression<bool>? inverse,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -2079,6 +2109,7 @@ class AtomicDomainSetsCompanion extends UpdateCompanion<AtomicDomainSet> {
       if (useBloomFilter != null) 'use_bloom_filter': useBloomFilter,
       if (clashRuleUrls != null) 'clash_rule_urls': clashRuleUrls,
       if (geoUrl != null) 'geo_url': geoUrl,
+      if (inverse != null) 'inverse': inverse,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -2090,6 +2121,7 @@ class AtomicDomainSetsCompanion extends UpdateCompanion<AtomicDomainSet> {
     Value<bool>? useBloomFilter,
     Value<List<String>?>? clashRuleUrls,
     Value<String?>? geoUrl,
+    Value<bool>? inverse,
     Value<int>? rowid,
   }) {
     return AtomicDomainSetsCompanion(
@@ -2099,6 +2131,7 @@ class AtomicDomainSetsCompanion extends UpdateCompanion<AtomicDomainSet> {
       useBloomFilter: useBloomFilter ?? this.useBloomFilter,
       clashRuleUrls: clashRuleUrls ?? this.clashRuleUrls,
       geoUrl: geoUrl ?? this.geoUrl,
+      inverse: inverse ?? this.inverse,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -2132,6 +2165,9 @@ class AtomicDomainSetsCompanion extends UpdateCompanion<AtomicDomainSet> {
     if (geoUrl.present) {
       map['geo_url'] = Variable<String>(geoUrl.value);
     }
+    if (inverse.present) {
+      map['inverse'] = Variable<bool>(inverse.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -2147,6 +2183,7 @@ class AtomicDomainSetsCompanion extends UpdateCompanion<AtomicDomainSet> {
           ..write('useBloomFilter: $useBloomFilter, ')
           ..write('clashRuleUrls: $clashRuleUrls, ')
           ..write('geoUrl: $geoUrl, ')
+          ..write('inverse: $inverse, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -8237,6 +8274,7 @@ typedef $$AtomicDomainSetsTableCreateCompanionBuilder =
       Value<bool> useBloomFilter,
       Value<List<String>?> clashRuleUrls,
       Value<String?> geoUrl,
+      Value<bool> inverse,
       Value<int> rowid,
     });
 typedef $$AtomicDomainSetsTableUpdateCompanionBuilder =
@@ -8247,6 +8285,7 @@ typedef $$AtomicDomainSetsTableUpdateCompanionBuilder =
       Value<bool> useBloomFilter,
       Value<List<String>?> clashRuleUrls,
       Value<String?> geoUrl,
+      Value<bool> inverse,
       Value<int> rowid,
     });
 
@@ -8321,6 +8360,11 @@ class $$AtomicDomainSetsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<bool> get inverse => $composableBuilder(
+    column: $table.inverse,
+    builder: (column) => ColumnFilters(column),
+  );
+
   Expression<bool> geoDomainsRefs(
     Expression<bool> Function($$GeoDomainsTableFilterComposer f) f,
   ) {
@@ -8385,6 +8429,11 @@ class $$AtomicDomainSetsTableOrderingComposer
     column: $table.geoUrl,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<bool> get inverse => $composableBuilder(
+    column: $table.inverse,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$AtomicDomainSetsTableAnnotationComposer
@@ -8421,6 +8470,9 @@ class $$AtomicDomainSetsTableAnnotationComposer
 
   GeneratedColumn<String> get geoUrl =>
       $composableBuilder(column: $table.geoUrl, builder: (column) => column);
+
+  GeneratedColumn<bool> get inverse =>
+      $composableBuilder(column: $table.inverse, builder: (column) => column);
 
   Expression<T> geoDomainsRefs<T extends Object>(
     Expression<T> Function($$GeoDomainsTableAnnotationComposer a) f,
@@ -8484,6 +8536,7 @@ class $$AtomicDomainSetsTableTableManager
                 Value<bool> useBloomFilter = const Value.absent(),
                 Value<List<String>?> clashRuleUrls = const Value.absent(),
                 Value<String?> geoUrl = const Value.absent(),
+                Value<bool> inverse = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => AtomicDomainSetsCompanion(
                 updatedAt: updatedAt,
@@ -8492,6 +8545,7 @@ class $$AtomicDomainSetsTableTableManager
                 useBloomFilter: useBloomFilter,
                 clashRuleUrls: clashRuleUrls,
                 geoUrl: geoUrl,
+                inverse: inverse,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -8502,6 +8556,7 @@ class $$AtomicDomainSetsTableTableManager
                 Value<bool> useBloomFilter = const Value.absent(),
                 Value<List<String>?> clashRuleUrls = const Value.absent(),
                 Value<String?> geoUrl = const Value.absent(),
+                Value<bool> inverse = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => AtomicDomainSetsCompanion.insert(
                 updatedAt: updatedAt,
@@ -8510,6 +8565,7 @@ class $$AtomicDomainSetsTableTableManager
                 useBloomFilter: useBloomFilter,
                 clashRuleUrls: clashRuleUrls,
                 geoUrl: geoUrl,
+                inverse: inverse,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

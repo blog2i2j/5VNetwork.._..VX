@@ -78,6 +78,7 @@ abstract class SetRepo {
     List<String>? clashRuleUrls,
     bool? useBloomFilter,
     String? geoUrl,
+    bool? inverse,
   });
   Future<void> updateGreateDomainSet(
     String name, {
@@ -415,6 +416,7 @@ class DbHelper implements SelectorRepo, RouteRepo, SetRepo, DnsRepo {
         clashRuleUrls: Value(config.clashRuleUrls),
         useBloomFilter: Value(config.useBloomFilter),
         geoUrl: Value(config.geoUrl),
+        inverse: Value(config.inverse),
       ),
     );
     // await _databaseProvider.database.managers.atomicDomainSets.create(
@@ -433,6 +435,7 @@ class DbHelper implements SelectorRepo, RouteRepo, SetRepo, DnsRepo {
     List<String>? clashRuleUrls,
     bool? useBloomFilter,
     String? geoUrl,
+    bool? inverse,
   }) async {
     // await _databaseProvider.database.managers.atomicDomainSets
     //     .filter((f) => f.name.equals(name))
@@ -461,6 +464,7 @@ class DbHelper implements SelectorRepo, RouteRepo, SetRepo, DnsRepo {
             ? Value(useBloomFilter)
             : const Value.absent(),
         geoUrl: geoUrl != null ? Value(geoUrl) : const Value.absent(),
+        inverse: inverse != null ? Value(inverse) : const Value.absent(),
       ),
     );
   }

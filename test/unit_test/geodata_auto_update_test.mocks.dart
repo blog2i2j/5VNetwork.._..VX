@@ -12,16 +12,17 @@ import 'package:mockito/src/dummies.dart' as _i17;
 import 'package:shared_preferences/shared_preferences.dart' as _i9;
 import 'package:tm/protos/app/api/api.pbgrpc.dart' as _i5;
 import 'package:tm/protos/vx/common/geo/geo.pb.dart' as _i15;
-import 'package:tm/protos/vx/dns/dns.pb.dart' as _i21;
+import 'package:tm/protos/vx/dns/dns.pb.dart' as _i22;
 import 'package:tm/protos/vx/geo/geo.pb.dart' as _i16;
 import 'package:tm/protos/vx/inbound/inbound.pb.dart' as _i14;
+import 'package:tm/protos/vx/log/logger.pb.dart' as _i19;
 import 'package:tm/protos/vx/outbound/outbound.pb.dart' as _i13;
-import 'package:tm/protos/vx/router/router.pb.dart' as _i20;
+import 'package:tm/protos/vx/router/router.pb.dart' as _i21;
 import 'package:tm/protos/vx/server.pb.dart' as _i7;
 import 'package:tm/protos/vx/sysproxy/sysproxy.pb.dart' as _i18;
 import 'package:tm/protos/vx/transport/security/tls/certificate.pb.dart' as _i4;
 import 'package:vx/app/outbound/outbound_repo.dart' as _i2;
-import 'package:vx/app/routing/repo.dart' as _i19;
+import 'package:vx/app/routing/repo.dart' as _i20;
 import 'package:vx/data/database.dart' as _i8;
 import 'package:vx/utils/download.dart' as _i11;
 import 'package:vx/utils/xapi_client.dart' as _i3;
@@ -91,48 +92,56 @@ class _FakeUpdateSubscriptionResponse_8 extends _i1.SmartFake
     : super(parent, parentInvocation);
 }
 
-class _FakeDecodeResponse_9 extends _i1.SmartFake
+class _FakeFetchSubscriptionContentResponse_9 extends _i1.SmartFake
+    implements _i5.FetchSubscriptionContentResponse {
+  _FakeFetchSubscriptionContentResponse_9(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(parent, parentInvocation);
+}
+
+class _FakeDecodeResponse_10 extends _i1.SmartFake
     implements _i5.DecodeResponse {
-  _FakeDecodeResponse_9(Object parent, Invocation parentInvocation)
+  _FakeDecodeResponse_10(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeDeployResponse_10 extends _i1.SmartFake
+class _FakeDeployResponse_11 extends _i1.SmartFake
     implements _i5.DeployResponse {
-  _FakeDeployResponse_10(Object parent, Invocation parentInvocation)
+  _FakeDeployResponse_11(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeGenerateCertResponse_11 extends _i1.SmartFake
+class _FakeGenerateCertResponse_12 extends _i1.SmartFake
     implements _i5.GenerateCertResponse {
-  _FakeGenerateCertResponse_11(Object parent, Invocation parentInvocation)
+  _FakeGenerateCertResponse_12(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeParseClashRuleFileResponse_12 extends _i1.SmartFake
+class _FakeParseClashRuleFileResponse_13 extends _i1.SmartFake
     implements _i5.ParseClashRuleFileResponse {
-  _FakeParseClashRuleFileResponse_12(Object parent, Invocation parentInvocation)
+  _FakeParseClashRuleFileResponse_13(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeToUrlResponse_13 extends _i1.SmartFake implements _i5.ToUrlResponse {
-  _FakeToUrlResponse_13(Object parent, Invocation parentInvocation)
+class _FakeToUrlResponse_14 extends _i1.SmartFake implements _i5.ToUrlResponse {
+  _FakeToUrlResponse_14(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeGenerateECHResponse_14 extends _i1.SmartFake
+class _FakeGenerateECHResponse_15 extends _i1.SmartFake
     implements _i5.GenerateECHResponse {
-  _FakeGenerateECHResponse_14(Object parent, Invocation parentInvocation)
+  _FakeGenerateECHResponse_15(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeDnsServer_15 extends _i1.SmartFake implements _i8.DnsServer {
-  _FakeDnsServer_15(Object parent, Invocation parentInvocation)
+class _FakeDnsServer_16 extends _i1.SmartFake implements _i8.DnsServer {
+  _FakeDnsServer_16(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeDnsRecord_16 extends _i1.SmartFake implements _i8.DnsRecord {
-  _FakeDnsRecord_16(Object parent, Invocation parentInvocation)
+class _FakeDnsRecord_17 extends _i1.SmartFake implements _i8.DnsRecord {
+  _FakeDnsRecord_17(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
@@ -626,6 +635,29 @@ class MockXApiClient extends _i1.Mock implements _i3.XApiClient {
           as _i10.Future<_i5.UpdateSubscriptionResponse>);
 
   @override
+  _i10.Future<_i5.FetchSubscriptionContentResponse> fetchSubscriptionContent(
+    _i5.FetchSubscriptionContentRequest? request,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#fetchSubscriptionContent, [request]),
+            returnValue:
+                _i10.Future<_i5.FetchSubscriptionContentResponse>.value(
+                  _FakeFetchSubscriptionContentResponse_9(
+                    this,
+                    Invocation.method(#fetchSubscriptionContent, [request]),
+                  ),
+                ),
+            returnValueForMissingStub:
+                _i10.Future<_i5.FetchSubscriptionContentResponse>.value(
+                  _FakeFetchSubscriptionContentResponse_9(
+                    this,
+                    Invocation.method(#fetchSubscriptionContent, [request]),
+                  ),
+                ),
+          )
+          as _i10.Future<_i5.FetchSubscriptionContentResponse>);
+
+  @override
   _i10.Future<void> processGeoFiles() =>
       (super.noSuchMethod(
             Invocation.method(#processGeoFiles, []),
@@ -639,10 +671,10 @@ class MockXApiClient extends _i1.Mock implements _i3.XApiClient {
       (super.noSuchMethod(
             Invocation.method(#decode, [data]),
             returnValue: _i10.Future<_i5.DecodeResponse>.value(
-              _FakeDecodeResponse_9(this, Invocation.method(#decode, [data])),
+              _FakeDecodeResponse_10(this, Invocation.method(#decode, [data])),
             ),
             returnValueForMissingStub: _i10.Future<_i5.DecodeResponse>.value(
-              _FakeDecodeResponse_9(this, Invocation.method(#decode, [data])),
+              _FakeDecodeResponse_10(this, Invocation.method(#decode, [data])),
             ),
           )
           as _i10.Future<_i5.DecodeResponse>);
@@ -666,7 +698,7 @@ class MockXApiClient extends _i1.Mock implements _i3.XApiClient {
               #disableOSFirewall: disableOSFirewall,
             }),
             returnValue: _i10.Future<_i5.DeployResponse>.value(
-              _FakeDeployResponse_10(
+              _FakeDeployResponse_11(
                 this,
                 Invocation.method(#deploy, [], {
                   #server: server,
@@ -679,7 +711,7 @@ class MockXApiClient extends _i1.Mock implements _i3.XApiClient {
               ),
             ),
             returnValueForMissingStub: _i10.Future<_i5.DeployResponse>.value(
-              _FakeDeployResponse_10(
+              _FakeDeployResponse_11(
                 this,
                 Invocation.method(#deploy, [], {
                   #server: server,
@@ -699,14 +731,14 @@ class MockXApiClient extends _i1.Mock implements _i3.XApiClient {
       (super.noSuchMethod(
             Invocation.method(#generateCert, [domain]),
             returnValue: _i10.Future<_i5.GenerateCertResponse>.value(
-              _FakeGenerateCertResponse_11(
+              _FakeGenerateCertResponse_12(
                 this,
                 Invocation.method(#generateCert, [domain]),
               ),
             ),
             returnValueForMissingStub:
                 _i10.Future<_i5.GenerateCertResponse>.value(
-                  _FakeGenerateCertResponse_11(
+                  _FakeGenerateCertResponse_12(
                     this,
                     Invocation.method(#generateCert, [domain]),
                   ),
@@ -766,14 +798,14 @@ class MockXApiClient extends _i1.Mock implements _i3.XApiClient {
       (super.noSuchMethod(
             Invocation.method(#parseClashRuleFile, [content]),
             returnValue: _i10.Future<_i5.ParseClashRuleFileResponse>.value(
-              _FakeParseClashRuleFileResponse_12(
+              _FakeParseClashRuleFileResponse_13(
                 this,
                 Invocation.method(#parseClashRuleFile, [content]),
               ),
             ),
             returnValueForMissingStub:
                 _i10.Future<_i5.ParseClashRuleFileResponse>.value(
-                  _FakeParseClashRuleFileResponse_12(
+                  _FakeParseClashRuleFileResponse_13(
                     this,
                     Invocation.method(#parseClashRuleFile, [content]),
                   ),
@@ -875,10 +907,10 @@ class MockXApiClient extends _i1.Mock implements _i3.XApiClient {
       (super.noSuchMethod(
             Invocation.method(#toUrl, [configs]),
             returnValue: _i10.Future<_i5.ToUrlResponse>.value(
-              _FakeToUrlResponse_13(this, Invocation.method(#toUrl, [configs])),
+              _FakeToUrlResponse_14(this, Invocation.method(#toUrl, [configs])),
             ),
             returnValueForMissingStub: _i10.Future<_i5.ToUrlResponse>.value(
-              _FakeToUrlResponse_13(this, Invocation.method(#toUrl, [configs])),
+              _FakeToUrlResponse_14(this, Invocation.method(#toUrl, [configs])),
             ),
           )
           as _i10.Future<_i5.ToUrlResponse>);
@@ -888,26 +920,35 @@ class MockXApiClient extends _i1.Mock implements _i3.XApiClient {
       (super.noSuchMethod(
             Invocation.method(#generateECHResponse, [domain]),
             returnValue: _i10.Future<_i5.GenerateECHResponse>.value(
-              _FakeGenerateECHResponse_14(
+              _FakeGenerateECHResponse_15(
                 this,
                 Invocation.method(#generateECHResponse, [domain]),
               ),
             ),
             returnValueForMissingStub:
                 _i10.Future<_i5.GenerateECHResponse>.value(
-                  _FakeGenerateECHResponse_14(
+                  _FakeGenerateECHResponse_15(
                     this,
                     Invocation.method(#generateECHResponse, [domain]),
                   ),
                 ),
           )
           as _i10.Future<_i5.GenerateECHResponse>);
+
+  @override
+  _i10.Future<void> setLog(_i19.LoggerConfig? logConfig) =>
+      (super.noSuchMethod(
+            Invocation.method(#setLog, [logConfig]),
+            returnValue: _i10.Future<void>.value(),
+            returnValueForMissingStub: _i10.Future<void>.value(),
+          )
+          as _i10.Future<void>);
 }
 
 /// A class which mocks [DbHelper].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockDbHelper extends _i1.Mock implements _i19.DbHelper {
+class MockDbHelper extends _i1.Mock implements _i20.DbHelper {
   @override
   _i10.Future<List<_i8.AtomicIpSet>> getAtomicIpSets() =>
       (super.noSuchMethod(
@@ -970,14 +1011,14 @@ class MockDbHelper extends _i1.Mock implements _i19.DbHelper {
           as _i10.Stream<List<_i8.DnsServer>>);
 
   @override
-  _i10.Stream<List<_i20.SelectorConfig>> getSelectorsStream() =>
+  _i10.Stream<List<_i21.SelectorConfig>> getSelectorsStream() =>
       (super.noSuchMethod(
             Invocation.method(#getSelectorsStream, []),
-            returnValue: _i10.Stream<List<_i20.SelectorConfig>>.empty(),
+            returnValue: _i10.Stream<List<_i21.SelectorConfig>>.empty(),
             returnValueForMissingStub:
-                _i10.Stream<List<_i20.SelectorConfig>>.empty(),
+                _i10.Stream<List<_i21.SelectorConfig>>.empty(),
           )
-          as _i10.Stream<List<_i20.SelectorConfig>>);
+          as _i10.Stream<List<_i21.SelectorConfig>>);
 
   @override
   _i10.Future<void> removeCustomRouteMode(int? id) =>
@@ -1037,7 +1078,7 @@ class MockDbHelper extends _i1.Mock implements _i19.DbHelper {
           as _i10.Future<void>);
 
   @override
-  _i10.Future<void> updateSelector(_i20.SelectorConfig? selector) =>
+  _i10.Future<void> updateSelector(_i21.SelectorConfig? selector) =>
       (super.noSuchMethod(
             Invocation.method(#updateSelector, [selector]),
             returnValue: _i10.Future<void>.value(),
@@ -1270,8 +1311,8 @@ class MockDbHelper extends _i1.Mock implements _i19.DbHelper {
   @override
   _i10.Future<void> updateCustomRouteMode(
     int? id, {
-    _i20.RouterConfig? routerConfig,
-    _i21.DnsRules? dnsRules,
+    _i21.RouterConfig? routerConfig,
+    _i22.DnsRules? dnsRules,
     String? name,
     List<String>? internalDnsServers,
   }) =>
@@ -1308,7 +1349,7 @@ class MockDbHelper extends _i1.Mock implements _i19.DbHelper {
   _i10.Future<void> updateDnsServer(
     _i8.DnsServer? ds, {
     String? dnsServerName,
-    _i21.DnsServerConfig? dnsServer,
+    _i22.DnsServerConfig? dnsServer,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
@@ -1324,18 +1365,18 @@ class MockDbHelper extends _i1.Mock implements _i19.DbHelper {
   @override
   _i10.Future<_i8.DnsServer> addDnsServer(
     String? dnsServerName,
-    _i21.DnsServerConfig? dnsServer,
+    _i22.DnsServerConfig? dnsServer,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#addDnsServer, [dnsServerName, dnsServer]),
             returnValue: _i10.Future<_i8.DnsServer>.value(
-              _FakeDnsServer_15(
+              _FakeDnsServer_16(
                 this,
                 Invocation.method(#addDnsServer, [dnsServerName, dnsServer]),
               ),
             ),
             returnValueForMissingStub: _i10.Future<_i8.DnsServer>.value(
-              _FakeDnsServer_15(
+              _FakeDnsServer_16(
                 this,
                 Invocation.method(#addDnsServer, [dnsServerName, dnsServer]),
               ),
@@ -1353,17 +1394,17 @@ class MockDbHelper extends _i1.Mock implements _i19.DbHelper {
           as _i10.Future<void>);
 
   @override
-  _i10.Future<_i8.DnsRecord> addDnsRecord(_i21.Record? record) =>
+  _i10.Future<_i8.DnsRecord> addDnsRecord(_i22.Record? record) =>
       (super.noSuchMethod(
             Invocation.method(#addDnsRecord, [record]),
             returnValue: _i10.Future<_i8.DnsRecord>.value(
-              _FakeDnsRecord_16(
+              _FakeDnsRecord_17(
                 this,
                 Invocation.method(#addDnsRecord, [record]),
               ),
             ),
             returnValueForMissingStub: _i10.Future<_i8.DnsRecord>.value(
-              _FakeDnsRecord_16(
+              _FakeDnsRecord_17(
                 this,
                 Invocation.method(#addDnsRecord, [record]),
               ),
@@ -1374,7 +1415,7 @@ class MockDbHelper extends _i1.Mock implements _i19.DbHelper {
   @override
   _i10.Future<void> updateDnsRecord(
     _i8.DnsRecord? record,
-    _i21.Record? newRecord,
+    _i22.Record? newRecord,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#updateDnsRecord, [record, newRecord]),
@@ -1479,7 +1520,7 @@ class MockDbHelper extends _i1.Mock implements _i19.DbHelper {
   @override
   _i10.Future<void> addApp(
     String? appSetName,
-    _i20.AppId? app, {
+    _i21.AppId? app, {
     _i12.Uint8List? icon,
   }) =>
       (super.noSuchMethod(
@@ -1528,18 +1569,18 @@ class MockDbHelper extends _i1.Mock implements _i19.DbHelper {
           as _i10.Future<void>);
 
   @override
-  _i10.Future<List<_i20.SelectorConfig>> getAllSelectors() =>
+  _i10.Future<List<_i21.SelectorConfig>> getAllSelectors() =>
       (super.noSuchMethod(
             Invocation.method(#getAllSelectors, []),
-            returnValue: _i10.Future<List<_i20.SelectorConfig>>.value(
-              <_i20.SelectorConfig>[],
+            returnValue: _i10.Future<List<_i21.SelectorConfig>>.value(
+              <_i21.SelectorConfig>[],
             ),
             returnValueForMissingStub:
-                _i10.Future<List<_i20.SelectorConfig>>.value(
-                  <_i20.SelectorConfig>[],
+                _i10.Future<List<_i21.SelectorConfig>>.value(
+                  <_i21.SelectorConfig>[],
                 ),
           )
-          as _i10.Future<List<_i20.SelectorConfig>>);
+          as _i10.Future<List<_i21.SelectorConfig>>);
 
   @override
   _i10.Future<void> addSubscriptionToSelector(
@@ -1629,7 +1670,7 @@ class MockDbHelper extends _i1.Mock implements _i19.DbHelper {
           as _i10.Future<void>);
 
   @override
-  _i10.Future<void> addSelector(_i20.SelectorConfig? selector) =>
+  _i10.Future<void> addSelector(_i21.SelectorConfig? selector) =>
       (super.noSuchMethod(
             Invocation.method(#addSelector, [selector]),
             returnValue: _i10.Future<void>.value(),

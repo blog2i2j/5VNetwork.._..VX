@@ -28,6 +28,7 @@ import 'package:vx/xconfig_helper.dart';
 
 const gfw = 'GFW';
 const cn = 'CN';
+const notCn = '!CN';
 // const cnGames = 'CN游戏';
 // const private = '私有';
 // const gfwWithoutCustomDirect = 'GFW(排除自定义直连)';
@@ -188,6 +189,12 @@ enum DefaultRouteMode {
           customDirectSet,
           customProxySet,
           AtomicDomainSet(
+            name: notCn,
+            inverse: true,
+            useBloomFilter: Platform.isIOS,
+            geositeConfig: GeositeConfig(codes: ['cn']),
+          ),
+          AtomicDomainSet(
             name: gfw,
             useBloomFilter: false,
             geositeConfig: GeositeConfig(codes: ['gfw']),
@@ -272,6 +279,11 @@ enum DefaultRouteMode {
             ),
           ),
           publicSet,
+          AtomicIpSet(
+            name: notCn,
+            inverse: true,
+            geoIpConfig: GeoIPConfig(codes: ['cn']),
+          ),
         ];
       case DefaultRouteMode.white:
         return [
@@ -516,7 +528,11 @@ enum DefaultRouteMode {
       fallbacks: [
         RuleConfig_Fallback(
           selectorTag: defaultProxySelectorTag,
-          matchAll: true,
+          domainTags: [notCn],
+        ),
+        RuleConfig_Fallback(
+          selectorTag: defaultProxySelectorTag,
+          dstIpTags: [notCn],
         ),
       ],
     );
@@ -655,7 +671,7 @@ enum DefaultRouteMode {
             dnsServerName: dnsServerFake,
             ruleName: al.dnsRuleNameGfwProxyFake,
             includedTypes: [DnsType.DnsType_A, DnsType.DnsType_AAAA],
-            domainTags: [al.gfwModeProxyDomains],
+            domainTags: [al.gfwModeProxyDomains, notCn],
           ),
           DnsRuleConfig(
             ruleName: al.dnsRuleNameGfwProxy,

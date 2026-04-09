@@ -441,6 +441,7 @@ class _SmallDomainSetFormState extends State<SmallDomainSetForm>
   List<Domain> _domains = [];
   bool _useBloomFilter = false;
   // FilePickerResult? _geositeFilePickerResult;
+  bool _inverse = false;
 
   @override
   Object? get formData {
@@ -453,6 +454,7 @@ class _SmallDomainSetFormState extends State<SmallDomainSetForm>
       }
       return AtomicDomainSet(
         name: _nameController.text,
+        inverse: _inverse,
         geoUrl: _geositeUrlController.text,
         geositeConfig: GeositeConfig(
           codes: _geositeCodes,
@@ -476,6 +478,7 @@ class _SmallDomainSetFormState extends State<SmallDomainSetForm>
       _geositeAttributes.addAll(
         widget.atomicDomainSet!.geositeConfig?.attributes ?? [],
       );
+      _inverse = widget.atomicDomainSet!.inverse;
       _clashRuleUrls.addAll(widget.atomicDomainSet!.clashRuleUrls ?? []);
       context
           .read<DatabaseProvider>()
@@ -548,6 +551,16 @@ class _SmallDomainSetFormState extends State<SmallDomainSetForm>
                 AppLocalizations.of(context)!.useBloomFilterDesc,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
+            ),
+            const SizedBox(height: 10),
+            SwitchListTile(
+              title: Text(AppLocalizations.of(context)!.inverse),
+              value: _inverse,
+              onChanged: (value) {
+                setState(() {
+                  _inverse = value;
+                });
+              },
             ),
             const Gap(5),
             const TextDivider(text: 'GeoSite'),

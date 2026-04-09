@@ -1029,8 +1029,9 @@ extension DnsRuleConfigExtension on DnsRuleConfig {
                 style: Theme.of(context).textTheme.labelSmall,
               ),
               const Gap(5),
-              ...domainTags.map(
-                (e) => Text(e, style: Theme.of(context).textTheme.labelSmall),
+              Text(
+                domainTags.join(', '),
+                style: Theme.of(context).textTheme.labelSmall,
               ),
             ],
           ),

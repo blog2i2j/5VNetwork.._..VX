@@ -887,6 +887,7 @@ class Cidr extends DataClass implements Insertable<Cidr> {
 class AtomicDomainSet extends DataClass implements Insertable<AtomicDomainSet> {
   final String name;
   final GeositeConfig? geositeConfig;
+  final bool inverse;
   final bool useBloomFilter;
   final List<String>? clashRuleUrls;
   final DateTime? updatedAt;
@@ -894,6 +895,7 @@ class AtomicDomainSet extends DataClass implements Insertable<AtomicDomainSet> {
   const AtomicDomainSet({
     required this.name,
     this.geositeConfig,
+    this.inverse = false,
     required this.useBloomFilter,
     this.updatedAt,
     this.geoUrl,
@@ -911,6 +913,7 @@ class AtomicDomainSet extends DataClass implements Insertable<AtomicDomainSet> {
         $AtomicDomainSetsTable.$convertergeositeConfign.toSql(geositeConfig),
       );
     }
+    map['inverse'] = Variable<bool>(inverse);
     map['use_bloom_filter'] = Variable<bool>(useBloomFilter);
     if (!nullToAbsent || clashRuleUrls != null) {
       map['clash_rule_urls'] = Variable<String>(
@@ -926,6 +929,7 @@ class AtomicDomainSet extends DataClass implements Insertable<AtomicDomainSet> {
   AtomicDomainSetsCompanion toCompanion(bool nullToAbsent) {
     return AtomicDomainSetsCompanion(
       name: Value(name),
+      inverse: Value(inverse),
       geositeConfig: geositeConfig == null && nullToAbsent
           ? const Value.absent()
           : Value(geositeConfig),
@@ -958,6 +962,7 @@ class AtomicDomainSet extends DataClass implements Insertable<AtomicDomainSet> {
           ? (json['clashRuleUrls'] as List<dynamic>).cast<String>()
           : null,
       geoUrl: json['geoUrl'] != null ? json['geoUrl'] as String : null,
+      inverse: serializer.fromJson<bool>(json['inverse']),
     );
   }
   @override
@@ -966,6 +971,7 @@ class AtomicDomainSet extends DataClass implements Insertable<AtomicDomainSet> {
     return <String, dynamic>{
       'updatedAt': updatedAt?.toIso8601String(),
       'name': serializer.toJson<String>(name),
+      'inverse': serializer.toJson<bool>(inverse),
       'geositeConfig': geositeConfig?.writeToJson(),
       'useBloomFilter': serializer.toJson<bool>(useBloomFilter),
       'clashRuleUrls': serializer.toJson<List<String>?>(clashRuleUrls),
