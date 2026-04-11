@@ -30,7 +30,7 @@ class NodeInfo {
   });
 }
 
-typedef NodeStats = (int throughput, int latency);
+typedef NodeStats = (int throughput, int latency, int upload, int download);
 typedef DataPoint = (int value, DateTime timestamp);
 
 const int _interval = 3;
@@ -260,15 +260,25 @@ class RealtimeSpeedNotifier extends ChangeNotifier {
       } else {
         nodeInfo = nodeInfos[nodeInfoIndex];
         // if a node has no traffic for 10 seconds, remove it
+        final last = nodeInfo.statsHistory.last;
         if (stat.up == 0 &&
             stat.down == 0 &&
-            nodeInfo.statsHistory.last.$1 == 0 &&
-            nodeInfo.statsHistory.last.$2 == 0) {
+            last.$1 == 0 &&
+            last.$3 == 0 &&
+            last.$4 == 0) {
           continue;
         }
         newList.add(nodeInfo);
       }
-      nodeInfo.statsHistory.add((stat.rate.toInt(), stat.ping.toInt()));
+      final iv = stat.interval;
+      final upRate = iv > 0 ? (stat.up.toInt() / iv).round() : 0;
+      final downRate = iv > 0 ? (stat.down.toInt() / iv).round() : 0;
+      nodeInfo.statsHistory.add((
+        stat.rate.toInt(),
+        stat.ping.toInt(),
+        upRate,
+        downRate,
+      ));
     }
     if (interval > 0) {
       uploadSpeed = uploadTotal ~/ interval;
@@ -1443,8 +1453,8 @@ class _NodeCardState extends State<NodeCard> {
         : null;
     final throughput = latestStats?.$1 ?? 0;
     final latency = latestStats?.$2 ?? 0;
-    // final downloadSpeed = latestStats?.$3 ?? 0;
-    // final uploadSpeed = latestStats?.$4 ?? 0;
+    final uploadSpeed = latestStats?.$3 ?? 0;
+    final downloadSpeed = latestStats?.$4 ?? 0;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1565,34 +1575,28 @@ class _NodeCardState extends State<NodeCard> {
                 },
               ),
             ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: _StatItem(
+                label: AppLocalizations.of(context)!.upload,
+                value: bytesToReadable(uploadSpeed),
+                icon: Icons.arrow_upward_rounded,
+                color: XPink,
+                isSelected: false,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: _StatItem(
+                label: AppLocalizations.of(context)!.download,
+                value: bytesToReadable(downloadSpeed),
+                icon: Icons.arrow_downward_rounded,
+                color: XBlue,
+                isSelected: false,
+              ),
+            ),
           ],
         ),
-        // const SizedBox(height: 8),
-        // Row(
-        //   children: [
-        //     Expanded(
-        //       child: _StatItem(
-        //         label: 'Upload',
-        //         value: bytesToReadable(uploadSpeed),
-        //         icon: Icons.arrow_upward,
-        //         color: XPink,
-        //         isSelected: _selectedChartType == 'upload',
-        //         onTap: () => _toggleChart('upload'),
-        //       ),
-        //     ),
-        //     const SizedBox(width: 8),
-        //     Expanded(
-        //       child: _StatItem(
-        //         label: 'Download',
-        //         value: bytesToReadable(downloadSpeed),
-        //         icon: Icons.arrow_downward,
-        //         color: XBlue,
-        //         isSelected: _selectedChartType == 'download',
-        //         onTap: () => _toggleChart('download'),
-        //       ),
-        //     ),
-        //   ],
-        // ),
         // // Chart area
         // if (_selectedChartType != null) ...[
         //   const SizedBox(height: 16),
@@ -1623,7 +1627,7 @@ class _StatItem extends StatelessWidget {
     required this.icon,
     required this.color,
     required this.isSelected,
-    required this.onTap,
+    this.onTap,
   });
 
   final String label;
@@ -1631,58 +1635,57 @@ class _StatItem extends StatelessWidget {
   final IconData icon;
   final Color color;
   final bool isSelected;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        decoration: BoxDecoration(
+    final box = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      decoration: BoxDecoration(
+        color: isSelected
+            ? color.withOpacity(0.15)
+            : Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
           color: isSelected
-              ? color.withOpacity(0.15)
-              : Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: isSelected
-                ? color.withOpacity(0.5)
-                : Theme.of(context).colorScheme.outlineVariant.withOpacity(0.2),
-            width: isSelected ? 1.5 : 1,
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(icon, size: 14, color: color),
-                const SizedBox(width: 8),
-                Text(
-                  label,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            Text(
-              value,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: color,
-                fontWeight: FontWeight.bold,
-                fontSize: 12,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
+              ? color.withOpacity(0.5)
+              : Theme.of(context).colorScheme.outlineVariant.withOpacity(0.2),
+          width: isSelected ? 1.5 : 1,
         ),
       ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, size: 14, color: color),
+              const SizedBox(width: 8),
+              Text(
+                label,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: color,
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
     );
+    if (onTap == null) return box;
+    return GestureDetector(onTap: onTap, child: box);
   }
 }
 
@@ -1718,12 +1721,12 @@ class _NodeChart extends StatelessWidget {
       // case 'upload':
       //   color = XPink;
       //   label = AppLocalizations.of(context)!.upload;
-      //   dataValues = nodeInfo.statsHistory.toList().map((e) => e.$4).toList();
+      //   dataValues = nodeInfo.statsHistory.toList().map((e) => e.$3).toList();
       //   break;
       // case 'download':
       //   color = XBlue;
       //   label = AppLocalizations.of(context)!.download;
-      //   dataValues = nodeInfo.statsHistory.toList().map((e) => e.$3).toList();
+      //   dataValues = nodeInfo.statsHistory.toList().map((e) => e.$4).toList();
       //   break;
       case 'latency':
         color = VioletBlue;

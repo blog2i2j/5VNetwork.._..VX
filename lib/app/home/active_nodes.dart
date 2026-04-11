@@ -94,6 +94,70 @@ class CurrentNodes extends StatelessWidget {
   }
 }
 
+/// Nested [ListView] inside an outer scroll view: at min/max extent the inner
+/// [Scrollable] does not register with [PointerSignalResolver], so wheel/trackpad
+/// deltas would scroll the parent. This wrapper registers a no-op handler in
+/// that case so scrolling stops at the inner list's edge.
+class _AbsorbParentPointerScrollAtEdge extends StatefulWidget {
+  const _AbsorbParentPointerScrollAtEdge({required this.builder});
+
+  final Widget Function(BuildContext context, ScrollController controller) builder;
+
+  @override
+  State<_AbsorbParentPointerScrollAtEdge> createState() =>
+      _AbsorbParentPointerScrollAtEdgeState();
+}
+
+class _AbsorbParentPointerScrollAtEdgeState
+    extends State<_AbsorbParentPointerScrollAtEdge> {
+  final ScrollController _controller = ScrollController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _onPointerSignal(PointerSignalEvent event) {
+    if (event is! PointerScrollEvent) return;
+    if (!_controller.hasClients) return;
+    final ScrollPosition position = _controller.position;
+    if (!position.hasContentDimensions) return;
+    if (position.minScrollExtent >= position.maxScrollExtent) return;
+    if (!position.physics.shouldAcceptUserOffset(position)) return;
+
+    final ScrollBehavior scrollBehavior = ScrollConfiguration.of(context);
+    final pressed = HardwareKeyboard.instance.logicalKeysPressed;
+    final flipAxes =
+        pressed.any(scrollBehavior.pointerAxisModifiers.contains) &&
+        event.kind == PointerDeviceKind.mouse;
+    final scrollAxis = flipAxes ? flipAxis(position.axis) : position.axis;
+    final double rawDelta = switch (scrollAxis) {
+      Axis.horizontal => event.scrollDelta.dx,
+      Axis.vertical => event.scrollDelta.dy,
+    };
+    final double delta = axisDirectionIsReversed(position.axisDirection)
+        ? -rawDelta
+        : rawDelta;
+
+    final double target = (position.pixels + delta).clamp(
+      position.minScrollExtent,
+      position.maxScrollExtent,
+    );
+    if (delta != 0.0 && target == position.pixels) {
+      GestureBinding.instance.pointerSignalResolver.register(event, (_) {});
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Listener(
+      onPointerSignal: _onPointerSignal,
+      child: widget.builder(context, _controller),
+    );
+  }
+}
+
 class ActiveNodes extends StatelessWidget {
   const ActiveNodes({super.key});
 
@@ -110,18 +174,21 @@ class ActiveNodes extends StatelessWidget {
         constraints: BoxConstraints(maxHeight: desktopPlatforms ? 227 : 235),
         child: ScrollConfiguration(
           behavior: ScrollConfiguration.of(context).copyWith(scrollbars: true),
-          child: ListView.separated(
-            shrinkWrap: true,
-            physics: const ClampingScrollPhysics(),
-            separatorBuilder: (context, index) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Divider(height: 1, color: Colors.grey.withOpacity(0.1)),
+          child: _AbsorbParentPointerScrollAtEdge(
+            builder: (context, scrollController) => ListView.separated(
+              controller: scrollController,
+              shrinkWrap: true,
+              physics: const ClampingScrollPhysics(),
+              separatorBuilder: (context, index) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Divider(height: 1, color: Colors.grey.withOpacity(0.1)),
+              ),
+              itemCount: realtime.nodeInfos.length,
+              itemBuilder: (context, index) {
+                final nodeInfo = realtime.nodeInfos[index];
+                return NodeCard(nodeInfo: nodeInfo);
+              },
             ),
-            itemCount: realtime.nodeInfos.length,
-            itemBuilder: (context, index) {
-              final nodeInfo = realtime.nodeInfos[index];
-              return NodeCard(nodeInfo: nodeInfo);
-            },
           ),
         ),
       ),

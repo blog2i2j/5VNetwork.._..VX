@@ -36,21 +36,42 @@ class AdvancedScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     showDialog<void>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(l10n.tunIpv6Settings),
-        content: SingleChildScrollView(
-          child: SizedBox(
-            width: double.maxFinite,
-            child: TunSetting(onSave: () => Navigator.of(ctx).pop()),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
-            child: Text(l10n.cancel),
-          ),
-        ],
-      ),
+      builder: (ctx) {
+        VoidCallback? applyTun;
+        return StatefulBuilder(
+          builder: (dialogContext, setDialogState) {
+            return AlertDialog(
+              title: Text(l10n.tunIpv6Settings),
+              content: SingleChildScrollView(
+                child: SizedBox(
+                  width: double.maxFinite,
+                  child: TunSetting(
+                    onRegisterApply: (apply) {
+                      applyTun = apply;
+                      setDialogState(() {});
+                    },
+                  ),
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(ctx).pop(),
+                  child: Text(l10n.cancel),
+                ),
+                FilledButton(
+                  onPressed: applyTun == null
+                      ? null
+                      : () {
+                          applyTun!();
+                          Navigator.of(ctx).pop();
+                        },
+                  child: Text(l10n.save),
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 
@@ -286,12 +307,14 @@ class _FallbackSettingState extends State<FallbackSetting> {
 
 /// Widget for TUN-related settings: tun IPv4/IPv6 (tun46Setting),
 /// reject IPv6, and reject QUIC (all map to [TunConfig] fields).
-/// When [onSave] is non-null (e.g. in a dialog), nothing is written until
-/// the user taps Save; [onSave] is called after applying.
+/// When [onRegisterApply] is non-null (e.g. in a dialog), nothing is written
+/// until the parent invokes the registered callback (typically from a dialog
+/// Save action).
 class TunSetting extends StatefulWidget {
-  const TunSetting({super.key, this.onSave});
+  const TunSetting({super.key, this.onRegisterApply});
 
-  final VoidCallback? onSave;
+  /// Receives [apply], which persists all fields and restarts the controller.
+  final void Function(VoidCallback apply)? onRegisterApply;
 
   @override
   State<TunSetting> createState() => _TunSettingState();
@@ -317,6 +340,12 @@ class _TunSettingState extends State<TunSetting> {
     _dns4Controller = TextEditingController(text: pref.tunDns4);
     _dns6Controller = TextEditingController(text: pref.tunDns6);
     _mtuController = TextEditingController(text: '${pref.tunMtu}');
+    if (widget.onRegisterApply != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        widget.onRegisterApply!(_applyAll);
+      });
+    }
   }
 
   @override
@@ -329,7 +358,7 @@ class _TunSettingState extends State<TunSetting> {
     super.dispose();
   }
 
-  bool get _inDialog => widget.onSave != null;
+  bool get _inDialog => widget.onRegisterApply != null;
 
   void _applyAll() {
     final pref = context.read<SharedPreferences>();
@@ -525,20 +554,6 @@ class _TunSettingState extends State<TunSetting> {
             }
           },
         ),
-        if (_inDialog) ...[
-          const Gap(24),
-          SizedBox(
-            width: double.infinity,
-            child: FilledButton.icon(
-              onPressed: () {
-                _applyAll();
-                widget.onSave?.call();
-              },
-              icon: const Icon(Icons.save_outlined, size: 20),
-              label: Text(l10n.save),
-            ),
-          ),
-        ],
       ],
     );
   }

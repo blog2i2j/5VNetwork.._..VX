@@ -19,11 +19,13 @@ import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_common/common.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:gap/gap.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vx/app/settings/privacy.dart';
+import 'package:vx/common/common.dart';
 import 'package:vx/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:vx/auth/auth_bloc.dart';
@@ -133,7 +135,7 @@ class _AccountPageState extends State<AccountPage> {
                 children: [
                   SignInPage(
                     showGoogle: _showGoogle,
-                    showMicrosoft: _showMicrosoft,
+                    showMicrosoft: isPkg || !applePlatform,
                     showApple: _showApple,
                     termOfServiceUrl: termOfServiceUrl,
                     privacyPolicyUrl: privacyPolicyUrl,

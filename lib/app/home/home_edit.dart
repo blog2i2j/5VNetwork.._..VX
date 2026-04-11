@@ -23,23 +23,114 @@ class HomeEditButton extends StatelessWidget {
     return IconButton(
       icon: const Icon(Icons.edit_rounded),
       onPressed: () {
-        showDialog(
-          context: context,
-          builder: (context) => const _HomeConfigDialog(),
-        );
+        final compact = context.read<MyLayout>().isCompact;
+        if (compact) {
+          Navigator.of(context, rootNavigator: true).push<void>(
+            CupertinoPageRoute<void>(
+              builder: (context) => const _HomeConfigScaffoldPage(),
+            ),
+          );
+        } else {
+          showDialog<void>(
+            context: context,
+            builder: (context) => const _HomeConfigDialog(),
+          );
+        }
       },
     );
   }
 }
 
-class _HomeConfigDialog extends StatefulWidget {
-  const _HomeConfigDialog();
+/// Chips + expandable editor (standard vs customizable). Used inside a
+/// bounded-height parent ([Column] with [MainAxisSize.max] or [Expanded]).
+class _HomeConfigEditorContent extends StatelessWidget {
+  const _HomeConfigEditorContent();
 
   @override
-  State<_HomeConfigDialog> createState() => _HomeConfigDialogState();
+  Widget build(BuildContext context) {
+    final _useCustomizable =
+        context.watch<HomePageCubit>().state &&
+        context.read<AuthBloc>().state.pro;
+    final l10n = AppLocalizations.of(context)!;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              ChoiceChip(
+                label: Text(l10n.homeEditStandardLayout),
+                selected: !_useCustomizable,
+                onSelected: (selected) {
+                  if (!selected) return;
+                  context.read<HomePageCubit>().setUseCustomizableHomePage(
+                    false,
+                  );
+                },
+              ),
+              const SizedBox(width: 8),
+              ChoiceChip(
+                label: AppendProIcon(
+                  child: Text(l10n.homeEditCustomizableLayout),
+                ),
+                selected: _useCustomizable,
+                onSelected: context.read<AuthBloc>().state.pro
+                    ? (selected) {
+                        if (!selected) return;
+                        context
+                            .read<HomePageCubit>()
+                            .setUseCustomizableHomePage(true);
+                      }
+                    : null,
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+        if (!_useCustomizable)
+          Expanded(child: const _StandardHomeWidgetSetting()),
+        if (_useCustomizable)
+          Expanded(
+            child: ChangeNotifierProvider(
+              create: (context) =>
+                  CustomizeHomeWidgetNotifier(context.read<HomeLayoutRepo>()),
+              child: const _HomeEditDialog(),
+            ),
+          ),
+      ],
+    );
+  }
 }
 
-class _HomeConfigDialogState extends State<_HomeConfigDialog> {
+class _HomeConfigScaffoldPage extends StatelessWidget {
+  const _HomeConfigScaffoldPage();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(l10n.home),
+        leading: IconButton(
+          icon: const Icon(Icons.close_rounded),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: const _HomeConfigEditorContent(),
+        ),
+      ),
+    );
+  }
+}
+
+class _HomeConfigDialog extends StatelessWidget {
+  const _HomeConfigDialog();
+
   @override
   Widget build(BuildContext context) {
     final _useCustomizable =
@@ -53,7 +144,7 @@ class _HomeConfigDialogState extends State<_HomeConfigDialog> {
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
@@ -67,50 +158,7 @@ class _HomeConfigDialogState extends State<_HomeConfigDialog> {
               ],
             ),
             const SizedBox(height: 12),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  ChoiceChip(
-                    label: Text(l10n.homeEditStandardLayout),
-                    selected: !_useCustomizable,
-                    onSelected: (selected) {
-                      if (!selected) return;
-                      context.read<HomePageCubit>().setUseCustomizableHomePage(
-                        false,
-                      );
-                    },
-                  ),
-                  const SizedBox(width: 8),
-                  ChoiceChip(
-                    label: AppendProIcon(
-                      child: Text(l10n.homeEditCustomizableLayout),
-                    ),
-                    selected: _useCustomizable,
-                    onSelected: context.read<AuthBloc>().state.pro
-                        ? (selected) {
-                            if (!selected) return;
-                            context
-                                .read<HomePageCubit>()
-                                .setUseCustomizableHomePage(true);
-                          }
-                        : null,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            if (!_useCustomizable)
-              Expanded(child: const _StandardHomeWidgetSetting()),
-            if (_useCustomizable)
-              Expanded(
-                child: ChangeNotifierProvider(
-                  create: (context) => CustomizeHomeWidgetNotifier(
-                    context.read<HomeLayoutRepo>(),
-                  ),
-                  child: const _HomeEditDialog(),
-                ),
-              ),
+            const Expanded(child: _HomeConfigEditorContent()),
           ],
         ),
       ),
