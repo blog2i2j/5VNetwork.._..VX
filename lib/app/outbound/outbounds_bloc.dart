@@ -485,50 +485,61 @@ class OutboundBloc extends Bloc<OutboundEvent, OutboundState> {
     SwitchHandlerEvent e,
     Emitter<OutboundState> emit,
   ) async {
-    final newList = List<OutboundHandler>.from(state.handlers);
-    final index = newList.indexWhere((h) => h.id == e.handler.id);
-    final unlockPro = _authBloc.state.pro;
-    // single node mode
-    if (!unlockPro ||
-        _pref.proxySelectorManualMode ==
-            ProxySelectorManualNodeSelectionMode.single) {
-      final currentlySelected = newList.indexWhere((h) => h.selected);
-      if (currentlySelected >= 0 && currentlySelected != index) {
-        newList[currentlySelected] = newList[currentlySelected].copyWith(
-          selected: false,
-        );
-      }
-      if (index >= 0) {
-        newList[index] = newList[index].copyWith(selected: e.selected);
-      }
-      emit(state.copyWith(handlers: _sortHandlers(newList, state.sortCol)));
-      // update database
-      if (!e.selected) {
-        await _outboundRepo.updateHandler(e.handler.id, selected: false);
-      } else {
-        final currentSelected = await _outboundRepo.getHandlers(selected: true);
-        final m = {
-          e.handler.id: const OutboundHandlersCompanion(selected: Value(true)),
-        };
-        for (var h in currentSelected) {
-          m[h.id] = const OutboundHandlersCompanion(selected: Value(false));
+    try {
+      final newList = List<OutboundHandler>.from(state.handlers);
+      final index = newList.indexWhere((h) => h.id == e.handler.id);
+      final unlockPro = _authBloc.state.pro;
+      // single node mode
+      if (!unlockPro ||
+          _pref.proxySelectorManualMode ==
+              ProxySelectorManualNodeSelectionMode.single) {
+        // update database
+        if (!e.selected) {
+          await _outboundRepo.updateHandler(e.handler.id, selected: false);
+        } else {
+          final currentSelected = await _outboundRepo.getHandlers(
+            selected: true,
+          );
+          final m = {
+            e.handler.id: const OutboundHandlersCompanion(selected: Value(true)),
+          };
+          for (var h in currentSelected) {
+            m[h.id] = const OutboundHandlersCompanion(selected: Value(false));
+          }
+          await _outboundRepo.updateHandlersTx(m);
         }
-        await _outboundRepo.updateHandlersTx(m);
+
+        final currentlySelected = newList.indexWhere((h) => h.selected);
+        if (currentlySelected >= 0 &&
+            newList[currentlySelected].id != e.handler.id) {
+          newList[currentlySelected] = newList[currentlySelected].copyWith(
+            selected: false,
+          );
+        }
+        if (index >= 0) {
+          newList[index] = newList[index].copyWith(selected: e.selected);
+        }
+        emit(state.copyWith(handlers: _sortHandlers(newList, state.sortCol)));
+      } else {
+        // update database
+        await _outboundRepo.updateHandler(e.handler.id, selected: e.selected);
+        // multiple node mode
+        if (index >= 0) {
+          newList[index] = newList[index].copyWith(selected: e.selected);
+        }
+        emit(state.copyWith(handlers: _sortHandlers(newList, state.sortCol)));
       }
-    } else {
-      // multiple node mode
-      if (index >= 0) {
-        newList[index] = newList[index].copyWith(selected: e.selected);
+      if ((await _outboundRepo.getHandlers(selected: true)).isEmpty) {
+        snack(rootLocalizations()?.noSelectedNode);
       }
-      emit(state.copyWith(handlers: _sortHandlers(newList, state.sortCol)));
-      // update database
-      await _outboundRepo.updateHandler(e.handler.id, selected: e.selected);
+      // notify core
+      await _xController.handlerSelectedChange();
+    } finally {
+      final c = e.whenPersisted;
+      if (c != null && !c.isCompleted) {
+        c.complete();
+      }
     }
-    if ((await _outboundRepo.getHandlers(selected: true)).isEmpty) {
-      snack(rootLocalizations()?.noSelectedNode);
-    }
-    // notify core
-    await _xController.handlerSelectedChange();
   }
 
   Future<void> _onUserIsNotPro(
@@ -1204,9 +1215,15 @@ class SortHandlersEvent extends OutboundEvent {
 }
 
 class SwitchHandlerEvent extends OutboundEvent {
-  const SwitchHandlerEvent(this.handler, this.selected);
+  SwitchHandlerEvent(this.handler, this.selected, {this.whenPersisted});
   final OutboundHandler handler;
   final bool selected;
+
+  /// If non-null, completed after DB updates in [_switchHandler] finish (success or failure).
+  final Completer<void>? whenPersisted;
+
+  @override
+  List<Object> get props => [handler, selected];
 }
 
 class ManuualSingleSelectionEvent extends OutboundEvent {

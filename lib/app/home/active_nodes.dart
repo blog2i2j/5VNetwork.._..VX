@@ -101,7 +101,8 @@ class CurrentNodes extends StatelessWidget {
 class _AbsorbParentPointerScrollAtEdge extends StatefulWidget {
   const _AbsorbParentPointerScrollAtEdge({required this.builder});
 
-  final Widget Function(BuildContext context, ScrollController controller) builder;
+  final Widget Function(BuildContext context, ScrollController controller)
+  builder;
 
   @override
   State<_AbsorbParentPointerScrollAtEdge> createState() =>
@@ -240,6 +241,28 @@ class _NodesHelperState extends State<NodesHelper> {
     if (mounted) setState(() => _handlers = handlers);
   }
 
+  /// Waits until [SwitchHandlerEvent] has finished writing selection to the DB,
+  /// then refreshes the recent list (so toggles show the correct state).
+  Future<void> _switchHandlerAndRefreshRecentIfNeeded(
+    int index,
+    bool selected,
+  ) async {
+    final handler = _handlers[index];
+    if (_selectedSegment != NodesHelperSegment.recent) {
+      context.read<SharedPreferences>().addRecentlyUsedNodeId(handler.id);
+    }
+
+    final whenPersisted = Completer<void>();
+    context.read<OutboundBloc>().add(
+      SwitchHandlerEvent(handler, selected, whenPersisted: whenPersisted),
+    );
+    await whenPersisted.future;
+    if (!mounted) return;
+    if (_selectedSegment == NodesHelperSegment.recent) {
+      await _loadRecentHandlers();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -364,19 +387,9 @@ class _NodesHelperState extends State<NodesHelper> {
                         child: InkWell(
                           onTap: manualSelect
                               ? () {
-                                  final handler = _handlers[index];
-                                  context
-                                      .read<SharedPreferences>()
-                                      .addRecentlyUsedNodeId(handler.id);
-                                  if (_selectedSegment ==
-                                      NodesHelperSegment.recent) {
-                                    _loadRecentHandlers();
-                                  }
-                                  context.read<OutboundBloc>().add(
-                                    SwitchHandlerEvent(
-                                      handler,
-                                      !handler.selected,
-                                    ),
+                                  _switchHandlerAndRefreshRecentIfNeeded(
+                                    index,
+                                    !_handlers[index].selected,
                                   );
                                 }
                               : null,
@@ -392,16 +405,9 @@ class _NodesHelperState extends State<NodesHelper> {
                                   child: Switch(
                                     value: _handlers[index].selected,
                                     onChanged: (value) {
-                                      final handler = _handlers[index];
-                                      context
-                                          .read<SharedPreferences>()
-                                          .addRecentlyUsedNodeId(handler.id);
-                                      if (_selectedSegment ==
-                                          NodesHelperSegment.recent) {
-                                        _loadRecentHandlers();
-                                      }
-                                      context.read<OutboundBloc>().add(
-                                        SwitchHandlerEvent(handler, value),
+                                      _switchHandlerAndRefreshRecentIfNeeded(
+                                        index,
+                                        value,
                                       );
                                     },
                                   ),
