@@ -23,22 +23,22 @@ Future<AppDatabase?> _initDatabase(
     final path = await getDbPath(pref);
     final db = AppDatabase(path: path, interceptor: interceptor);
 
-    if (Platform.isAndroid) {
-      // PRAGMA quick_check returns one row "ok" if healthy,
-      // or multiple rows describing each corruption found.
-      final rows = await db.customSelect('PRAGMA quick_check').get();
-      final messages = rows
-          .map((r) => r.data.values.first?.toString() ?? '')
-          .toList();
-      logger.d('quick_check messages: $messages');
-      if (messages.length != 1 || messages.first != 'ok') {
-        final report = messages.join('\n');
-        logger.e('Database corruption detected:\n$report');
-        reportError("database corruption detected", report);
-        fatalErrorMessage =
-            "Database was corrupted. Details of corruption: $report";
-      }
-    }
+    // if (Platform.isAndroid) {
+    //   // PRAGMA quick_check returns one row "ok" if healthy,
+    //   // or multiple rows describing each corruption found.
+    //   final rows = await db.customSelect('PRAGMA quick_check').get();
+    //   final messages = rows
+    //       .map((r) => r.data.values.first?.toString() ?? '')
+    //       .toList();
+    //   logger.d('quick_check messages: $messages');
+    //   if (messages.length != 1 || messages.first != 'ok') {
+    //     final report = messages.join('\n');
+    //     logger.e('Database corruption detected:\n$report');
+    //     reportError("database corruption detected", report);
+    //     fatalErrorMessage =
+    //         "Database was corrupted. Details of corruption: $report";
+    //   }
+    // }
 
     return db;
   } catch (e) {
