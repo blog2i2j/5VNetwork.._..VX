@@ -391,6 +391,7 @@ class _QuickDeployState extends State<QuickDeploy> {
           destination: widget.server.address,
         ),
       ),
+      saveText: AppLocalizations.of(context)!.deploy,
       onSave: (BuildContext ctx) {
         if (formKey.currentState?.validate() != true) {
           return;

@@ -31,6 +31,7 @@ Future<T> showMyAdaptiveDialog<T>(
   Widget widget, {
   String? title,
   Function(BuildContext)? onSave,
+  String? saveText,
   bool editable = true,
 }) async {
   late Object? result;
@@ -56,7 +57,7 @@ Future<T> showMyAdaptiveDialog<T>(
               if (editable)
                 TextButton(
                   onPressed: () => onSave?.call(ctx),
-                  child: Text(AppLocalizations.of(ctx)!.save),
+                  child: Text(saveText ?? AppLocalizations.of(ctx)!.save),
                 ),
             ],
           ),
@@ -96,7 +97,7 @@ Future<T> showMyAdaptiveDialog<T>(
                     elevation: 1,
                   ),
                   onPressed: () => onSave?.call(context),
-                  child: Text(AppLocalizations.of(context)!.save),
+                  child: Text(saveText ?? AppLocalizations.of(context)!.save),
                 );
               },
             ),
