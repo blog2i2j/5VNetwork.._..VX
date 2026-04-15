@@ -12,8 +12,7 @@
 ## Overview
 
 VX (formerly known as Vproxy) is a cross-platform proxy client built on top of
-[vx-core](https://github.com/5vnetwork/vx-core), which originated from
-[v2ray-core](https://www.v2fly.org/).
+[vx-core](https://github.com/5vnetwork/vx-core)
 
 ## Features
 

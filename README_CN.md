@@ -12,7 +12,7 @@
 ## 概览
 
 VX (之前叫Vproxy)
-是一个全平台代理客户端，使用[vx-core](https://github.com/5vnetwork/vx-core)（改自[v2ray-core](https://www.v2fly.org/)）.
+是一个全平台代理客户端，使用[vx-core](https://github.com/5vnetwork/vx-core)
 
 ## 特点
 
