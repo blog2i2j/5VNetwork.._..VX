@@ -563,7 +563,10 @@ class _SubScriptionListTileState extends State<SubScriptionListTile> {
   @override
   Widget build(BuildContext context) {
     final parsedData = SubscriptionData.parse(widget.group.description);
+    final subState = context.read<SubscriptionBloc>().state;
     final hasUpdateError =
+        (!subState.updatingSubs.contains(widget.group.id) &&
+            !subState.updatingAll) &&
         widget.group.lastSuccessUpdate != widget.group.lastUpdate;
     final colorScheme = Theme.of(context).colorScheme;
 
