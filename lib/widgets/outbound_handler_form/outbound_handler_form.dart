@@ -54,15 +54,20 @@ import 'package:vx/common/const.dart';
 import 'package:vx/common/net.dart';
 import 'package:vx/theme.dart';
 import 'package:uuid/uuid.dart';
-import 'package:tm/protos/vx/transport/headers/http/config.pb.dart' as http_header;
-import 'package:tm/protos/vx/transport/headers/noop/config.pb.dart' as noop_header;
+import 'package:tm/protos/vx/transport/headers/http/config.pb.dart'
+    as http_header;
+import 'package:tm/protos/vx/transport/headers/noop/config.pb.dart'
+    as noop_header;
 import 'package:tm/protos/vx/transport/headers/wireguard/config.pb.dart'
     as wireguard_header;
 import 'package:tm/protos/vx/transport/headers/wechat/config.pb.dart'
     as wechat_header;
-import 'package:tm/protos/vx/transport/headers/utp/config.pb.dart' as utp_header;
-import 'package:tm/protos/vx/transport/headers/srtp/config.pb.dart' as srtp_header;
-import 'package:tm/protos/vx/transport/headers/tls/config.pb.dart' as tls_header;
+import 'package:tm/protos/vx/transport/headers/utp/config.pb.dart'
+    as utp_header;
+import 'package:tm/protos/vx/transport/headers/srtp/config.pb.dart'
+    as srtp_header;
+import 'package:tm/protos/vx/transport/headers/tls/config.pb.dart'
+    as tls_header;
 import 'package:tm/protos/vx/transport/protocols/splithttp/config.pb.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:tm/protos/vx/transport/security/tls/tls.pb.dart';
@@ -108,7 +113,7 @@ class OutboundHandlerFormState extends State<OutboundHandlerForm>
   VlessClientConfig _vlessConfig = VlessClientConfig(encryption: "none");
   ShadowsocksClientConfig _shadowsocksConfig = ShadowsocksClientConfig();
   Shadowsocks2022ClientConfig _shadowsocks2022Config =
-      Shadowsocks2022ClientConfig();
+      Shadowsocks2022ClientConfig(method: '2022-blake3-aes-128-gcm');
   SocksClientConfig _socksConfig = SocksClientConfig();
   AnytlsClientConfig _anytlsConfig = AnytlsClientConfig();
   Hysteria2ClientConfig _hysteriaConfig = _getDefaultHysteriaConfig();
