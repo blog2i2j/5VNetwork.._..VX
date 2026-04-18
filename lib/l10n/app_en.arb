@@ -979,5 +979,15 @@
       }
     }
   },
+  "policyTimeout": "Policy Timeout",
+  "policyTimeoutNoTimeoutHint": "0 means no timeout",
+  "policyTcpIdleTimeout": "TCP Idle Timeout",
+  "policyTcpIdleTimeoutDesc": "If uplink or downlink data is absent during this period, the connection will be closed.",
+  "policyUdpIdleTimeout": "UDP Idle Timeout",
+  "policyUdpIdleTimeoutDesc": "If no uplink data is received during this period, the connection will be closed.",
+  "policyUpLinkOnlyTimeout": "UpLink Only Timeout",
+  "policyUpLinkOnlyTimeoutDesc": "If a TCP connection's downlink stream is done, the idle timeout switches to this value.",
+  "policyDownLinkOnlyTimeout": "DownLink Only Timeout",
+  "policyDownLinkOnlyTimeoutDesc": "If a TCP connection's uplink stream is done, the idle timeout switches to this value.",
   "tutorial": "Tutorial"
 }

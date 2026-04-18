@@ -2352,5 +2352,37 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get policyTimeout => '策略超时';
+
+  @override
+  String get policyTimeoutNoTimeoutHint => '0 表示不超时';
+
+  @override
+  String get policyTcpIdleTimeout => 'TCP 空闲超时';
+
+  @override
+  String get policyTcpIdleTimeoutDesc => '在该时间段内没有上行或下行数据，连接将被关闭。';
+
+  @override
+  String get policyUdpIdleTimeout => 'UDP 空闲超时';
+
+  @override
+  String get policyUdpIdleTimeoutDesc => '在该时间段内没有上行数据，连接将被关闭。';
+
+  @override
+  String get policyUpLinkOnlyTimeout => '仅上行超时';
+
+  @override
+  String get policyUpLinkOnlyTimeoutDesc =>
+      '当 TCP 连接的下行流结束后，空闲超时将切换为该值。';
+
+  @override
+  String get policyDownLinkOnlyTimeout => '仅下行超时';
+
+  @override
+  String get policyDownLinkOnlyTimeoutDesc =>
+      '当 TCP 连接的上行流结束后，空闲超时将切换为该值。';
+
+  @override
   String get tutorial => '教程';
 }

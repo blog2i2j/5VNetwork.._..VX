@@ -2402,5 +2402,39 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get policyTimeout => 'Таймауты политики';
+
+  @override
+  String get policyTimeoutNoTimeoutHint => '0 означает без таймаута';
+
+  @override
+  String get policyTcpIdleTimeout => 'Таймаут простоя TCP';
+
+  @override
+  String get policyTcpIdleTimeoutDesc =>
+      'Если в течение этого периода нет входящих или исходящих данных, соединение будет закрыто.';
+
+  @override
+  String get policyUdpIdleTimeout => 'Таймаут простоя UDP';
+
+  @override
+  String get policyUdpIdleTimeoutDesc =>
+      'Если в течение этого периода нет исходящих данных, соединение будет закрыто.';
+
+  @override
+  String get policyUpLinkOnlyTimeout => 'Таймаут только uplink';
+
+  @override
+  String get policyUpLinkOnlyTimeoutDesc =>
+      'Если входящий поток TCP-соединения завершён, таймаут простоя переключится на это значение.';
+
+  @override
+  String get policyDownLinkOnlyTimeout => 'Таймаут только downlink';
+
+  @override
+  String get policyDownLinkOnlyTimeoutDesc =>
+      'Если исходящий поток TCP-соединения завершён, таймаут простоя переключится на это значение.';
+
+  @override
   String get tutorial => 'Учебное пособие';
 }

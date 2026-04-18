@@ -126,6 +126,8 @@ class AdvancedScreen extends StatelessWidget {
             const RejectQuicHysteriaSetting(),
             const Divider(),
             const DialerSetting(),
+            const Divider(),
+            const PolicyTimeoutSetting(),
             const SizedBox(height: 100),
           ],
         ),
@@ -756,6 +758,148 @@ class _DialerSettingState extends State<DialerSetting> {
             keyboardType: TextInputType.number,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           ),
+        ),
+      ],
+    );
+  }
+}
+
+class PolicyTimeoutSetting extends StatefulWidget {
+  const PolicyTimeoutSetting({super.key});
+
+  @override
+  State<PolicyTimeoutSetting> createState() => _PolicyTimeoutSettingState();
+}
+
+class _PolicyTimeoutSettingState extends State<PolicyTimeoutSetting> {
+  late final SharedPreferences _pref;
+  late final TextEditingController _handshakeTimeoutController;
+  late final TextEditingController _connectionIdleTimeoutController;
+  late final TextEditingController _udpIdleTimeoutController;
+  late final TextEditingController _upLinkOnlyTimeoutController;
+  late final TextEditingController _downLinkOnlyTimeoutController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pref = context.read<SharedPreferences>();
+    _handshakeTimeoutController = TextEditingController(
+      text: '${_pref.policyHandshakeTimeout}',
+    );
+    _connectionIdleTimeoutController = TextEditingController(
+      text: '${_pref.policyConnectionIdleTimeout}',
+    );
+    _udpIdleTimeoutController = TextEditingController(
+      text: '${_pref.policyUdpIdleTimeout}',
+    );
+    _upLinkOnlyTimeoutController = TextEditingController(
+      text: '${_pref.policyUpLinkOnlyTimeout}',
+    );
+    _downLinkOnlyTimeoutController = TextEditingController(
+      text: '${_pref.policyDownLinkOnlyTimeout}',
+    );
+  }
+
+  @override
+  void dispose() {
+    _handshakeTimeoutController.dispose();
+    _connectionIdleTimeoutController.dispose();
+    _udpIdleTimeoutController.dispose();
+    _upLinkOnlyTimeoutController.dispose();
+    _downLinkOnlyTimeoutController.dispose();
+    super.dispose();
+  }
+
+  void _onTimeoutChanged({
+    required String value,
+    required void Function(int timeout) save,
+  }) {
+    if (value.isEmpty) {
+      save(0);
+      context.read<XController>().restart();
+      return;
+    }
+    final i = int.tryParse(value);
+    if (i != null) {
+      save(i);
+      context.read<XController>().restart();
+    }
+  }
+
+  Widget _buildTimeoutField({
+    required TextEditingController controller,
+    required String label,
+    required String helperText,
+    required void Function(int timeout) onSave,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: label,
+          helperText: helperText,
+          helperMaxLines: 3,
+          suffixText: 's',
+          border: const OutlineInputBorder(),
+        ),
+        keyboardType: TextInputType.number,
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        onChanged: (value) => _onTimeoutChanged(value: value, save: onSave),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            l10n.policyTimeout,
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+        ),
+        const Gap(10),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            l10n.policyTimeoutNoTimeoutHint,
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ),
+        const Gap(10),
+        _buildTimeoutField(
+          controller: _connectionIdleTimeoutController,
+          label: l10n.policyTcpIdleTimeout,
+          helperText: l10n.policyTcpIdleTimeoutDesc,
+          onSave: _pref.setPolicyConnectionIdleTimeout,
+        ),
+        const Gap(10),
+        _buildTimeoutField(
+          controller: _udpIdleTimeoutController,
+          label: l10n.policyUdpIdleTimeout,
+          helperText: l10n.policyUdpIdleTimeoutDesc,
+          onSave: _pref.setPolicyUdpIdleTimeout,
+        ),
+        const Gap(10),
+        _buildTimeoutField(
+          controller: _upLinkOnlyTimeoutController,
+          label: l10n.policyUpLinkOnlyTimeout,
+          helperText: l10n.policyUpLinkOnlyTimeoutDesc,
+          onSave: _pref.setPolicyUpLinkOnlyTimeout,
+        ),
+        const Gap(10),
+        _buildTimeoutField(
+          controller: _downLinkOnlyTimeoutController,
+          label: l10n.policyDownLinkOnlyTimeout,
+          helperText: l10n.policyDownLinkOnlyTimeoutDesc,
+          onSave: _pref.setPolicyDownLinkOnlyTimeout,
         ),
       ],
     );

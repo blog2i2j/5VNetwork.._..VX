@@ -2402,5 +2402,39 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get policyTimeout => 'Policy Timeout';
+
+  @override
+  String get policyTimeoutNoTimeoutHint => '0 means no timeout';
+
+  @override
+  String get policyTcpIdleTimeout => 'TCP Idle Timeout';
+
+  @override
+  String get policyTcpIdleTimeoutDesc =>
+      'If uplink or downlink data is absent during this period, the connection will be closed.';
+
+  @override
+  String get policyUdpIdleTimeout => 'UDP Idle Timeout';
+
+  @override
+  String get policyUdpIdleTimeoutDesc =>
+      'If no uplink data is received during this period, the connection will be closed.';
+
+  @override
+  String get policyUpLinkOnlyTimeout => 'UpLink Only Timeout';
+
+  @override
+  String get policyUpLinkOnlyTimeoutDesc =>
+      'If a TCP connection\'s downlink stream is done, the idle timeout switches to this value.';
+
+  @override
+  String get policyDownLinkOnlyTimeout => 'DownLink Only Timeout';
+
+  @override
+  String get policyDownLinkOnlyTimeoutDesc =>
+      'If a TCP connection\'s uplink stream is done, the idle timeout switches to this value.';
+
+  @override
   String get tutorial => 'Tutorial';
 }

@@ -4567,6 +4567,66 @@ abstract class AppLocalizations {
   /// **'Failed to reset: {error}'**
   String resetFailed(String error);
 
+  /// No description provided for @policyTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'Policy Timeout'**
+  String get policyTimeout;
+
+  /// No description provided for @policyTimeoutNoTimeoutHint.
+  ///
+  /// In en, this message translates to:
+  /// **'0 means no timeout'**
+  String get policyTimeoutNoTimeoutHint;
+
+  /// No description provided for @policyTcpIdleTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'TCP Idle Timeout'**
+  String get policyTcpIdleTimeout;
+
+  /// No description provided for @policyTcpIdleTimeoutDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'If uplink or downlink data is absent during this period, the connection will be closed.'**
+  String get policyTcpIdleTimeoutDesc;
+
+  /// No description provided for @policyUdpIdleTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'UDP Idle Timeout'**
+  String get policyUdpIdleTimeout;
+
+  /// No description provided for @policyUdpIdleTimeoutDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'If no uplink data is received during this period, the connection will be closed.'**
+  String get policyUdpIdleTimeoutDesc;
+
+  /// No description provided for @policyUpLinkOnlyTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'UpLink Only Timeout'**
+  String get policyUpLinkOnlyTimeout;
+
+  /// No description provided for @policyUpLinkOnlyTimeoutDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'If a TCP connection's downlink stream is done, the idle timeout switches to this value.'**
+  String get policyUpLinkOnlyTimeoutDesc;
+
+  /// No description provided for @policyDownLinkOnlyTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'DownLink Only Timeout'**
+  String get policyDownLinkOnlyTimeout;
+
+  /// No description provided for @policyDownLinkOnlyTimeoutDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'If a TCP connection's uplink stream is done, the idle timeout switches to this value.'**
+  String get policyDownLinkOnlyTimeoutDesc;
+
   /// No description provided for @tutorial.
   ///
   /// In en, this message translates to:

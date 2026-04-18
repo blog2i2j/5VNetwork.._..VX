@@ -66,7 +66,6 @@ import 'package:vx/utils/wintun.dart';
 import 'package:vx/utils/xapi_client.dart';
 import 'package:protobuf/well_known_types/google/protobuf/any.pb.dart';
 
-
 class ConfigException implements Exception {
   ConfigException(this.message);
   final String message;
@@ -248,15 +247,13 @@ class XConfigHelper {
   }
 
   DispatcherConfig _getDispatcherConfig() {
-    /* 
-     When there is possiblity that dst ip is not correct, such as in the cases of tun is disabled,
-     or fakeDns has just been turned off, sniffing should be enabled.
-    */
-    // final enableSniffing = !inboundSetting.enableTun;
     final config = DispatcherConfig(
       ipv6UseDomain: _persistentStateRepo.changeIpv6ToDomain,
       sniff: _persistentStateRepo.sniff,
       fallbackTimeout: _persistentStateRepo.fallbackTimeout,
+      sessionStats: true,
+      handlerLinkStats: true,
+      handlerMeter: true,
     );
     return config;
   }
@@ -1193,7 +1190,13 @@ class XConfigHelper {
   // }
 
   PolicyConfig _getPolicyConfig() {
-    final c = PolicyConfig(sessionStats: true, outboundStats: true);
+    final c = PolicyConfig(
+      handshakeTimeout: _persistentStateRepo.policyHandshakeTimeout,
+      connectionIdleTimeout: _persistentStateRepo.policyConnectionIdleTimeout,
+      udpIdleTimeout: _persistentStateRepo.policyUdpIdleTimeout,
+      upLinkOnlyTimeout: _persistentStateRepo.policyUpLinkOnlyTimeout,
+      downLinkOnlyTimeout: _persistentStateRepo.policyDownLinkOnlyTimeout,
+    );
     return c;
   }
 

@@ -1087,6 +1087,46 @@ extension PrefHelperExtension on SharedPreferences {
     setInt('globalDialTimeout', timeout);
   }
 
+  int get policyHandshakeTimeout {
+    return getInt('policyHandshakeTimeout') ?? 4;
+  }
+
+  void setPolicyHandshakeTimeout(int timeout) {
+    setInt('policyHandshakeTimeout', timeout);
+  }
+
+  int get policyConnectionIdleTimeout {
+    return getInt('policyConnectionIdleTimeout') ?? 60;
+  }
+
+  void setPolicyConnectionIdleTimeout(int timeout) {
+    setInt('policyConnectionIdleTimeout', timeout);
+  }
+
+  int get policyUdpIdleTimeout {
+    return getInt('policyUdpIdleTimeout') ?? 120;
+  }
+
+  void setPolicyUdpIdleTimeout(int timeout) {
+    setInt('policyUdpIdleTimeout', timeout);
+  }
+
+  int get policyUpLinkOnlyTimeout {
+    return getInt('policyUpLinkOnlyTimeout') ?? 5;
+  }
+
+  void setPolicyUpLinkOnlyTimeout(int timeout) {
+    setInt('policyUpLinkOnlyTimeout', timeout);
+  }
+
+  int get policyDownLinkOnlyTimeout {
+    return getInt('policyDownLinkOnlyTimeout') ?? 2;
+  }
+
+  void setPolicyDownLinkOnlyTimeout(int timeout) {
+    setInt('policyDownLinkOnlyTimeout', timeout);
+  }
+
   DateTime? get reviewFirstUseAt {
     final value = getInt('reviewFirstUseAt');
     if (value == null) return null;
@@ -1130,5 +1170,4 @@ extension PrefHelperExtension on SharedPreferences {
   void setReviewAutoPromptDisabled(bool disabled) {
     setBool('reviewAutoPromptDisabled', disabled);
   }
-
 }
