@@ -239,11 +239,11 @@ void main() async {
             flutterLogDir: getFlutterLogDir(),
             tunnelLogDir: getTunnelLogDir(),
             secret: logKey,
-            xApiClient: ctx.read<XApiClient>(),
+            httpClient: HttpClient(),
             useReportLogger: () => pref.shareLog && !enableCrashlytics,
             uploadUrl: kDebugMode
                 ? 'https://127.0.0.1:11111/api/upload-logs'
-                : 'https://vproxybackend.5vnetwork.com:443/api/upload-logs',
+                : 'https://vproxybackend.5vnetwork.com/api/upload-logs',
           );
           if (pref.shareLog) {
             logUploadService.start();

@@ -40,19 +40,20 @@ class LogUploadService {
   static const int _defaultMaxLogSizeMB = 10;
   static const int _maxRetryAttempts = 2;
   static const Duration _retryDelay = Duration(seconds: 30);
+  final HttpClient _httpClient;
 
   LogUploadService({
     required String uploadUrl,
     required Directory flutterLogDir,
     required Directory tunnelLogDir,
     required String secret,
-    required XApiClient xApiClient,
+    required HttpClient httpClient,
     required ValueGetter<bool> useReportLogger,
   }) : _flutterLogDir = flutterLogDir,
        _tunnelLogDir = tunnelLogDir,
        _uploadUrl = uploadUrl,
        _secret = secret,
-       _xApiClient = xApiClient,
+       _httpClient = httpClient,
        _useReportLogger = useReportLogger;
 
   Timer? _uploadTimer;
@@ -60,7 +61,6 @@ class LogUploadService {
   final Directory _tunnelLogDir;
   final String _uploadUrl;
   final String _secret;
-  final XApiClient _xApiClient;
   final ValueGetter<bool> _useReportLogger;
 
   /// Initialize the log upload service with configuration
@@ -337,19 +337,41 @@ class LogUploadService {
     final packageInfo = await PackageInfo.fromPlatform();
 
     final jsonString = json.encode(logData.toJson());
-
-    await _xApiClient.uploadLog(
-      UploadLogRequest(
-        ca: utf8.encode(serverCA),
-        url: _uploadUrl,
-        secret: generateHmacSha256(
-          jsonString.substring(0, min(jsonString.length, 1024)),
-          utf8.encode(_secret),
-        ),
-        version: packageInfo.version,
-        body: jsonString,
-      ),
+    final key = generateHmacSha256(
+      jsonString.substring(0, min(jsonString.length, 1024)),
+      utf8.encode(_secret),
     );
+
+    final uri = Uri.parse(_uploadUrl);
+    HttpClientRequest request;
+    try {
+      request = await _httpClient.postUrl(uri);
+    } catch (e) {
+      logger.e('Failed to create HTTP request for log upload', error: e);
+      rethrow;
+    }
+    // Set headers
+    request.headers.contentType = ContentType.json;
+    request.headers.set('Authorization', key);
+    request.headers.set('Version', packageInfo.version);
+    request.headers.set('Content-Type', 'application/json');
+
+    // Write body
+    request.add(utf8.encode(jsonString));
+
+    final response = await request.close();
+    final responseBody = await response.transform(utf8.decoder).join();
+
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      logger.e(
+        'Log upload failed: ${response.statusCode}, body: $responseBody',
+      );
+      throw HttpException(
+        'Log upload failed with status ${response.statusCode}',
+        uri: uri,
+      );
+    }
+
     logger.i('Log upload successful');
   }
 }
