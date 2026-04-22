@@ -1175,12 +1175,16 @@ class MockDbHelper extends _i1.Mock implements _i20.DbHelper {
           as _i10.Future<void>);
 
   @override
-  _i10.Future<void> updateAppSet(String? name, {List<String>? clashRuleUrls}) =>
+  _i10.Future<void> updateAppSet(
+    String? name, {
+    List<String>? clashRuleUrls,
+    String? newName,
+  }) =>
       (super.noSuchMethod(
             Invocation.method(
               #updateAppSet,
               [name],
-              {#clashRuleUrls: clashRuleUrls},
+              {#clashRuleUrls: clashRuleUrls, #newName: newName},
             ),
             returnValue: _i10.Future<void>.value(),
             returnValueForMissingStub: _i10.Future<void>.value(),

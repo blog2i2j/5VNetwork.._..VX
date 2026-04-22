@@ -137,7 +137,6 @@ class XConfigHelper {
       serviceSecret: dbSecretAndPort?.$1,
       servicePort: dbSecretAndPort?.$2,
       defaultNicMonitor: true,
-      hysteria2RejectQuic: _persistentStateRepo.rejectQuicHysteria,
       sysProxy: _getSysProxyConfig(inboundConfig),
       grpcService: GrpcServiceConfig(
         updateLatency: _persistentStateRepo.pingMode == PingMode.Real,
@@ -153,6 +152,7 @@ class XConfigHelper {
       ),
       dialerFactory: DialerFactoryConfig(
         dialTimeout: _persistentStateRepo.globalDialTimeout,
+        shouldBindDevice: true,
       ),
     );
     // redirect std err
@@ -174,6 +174,7 @@ class XConfigHelper {
 
   Future<o.OutboundConfig> _getOutboundConfig(RouterConfig routerConfig) async {
     final config = o.OutboundConfig(
+      hysteriaRejectQuic: _persistentStateRepo.rejectQuicHysteria,
       handlers: [
         o.HandlerConfig(
           outbound: o.OutboundHandlerConfig(
@@ -328,7 +329,6 @@ class XConfigHelper {
 
     return TunConfig(
       tag: 'tun',
-      shouldBindDevice: true,
       mode: Platform.isWindows || Platform.isAndroid || Platform.isLinux
           ? Mode.MODE_SYSTEM
           : Mode.MODE_GVISOR,
@@ -1211,6 +1211,7 @@ class XConfigHelper {
       consoleWriter: true,
       showCaller: true,
       logLevel: logLevel,
+      showColor: !Platform.isAndroid,
     );
   }
 

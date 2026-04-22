@@ -263,12 +263,12 @@ class RealtimeSpeedNotifier extends ChangeNotifier {
         newList.add(nodeInfo);
       } else {
         nodeInfo = nodeInfos[nodeInfoIndex];
-        // if (nodeInfo.statsHistory.$3 == 0 &&
-        //     nodeInfo.statsHistory.$4 == 0 &&
-        //     stats.$3 == 0 &&
-        //     stats.$4 == 0) {
-        //   continue;
-        // }
+        if (nodeInfo.stats.$3 == 0 &&
+            nodeInfo.stats.$4 == 0 &&
+            stats.$3 == 0 &&
+            stats.$4 == 0) {
+          continue;
+        }
         nodeInfo.stats = stats;
         newList.add(nodeInfo);
       }

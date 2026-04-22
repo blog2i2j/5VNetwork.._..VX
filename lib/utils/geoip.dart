@@ -55,10 +55,13 @@ Future<String?> getCountryCode(String address, [http.Client? client]) async {
   }
 }
 
-Widget getCountryIcon(String countryCode) {
+Widget getCountryIcon(String countryCode, {double size = 24}) {
+  if (countryCode.isEmpty) {
+    return Icon(Icons.language);
+  }
   return SvgPicture(
-    height: 24,
-    width: 24,
+    height: size,
+    width: size,
     AssetBytesLoader('assets/icons/flags/${countryCode.toLowerCase()}.svg.vec'),
   );
 }
