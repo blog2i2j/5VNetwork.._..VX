@@ -1408,6 +1408,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get later => 'Remind Me Later';
 
   @override
+  String get skip => 'Skip';
+
+  @override
   String get autoCheck => 'Automatically Check New Version';
 
   @override
@@ -2411,30 +2414,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get policyTcpIdleTimeout => 'TCP Idle Timeout';
 
   @override
-  String get policyTcpIdleTimeoutDesc =>
-      'If uplink or downlink data is absent during this period, the connection will be closed.';
+  String get policyTcpIdleTimeoutDesc => 'If uplink or downlink data is absent during this period, the connection will be closed.';
 
   @override
   String get policyUdpIdleTimeout => 'UDP Idle Timeout';
 
   @override
-  String get policyUdpIdleTimeoutDesc =>
-      'If no uplink data is received during this period, the connection will be closed.';
+  String get policyUdpIdleTimeoutDesc => 'If no uplink data is received during this period, the connection will be closed.';
 
   @override
   String get policyUpLinkOnlyTimeout => 'UpLink Only Timeout';
 
   @override
-  String get policyUpLinkOnlyTimeoutDesc =>
-      'If a TCP connection\'s downlink stream is done, the idle timeout switches to this value.';
+  String get policyUpLinkOnlyTimeoutDesc => 'If a TCP connection\'s downlink stream is done, the idle timeout switches to this value.';
 
   @override
   String get policyDownLinkOnlyTimeout => 'DownLink Only Timeout';
 
   @override
-  String get policyDownLinkOnlyTimeoutDesc =>
-      'If a TCP connection\'s uplink stream is done, the idle timeout switches to this value.';
+  String get policyDownLinkOnlyTimeoutDesc => 'If a TCP connection\'s uplink stream is done, the idle timeout switches to this value.';
 
   @override
   String get tutorial => 'Tutorial';
+
+  @override
+  String get selectGroup => 'Select Group';
 }

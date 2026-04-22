@@ -79,7 +79,6 @@ class _GreatDomainSetFormState extends State<GreatDomainSetForm>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextFormField(
-            readOnly: widget.domainSetConfig != null,
             controller: _nameController,
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -235,7 +234,6 @@ class _GreatIpSetFormState extends State<GreatIpSetForm> with FormDataGetter {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextFormField(
-            readOnly: widget.ipSetConfig != null,
             controller: _nameController,
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -516,7 +514,6 @@ class _SmallDomainSetFormState extends State<SmallDomainSetForm>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextFormField(
-              readOnly: widget.atomicDomainSet != null,
               controller: _nameController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -811,7 +808,6 @@ class _SmallIpSetFormState extends State<SmallIpSetForm> with FormDataGetter {
   final _geoIpFilePathController = TextEditingController();
   final _geoIpCodeController = TextEditingController();
   final _clashRuleUrls = <String>[];
-  late final bool _isEdit;
   final _geoIpCodes = <String>[];
   List<CIDR> _cidrs = [];
   final _geoUrlController = TextEditingController();
@@ -841,7 +837,6 @@ class _SmallIpSetFormState extends State<SmallIpSetForm> with FormDataGetter {
   @override
   void initState() {
     super.initState();
-    _isEdit = widget.atomicIpSet != null;
     if (widget.atomicIpSet != null) {
       _nameController.text = widget.atomicIpSet!.name;
       _geoIpFilePathController.text =
@@ -884,7 +879,6 @@ class _SmallIpSetFormState extends State<SmallIpSetForm> with FormDataGetter {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextFormField(
-              readOnly: _isEdit,
               controller: _nameController,
               validator: (value) {
                 if (value == null || value.isEmpty) {

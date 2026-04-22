@@ -26,6 +26,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:pasteboard/pasteboard.dart';
 import 'package:tm/protos/vx/outbound/outbound.pb.dart';
 import 'package:vx/app/outbound/add_chain_handler.dart';
+import 'package:vx/app/outbound/outbound_page.dart';
 import 'package:vx/app/outbound/outbound_repo.dart';
 import 'package:vx/utils/xapi_client.dart';
 import 'package:vx/widgets/outbound_handler_form/outbound_handler_form.dart';
@@ -288,6 +289,7 @@ Future<void> getNodesFromUrls(
       final t = await showStringForm(
         context,
         title: AppLocalizations.of(context)!.addRemark,
+        cancelText: AppLocalizations.of(context)!.skip,
       );
       if (t != null && t.isNotEmpty) tag = t;
       if (tag.isEmpty) {
@@ -312,25 +314,13 @@ Future<void> getNodesFromUrls(
         logger.d('HandlerConfigs.fromBuffer', error: e);
       }
       if (configs.isNotEmpty) {
-        String group = defaultGroupName;
-        final t = await showStringForm(
-          context,
-          title: AppLocalizations.of(context)!.addToGroup,
-          cancelText: AppLocalizations.of(context)!.addToDefault,
-        );
-        if (t != null && t.isNotEmpty) group = t;
+        final group = await _showGroupPickerDialog(context, outboundRepo);
         outbloc.add(AddHandlersEvent(groupName: group, configs));
         return;
       } else {
         // decode as urls
         final result = await context.read<XApiClient>().decode(data);
-        String group = defaultGroupName;
-        final t = await showStringForm(
-          context,
-          title: AppLocalizations.of(context)!.addToGroup,
-          cancelText: AppLocalizations.of(context)!.addToDefault,
-        );
-        if (t != null && t.isNotEmpty) group = t;
+        final group = await _showGroupPickerDialog(context, outboundRepo);
         outbloc.add(
           AddHandlersEvent(
             groupName: group,
@@ -377,6 +367,61 @@ Future<void> getNodesFromUrls(
       ),
     );
   }
+}
+
+Future<String> _showGroupPickerDialog(
+  BuildContext context,
+  OutboundRepo outboundRepo,
+) async {
+  final groups = await outboundRepo.getGroups();
+  final controller = TextEditingController();
+  final chosen = await showDialog<String>(
+    context: context,
+    builder: (dialogContext) => StatefulBuilder(
+      builder: (dialogContext, setDialogState) {
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context)!.addToGroup),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                controller: controller,
+                decoration: InputDecoration(border: const OutlineInputBorder()),
+              ),
+            ],
+          ),
+          actions: [
+            MenuAnchor(
+              menuChildren: groups
+                  .map(
+                    (e) => MenuItemButton(
+                      onPressed: () => Navigator.pop(dialogContext, e.name),
+                      child: Text(groupNametoLocalizedName(context, e.name)),
+                    ),
+                  )
+                  .toList(),
+              builder: (context, controller, child) => TextButton(
+                onPressed: () => controller.open(),
+                child: Text(AppLocalizations.of(context)!.selectGroup),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                final value = controller.text.trim();
+                if (value.isEmpty) {
+                  return;
+                }
+                Navigator.pop(dialogContext, value);
+              },
+              child: Text(AppLocalizations.of(context)!.confirm),
+            ),
+          ],
+        );
+      },
+    ),
+  );
+  controller.dispose();
+  return chosen ?? defaultGroupName;
 }
 
 String getQrCodeData(img.Image image) {

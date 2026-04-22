@@ -1408,6 +1408,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get later => 'Напомни мне позже';
 
   @override
+  String get skip => 'Пропустить';
+
+  @override
   String get autoCheck => 'Автоматическая проверка новой версии';
 
   @override
@@ -2402,39 +2405,38 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get policyTimeout => 'Таймауты политики';
+  String get policyTimeout => 'Policy Timeout';
 
   @override
-  String get policyTimeoutNoTimeoutHint => '0 означает без таймаута';
+  String get policyTimeoutNoTimeoutHint => '0 means no timeout';
 
   @override
-  String get policyTcpIdleTimeout => 'Таймаут простоя TCP';
+  String get policyTcpIdleTimeout => 'TCP Idle Timeout';
 
   @override
-  String get policyTcpIdleTimeoutDesc =>
-      'Если в течение этого периода нет входящих или исходящих данных, соединение будет закрыто.';
+  String get policyTcpIdleTimeoutDesc => 'If uplink or downlink data is absent during this period, the connection will be closed.';
 
   @override
-  String get policyUdpIdleTimeout => 'Таймаут простоя UDP';
+  String get policyUdpIdleTimeout => 'UDP Idle Timeout';
 
   @override
-  String get policyUdpIdleTimeoutDesc =>
-      'Если в течение этого периода нет исходящих данных, соединение будет закрыто.';
+  String get policyUdpIdleTimeoutDesc => 'If no uplink data is received during this period, the connection will be closed.';
 
   @override
-  String get policyUpLinkOnlyTimeout => 'Таймаут только uplink';
+  String get policyUpLinkOnlyTimeout => 'UpLink Only Timeout';
 
   @override
-  String get policyUpLinkOnlyTimeoutDesc =>
-      'Если входящий поток TCP-соединения завершён, таймаут простоя переключится на это значение.';
+  String get policyUpLinkOnlyTimeoutDesc => 'If a TCP connection\'s downlink stream is done, the idle timeout switches to this value.';
 
   @override
-  String get policyDownLinkOnlyTimeout => 'Таймаут только downlink';
+  String get policyDownLinkOnlyTimeout => 'DownLink Only Timeout';
 
   @override
-  String get policyDownLinkOnlyTimeoutDesc =>
-      'Если исходящий поток TCP-соединения завершён, таймаут простоя переключится на это значение.';
+  String get policyDownLinkOnlyTimeoutDesc => 'If a TCP connection\'s uplink stream is done, the idle timeout switches to this value.';
 
   @override
   String get tutorial => 'Учебное пособие';
+
+  @override
+  String get selectGroup => 'Select Group';
 }

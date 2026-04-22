@@ -810,22 +810,6 @@ class _PolicyTimeoutSettingState extends State<PolicyTimeoutSetting> {
     super.dispose();
   }
 
-  void _onTimeoutChanged({
-    required String value,
-    required void Function(int timeout) save,
-  }) {
-    if (value.isEmpty) {
-      save(0);
-      context.read<XController>().restart();
-      return;
-    }
-    final i = int.tryParse(value);
-    if (i != null) {
-      save(i);
-      context.read<XController>().restart();
-    }
-  }
-
   Widget _buildTimeoutField({
     required TextEditingController controller,
     required String label,
@@ -845,7 +829,13 @@ class _PolicyTimeoutSettingState extends State<PolicyTimeoutSetting> {
         ),
         keyboardType: TextInputType.number,
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        onChanged: (value) => _onTimeoutChanged(value: value, save: onSave),
+        onChanged: (value) {
+          if (value.isEmpty) {
+            onSave(0);
+            return;
+          }
+          onSave(int.parse(value));
+        },
       ),
     );
   }

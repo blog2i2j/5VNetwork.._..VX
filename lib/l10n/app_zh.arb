@@ -598,6 +598,7 @@
   "skipThisVersion": "跳过此版本",
   "install": "安装",
   "later": "暂时不安装",
+  "skip": "跳过",
   "autoDownload": "自动下载新版本",
   "autoCheck": "自动检查新版本",
   "downloading": "正在下载{version}...",
@@ -987,5 +988,6 @@
       }
     }
   },
-  "tutorial": "教程"
+  "tutorial": "教程",
+  "selectGroup": "选择分组"
 }

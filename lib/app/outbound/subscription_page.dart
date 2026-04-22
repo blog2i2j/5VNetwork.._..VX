@@ -21,7 +21,6 @@ import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tm/tm.dart';
 import 'package:vx/app/outbound/outbound_repo.dart';
 import 'package:vx/app/outbound/subscription.dart';
 import 'package:vx/app/x_controller.dart';
@@ -51,60 +50,55 @@ class SubscriptionPage extends StatefulWidget {
   State<SubscriptionPage> createState() => _SubscriptionPageState();
 }
 
+const List<int> _subscriptionUpdateIntervals = [
+  5,
+  10,
+  20,
+  30,
+  60,
+  120,
+  180,
+  240,
+  300,
+  360,
+  420,
+  480,
+  540,
+  600,
+  660,
+  720,
+  780,
+  840,
+  900,
+  960,
+  1020,
+  1080,
+  1140,
+  1200,
+  1260,
+  1320,
+  1380,
+  1440,
+];
+
+String _formatSubscriptionInterval(BuildContext context, int minutes) {
+  if (minutes < 60) {
+    return AppLocalizations.of(context)!.min(minutes);
+  } else if (minutes < 1440) {
+    return AppLocalizations.of(context)!.hour(minutes ~/ 60);
+  } else {
+    return AppLocalizations.of(context)!.hour(24);
+  }
+}
+
 class _SubscriptionPageState extends State<SubscriptionPage> {
-  // Predefined intervals in minutes
-  final List<int> _intervals = [
-    5,
-    10,
-    20,
-    30,
-    60,
-    120,
-    180,
-    240,
-    300,
-    360,
-    420,
-    480,
-    540,
-    600,
-    660,
-    720,
-    780,
-    840,
-    900,
-    960,
-    1020,
-    1080,
-    1140,
-    1200,
-    1260,
-    1320,
-    1380,
-    1440,
-  ];
-  int _selectedIndex = 7; // Default to 30 minutes
-  bool _autoUpdate = true;
   late Widget _cache;
   final double width = 190;
-  String _formatInterval(BuildContext ctx, int minutes) {
-    if (minutes < 60) {
-      return AppLocalizations.of(context)!.min(minutes);
-    } else if (minutes < 1440) {
-      return AppLocalizations.of(context)!.hour(minutes ~/ 60);
-    } else {
-      return AppLocalizations.of(context)!.hour(24);
-    }
-  }
 
   late final Widget _updateAllButton;
 
   @override
   void initState() {
-    _autoUpdate = context.read<SharedPreferences>().autoUpdate;
-    _selectedIndex = _intervals.indexOf(
-      context.read<SharedPreferences>().updateInterval,
-    );
     _updateAllButton = BlocSelector<SubscriptionBloc, SubscriptionState, bool>(
       selector: (state) => state.updatingAll,
       builder: (ctx, updating) {
@@ -217,105 +211,13 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
 
   @override
   Widget build(BuildContext ctx) {
-    final isPro = ctx.read<AuthBloc>().state.pro;
-    final showAd = !isPro && (!Platform.isMacOS || isPkg);
-    final autoUpdateSwitch = Switch(
-      value: _autoUpdate,
-      onChanged: (value) {
-        setState(() {
-          _autoUpdate = value;
-        });
-        context.read<SharedPreferences>().setAutoUpdate(value);
-        context.read<XController>().setSubscriptionAutoUpdate(value);
-        context.read<AutoSubscriptionUpdater>().reset();
-      },
-    );
     final size = MediaQuery.sizeOf(context);
     final isCompact = size.width <= 600;
-    final slider = Slider(
-      padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 10),
-      value: _selectedIndex.toDouble(),
-      min: 0,
-      max: (_intervals.length - 1).toDouble(),
-      divisions: _intervals.length - 1,
-      label: _formatInterval(context, _intervals[_selectedIndex]),
-      onChanged: (value) {
-        setState(() {
-          _selectedIndex = value.round();
-        });
-      },
-      onChangeEnd: (value) async {
-        context.read<SharedPreferences>().setUpdateInterval(
-          _intervals[_selectedIndex],
-        );
-        context.read<XController>().setSubscriptionInterval(
-          _intervals[_selectedIndex],
-        );
-        context.read<AutoSubscriptionUpdater>().onIntervalChange(
-          _intervals[_selectedIndex],
-        );
-      },
-    );
-    final sliderValue = SizedBox(
-      width: 80,
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: Text(_formatInterval(ctx, _intervals[_selectedIndex])),
-      ),
-    );
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            height: 48,
-            child: isCompact
-                ? Row(
-                    children: [
-                      Text(AppLocalizations.of(context)!.autoUpdate),
-                      const Expanded(child: SizedBox()),
-                      autoUpdateSwitch,
-                    ],
-                  )
-                : Row(
-                    children: [
-                      Text(AppLocalizations.of(context)!.autoUpdate),
-                      const Gap(10),
-                      autoUpdateSwitch,
-                      const Gap(15),
-                      if (_autoUpdate)
-                        Expanded(
-                          child: Row(
-                            children: [
-                              Text(
-                                AppLocalizations.of(context)!.updateInterval,
-                              ),
-                              const Gap(10),
-                              Expanded(child: slider),
-                              sliderValue,
-                            ],
-                          ),
-                        ),
-                    ],
-                  ),
-          ),
-          if (isCompact && _autoUpdate)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(AppLocalizations.of(context)!.updateInterval),
-                      sliderValue,
-                    ],
-                  ),
-                  slider,
-                ],
-              ),
-            ),
           const Gap(5),
           Row(
             children: [
@@ -340,12 +242,221 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
               //     ),
               //   ),
               const Expanded(child: SizedBox()),
+              IconButton(
+                tooltip: AppLocalizations.of(context)!.settings,
+                onPressed: () => _openUpdateSettings(isCompact),
+                icon: const Icon(Icons.settings_rounded),
+              ),
+              const Gap(8),
               const AddMenuAnchor(colored: true),
             ],
           ),
-          const Gap(10),
           Expanded(child: _cache),
         ],
+      ),
+    );
+  }
+
+  Future<void> _openUpdateSettings(bool isCompact) async {
+    final pref = context.read<SharedPreferences>();
+    final autoUpdate = pref.autoUpdate;
+    final savedInterval = pref.updateInterval;
+    final selectedIndex = _subscriptionUpdateIntervals.indexOf(savedInterval);
+    final normalizedSelectedIndex = selectedIndex >= 0 ? selectedIndex : 7;
+    if (isCompact) {
+      await Navigator.of(context).push<void>(
+        MaterialPageRoute(
+          builder: (context) => _SubscriptionUpdateSettingsPage(
+            initialAutoUpdate: autoUpdate,
+            initialSelectedIndex: normalizedSelectedIndex,
+            intervals: _subscriptionUpdateIntervals,
+            formatInterval: _formatSubscriptionInterval,
+          ),
+        ),
+      );
+      return;
+    }
+    await showDialog<void>(
+      context: context,
+      builder: (dialogContext) => _SubscriptionUpdateSettingsDialog(
+        initialAutoUpdate: autoUpdate,
+        initialSelectedIndex: normalizedSelectedIndex,
+        intervals: _subscriptionUpdateIntervals,
+        formatInterval: _formatSubscriptionInterval,
+      ),
+    );
+  }
+}
+
+class _SubscriptionUpdateSettingsContent extends StatefulWidget {
+  const _SubscriptionUpdateSettingsContent({
+    required this.initialAutoUpdate,
+    required this.initialSelectedIndex,
+    required this.intervals,
+    required this.formatInterval,
+  });
+
+  final bool initialAutoUpdate;
+  final int initialSelectedIndex;
+  final List<int> intervals;
+  final String Function(BuildContext, int) formatInterval;
+
+  @override
+  State<_SubscriptionUpdateSettingsContent> createState() =>
+      _SubscriptionUpdateSettingsContentState();
+}
+
+class _SubscriptionUpdateSettingsContentState
+    extends State<_SubscriptionUpdateSettingsContent> {
+  late bool _autoUpdate = widget.initialAutoUpdate;
+  late int _selectedIndex = widget.initialSelectedIndex;
+
+  void _applyUpdateSettings() {
+    context.read<SharedPreferences>().setAutoUpdate(_autoUpdate);
+    context.read<XController>().setSubscriptionAutoUpdate(_autoUpdate);
+    context.read<AutoSubscriptionUpdater>().reset();
+  }
+
+  void _applyInterval() {
+    context.read<SharedPreferences>().setUpdateInterval(
+      widget.intervals[_selectedIndex],
+    );
+    context.read<XController>().setSubscriptionInterval(
+      widget.intervals[_selectedIndex],
+    );
+    context.read<AutoSubscriptionUpdater>().onIntervalChange(
+      widget.intervals[_selectedIndex],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final slider = Slider(
+      value: _selectedIndex.toDouble(),
+      min: 0,
+      max: (widget.intervals.length - 1).toDouble(),
+      divisions: widget.intervals.length - 1,
+      label: widget.formatInterval(context, widget.intervals[_selectedIndex]),
+      onChanged: _autoUpdate
+          ? (value) {
+              setState(() {
+                _selectedIndex = value.round();
+              });
+              _applyInterval();
+            }
+          : null,
+    );
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text(AppLocalizations.of(context)!.autoUpdate),
+          value: _autoUpdate,
+          onChanged: (value) {
+            setState(() {
+              _autoUpdate = value;
+            });
+            _applyUpdateSettings();
+          },
+        ),
+        if (_autoUpdate) ...[
+          const Gap(8),
+          Row(
+            children: [
+              Text(AppLocalizations.of(context)!.updateInterval),
+              const Spacer(),
+              Text(
+                widget.formatInterval(
+                  context,
+                  widget.intervals[_selectedIndex],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(width: 460, child: slider),
+        ],
+      ],
+    );
+  }
+}
+
+class _SubscriptionUpdateSettingsDialog extends StatefulWidget {
+  const _SubscriptionUpdateSettingsDialog({
+    required this.initialAutoUpdate,
+    required this.initialSelectedIndex,
+    required this.intervals,
+    required this.formatInterval,
+  });
+
+  final bool initialAutoUpdate;
+  final int initialSelectedIndex;
+  final List<int> intervals;
+  final String Function(BuildContext, int) formatInterval;
+
+  @override
+  State<_SubscriptionUpdateSettingsDialog> createState() =>
+      _SubscriptionUpdateSettingsDialogState();
+}
+
+class _SubscriptionUpdateSettingsDialogState
+    extends State<_SubscriptionUpdateSettingsDialog> {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(AppLocalizations.of(context)!.settings),
+      content: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 520),
+        child: _SubscriptionUpdateSettingsContent(
+          initialAutoUpdate: widget.initialAutoUpdate,
+          initialSelectedIndex: widget.initialSelectedIndex,
+          intervals: widget.intervals,
+          formatInterval: widget.formatInterval,
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(AppLocalizations.of(context)!.close),
+        ),
+      ],
+    );
+  }
+}
+
+class _SubscriptionUpdateSettingsPage extends StatefulWidget {
+  const _SubscriptionUpdateSettingsPage({
+    required this.initialAutoUpdate,
+    required this.initialSelectedIndex,
+    required this.intervals,
+    required this.formatInterval,
+  });
+
+  final bool initialAutoUpdate;
+  final int initialSelectedIndex;
+  final List<int> intervals;
+  final String Function(BuildContext, int) formatInterval;
+
+  @override
+  State<_SubscriptionUpdateSettingsPage> createState() =>
+      _SubscriptionUpdateSettingsPageState();
+}
+
+class _SubscriptionUpdateSettingsPageState
+    extends State<_SubscriptionUpdateSettingsPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.settings)),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: _SubscriptionUpdateSettingsContent(
+          initialAutoUpdate: widget.initialAutoUpdate,
+          initialSelectedIndex: widget.initialSelectedIndex,
+          intervals: widget.intervals,
+          formatInterval: widget.formatInterval,
+        ),
       ),
     );
   }

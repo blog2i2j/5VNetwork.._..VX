@@ -1358,6 +1358,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get later => '暂时不安装';
 
   @override
+  String get skip => '跳过';
+
+  @override
   String get autoCheck => '自动检查新版本';
 
   @override
@@ -2352,37 +2355,38 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get policyTimeout => '策略超时';
+  String get policyTimeout => 'Policy Timeout';
 
   @override
-  String get policyTimeoutNoTimeoutHint => '0 表示不超时';
+  String get policyTimeoutNoTimeoutHint => '0 means no timeout';
 
   @override
-  String get policyTcpIdleTimeout => 'TCP 空闲超时';
+  String get policyTcpIdleTimeout => 'TCP Idle Timeout';
 
   @override
-  String get policyTcpIdleTimeoutDesc => '在该时间段内没有上行或下行数据，连接将被关闭。';
+  String get policyTcpIdleTimeoutDesc => 'If uplink or downlink data is absent during this period, the connection will be closed.';
 
   @override
-  String get policyUdpIdleTimeout => 'UDP 空闲超时';
+  String get policyUdpIdleTimeout => 'UDP Idle Timeout';
 
   @override
-  String get policyUdpIdleTimeoutDesc => '在该时间段内没有上行数据，连接将被关闭。';
+  String get policyUdpIdleTimeoutDesc => 'If no uplink data is received during this period, the connection will be closed.';
 
   @override
-  String get policyUpLinkOnlyTimeout => '仅上行超时';
+  String get policyUpLinkOnlyTimeout => 'UpLink Only Timeout';
 
   @override
-  String get policyUpLinkOnlyTimeoutDesc =>
-      '当 TCP 连接的下行流结束后，空闲超时将切换为该值。';
+  String get policyUpLinkOnlyTimeoutDesc => 'If a TCP connection\'s downlink stream is done, the idle timeout switches to this value.';
 
   @override
-  String get policyDownLinkOnlyTimeout => '仅下行超时';
+  String get policyDownLinkOnlyTimeout => 'DownLink Only Timeout';
 
   @override
-  String get policyDownLinkOnlyTimeoutDesc =>
-      '当 TCP 连接的上行流结束后，空闲超时将切换为该值。';
+  String get policyDownLinkOnlyTimeoutDesc => 'If a TCP connection\'s uplink stream is done, the idle timeout switches to this value.';
 
   @override
   String get tutorial => '教程';
+
+  @override
+  String get selectGroup => '选择分组';
 }

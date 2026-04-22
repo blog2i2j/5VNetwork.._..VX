@@ -39,6 +39,7 @@ import 'package:vx/app/routing/selector_widget.dart';
 import 'package:vx/app/x_controller.dart';
 import 'package:vx/common/common.dart';
 import 'package:vx/common/config.dart';
+import 'package:vx/common/domain.dart';
 import 'package:vx/data/database.dart';
 import 'package:vx/data/database_provider.dart';
 import 'package:vx/l10n/app_localizations.dart';
@@ -1059,11 +1060,51 @@ class _LogListState extends State<LogList> {
   }) {
     bool domainAdded = false;
     final isDestinationDomain = isDomain(destination);
-    final dst = Text(
-      destination,
-      maxLines: 3,
-      style: Theme.of(context).textTheme.bodyLarge,
-    );
+    final rootDomain = isDestinationDomain ? getRootDomain(destination) : '';
+    final rootDomainStartIndex = isDestinationDomain
+        ? destination.lastIndexOf(rootDomain)
+        : -1;
+    final destinationTextStyle = Theme.of(context).textTheme.bodyLarge;
+    final dst = isDestinationDomain
+        ? Wrap(
+            children: [
+              if (rootDomainStartIndex > 0)
+                Text(
+                  destination.substring(0, rootDomainStartIndex),
+                  style: destinationTextStyle,
+                ),
+              _DomainSetPickerButton(
+                onChanged: (setName) async {
+                  try {
+                    final xController = context.read<XController>();
+                    final d = Domain(
+                      type: Domain_Type.RootDomain,
+                      value: rootDomain,
+                    );
+                    await Provider.of<SetRepo>(
+                      context,
+                      listen: false,
+                    ).addGeoDomain(setName, d);
+                    xController.addGeoDomain(setName, d);
+                  } on DriftRemoteException catch (e) {
+                    if (e.remoteCause is SqliteException &&
+                        (e.remoteCause as SqliteException).extendedResultCode ==
+                            2067) {
+                      snack(rootLocalizations()?.addFailedUniqueConstraint);
+                    }
+                  } catch (e) {
+                    logger.d('add root domain error', error: e);
+                  }
+                },
+                child: Text(
+                  rootDomain,
+                  maxLines: 3,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ),
+            ],
+          )
+        : Text(destination, maxLines: 3, style: destinationTextStyle);
     return ListTile(
       title: Row(
         children: [
@@ -1324,11 +1365,17 @@ class _LogListState extends State<LogList> {
           // ),
         ],
       ),
-      subtitle: Text(
-        app,
-        maxLines: 8,
-        overflow: TextOverflow.ellipsis,
-        style: Theme.of(context).textTheme.bodyLarge,
+      subtitle: Tooltip(
+        message: AppLocalizations.of(context)!.copy,
+        child: InkWell(
+          onTap: () => Pasteboard.writeText(app),
+          child: Text(
+            app,
+            maxLines: 8,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+        ),
       ),
       trailing: !showTrailing
           ? null
@@ -1727,9 +1774,10 @@ class _LogListState extends State<LogList> {
 }
 
 class _DomainSetPickerButton extends StatefulWidget {
-  const _DomainSetPickerButton({required this.onChanged});
+  const _DomainSetPickerButton({required this.onChanged, this.child});
 
   final Future<void> Function(String) onChanged;
+  final Widget? child;
 
   @override
   State<_DomainSetPickerButton> createState() => _DomainSetPickerButtonState();
@@ -1769,12 +1817,14 @@ class _DomainSetPickerButtonState extends State<_DomainSetPickerButton> {
           },
         ),
       ],
-      builder: (context, controller, child) => IconButton.filledTonal(
-        onPressed: () => controller.open(),
-        icon: const Icon(Icons.add_rounded, size: 18),
-        constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
-        padding: EdgeInsets.zero,
-      ),
+      builder: (context, controller, child) => widget.child == null
+          ? IconButton.filledTonal(
+              onPressed: () => controller.open(),
+              icon: const Icon(Icons.add_rounded, size: 18),
+              constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+              padding: EdgeInsets.zero,
+            )
+          : InkWell(onTap: () => controller.open(), child: widget.child!),
     );
   }
 }

@@ -253,6 +253,7 @@ class _RouteRuleFormState extends State<RouteRuleForm> with FormDataGetter {
                   if (_outboundType == OutboundType.node)
                     DropdownMenu<OutboundHandler>(
                       label: Text(AppLocalizations.of(context)!.node),
+                      menuHeight: 320,
                       initialSelection: _selectedOutboundHandler,
                       onSelected: (value) {
                         setState(() {

@@ -147,7 +147,7 @@ class OutboundHandlerFormState extends State<OutboundHandlerForm>
     if (widget.config?.muxConfig != null) {
       _muxConcurrencyController.text =
           (widget.config!.muxConfig.maxConcurrency == 0
-          ? '2'
+          ? '1'
           : widget.config!.muxConfig.maxConcurrency.toString());
       _muxConnectionController.text =
           (widget.config!.muxConfig.maxConnection == 0

@@ -2623,6 +2623,12 @@ abstract class AppLocalizations {
   /// **'Remind Me Later'**
   String get later;
 
+  /// No description provided for @skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skip;
+
   /// No description provided for @autoCheck.
   ///
   /// In en, this message translates to:
@@ -4612,7 +4618,7 @@ abstract class AppLocalizations {
   /// No description provided for @policyUpLinkOnlyTimeoutDesc.
   ///
   /// In en, this message translates to:
-  /// **'If a TCP connection's downlink stream is done, the idle timeout switches to this value.'**
+  /// **'If a TCP connection\'s downlink stream is done, the idle timeout switches to this value.'**
   String get policyUpLinkOnlyTimeoutDesc;
 
   /// No description provided for @policyDownLinkOnlyTimeout.
@@ -4624,7 +4630,7 @@ abstract class AppLocalizations {
   /// No description provided for @policyDownLinkOnlyTimeoutDesc.
   ///
   /// In en, this message translates to:
-  /// **'If a TCP connection's uplink stream is done, the idle timeout switches to this value.'**
+  /// **'If a TCP connection\'s uplink stream is done, the idle timeout switches to this value.'**
   String get policyDownLinkOnlyTimeoutDesc;
 
   /// No description provided for @tutorial.
@@ -4632,6 +4638,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tutorial'**
   String get tutorial;
+
+  /// No description provided for @selectGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Group'**
+  String get selectGroup;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

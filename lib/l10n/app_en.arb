@@ -593,6 +593,7 @@
   "skipThisVersion": "Skip this version",
   "install": "Install",
   "later": "Remind Me Later",
+  "skip": "Skip",
   "autoCheck": "Automatically Check New Version",
   "downloading": "Downloading {version}...",
   "@downloading": {
@@ -989,5 +990,6 @@
   "policyUpLinkOnlyTimeoutDesc": "If a TCP connection's downlink stream is done, the idle timeout switches to this value.",
   "policyDownLinkOnlyTimeout": "DownLink Only Timeout",
   "policyDownLinkOnlyTimeoutDesc": "If a TCP connection's uplink stream is done, the idle timeout switches to this value.",
-  "tutorial": "Tutorial"
+  "tutorial": "Tutorial",
+  "selectGroup": "Select Group"
 }

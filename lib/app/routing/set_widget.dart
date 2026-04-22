@@ -242,8 +242,12 @@ class _AppSetWidgetState extends State<AppSetWidget> {
       ),
     );
     if (newAppSet != null) {
-      // if creating, check if name conflict
-      if (appSet == null && _appSets.any((e) => e.name == newAppSet.name)) {
+      final nameTaken = _appSets.any(
+        (e) =>
+            e.name == newAppSet.name &&
+            (appSet == null || e.name != appSet.name),
+      );
+      if (nameTaken) {
         snack(AppLocalizations.of(context)!.setNameDuplicate);
         return;
       }
@@ -263,7 +267,13 @@ class _AppSetWidgetState extends State<AppSetWidget> {
         await repo.updateAppSet(
           appSet.name,
           clashRuleUrls: newAppSet.clashRuleUrls,
+          newName: newAppSet.name != appSet.name ? newAppSet.name : null,
         );
+        if (_selectedAppSet?.name == appSet.name) {
+          setState(() {
+            _selectedAppSet = newAppSet;
+          });
+        }
       }
       context.read<GeoDataHelper>().makeGeoDataAvailable();
     }
@@ -650,7 +660,11 @@ class _DomainSetWidgetState extends State<DomainSetWidget> {
       if (set == null) {
         await repo.addGreatDomainSet(config);
       } else {
-        await repo.updateGreateDomainSet(set.name, greatDomainSet: config);
+        await repo.updateGreateDomainSet(
+          set.name,
+          greatDomainSet: config,
+          newName: config.name,
+        );
       }
     }
   }
@@ -684,6 +698,7 @@ class _DomainSetWidgetState extends State<DomainSetWidget> {
       } else {
         await repo.updateAtomicDomainSet(
           set.name,
+          newName: config.name,
           inverse: config.inverse,
           geositeConfig: config.geositeConfig,
           clashRuleUrls: config.clashRuleUrls,
@@ -1003,7 +1018,11 @@ class _IPSetWidgetState extends State<IPSetWidget> {
       if (set == null) {
         await repo.addGreatIpSet(config);
       } else {
-        await repo.updateGreatIpSet(set.name, greatIpSet: config);
+        await repo.updateGreatIpSet(
+          set.name,
+          greatIpSet: config,
+          newName: config.name,
+        );
       }
     }
   }
@@ -1037,6 +1056,7 @@ class _IPSetWidgetState extends State<IPSetWidget> {
       } else {
         await repo.updateAtomicIpSet(
           set.name,
+          newName: config.name,
           geoIpConfig: config.geoIpConfig,
           clashRuleUrls: config.clashRuleUrls,
           geoUrl: config.geoUrl,
@@ -1218,7 +1238,6 @@ class _AppSetFormState extends State<AppSetForm> {
         mainAxisSize: MainAxisSize.min,
         children: [
           TextFormField(
-            readOnly: widget.appSet != null,
             controller: _nameController,
             decoration: InputDecoration(
               helperText: AppLocalizations.of(context)!.setNameDuplicate,

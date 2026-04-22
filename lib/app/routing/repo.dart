@@ -81,10 +81,12 @@ abstract class SetRepo {
     bool? useBloomFilter,
     String? geoUrl,
     bool? inverse,
+    String? newName,
   });
   Future<void> updateGreateDomainSet(
     String name, {
     GreatDomainSetConfig? greatDomainSet,
+    String? newName,
   });
 
   Future<void> addCidr(String ipSetName, CIDR cidr);
@@ -92,7 +94,11 @@ abstract class SetRepo {
   Stream<List<Cidr>> getCidrsStream(String ipSetName);
   Future<void> removeCidr(Cidr cidr);
   Future<void> addGreatIpSet(GreatIPSetConfig greatIpSet);
-  Future<void> updateGreatIpSet(String name, {GreatIPSetConfig? greatIpSet});
+  Future<void> updateGreatIpSet(
+    String name, {
+    GreatIPSetConfig? greatIpSet,
+    String? newName,
+  });
   Future<void> removeGreatIpSet(String ipSetName);
   Future<void> addAtomicIpSet(AtomicIpSet atomicIpSet);
   Future<void> updateAtomicIpSet(
@@ -101,6 +107,7 @@ abstract class SetRepo {
     List<String>? clashRuleUrls,
     String? geoUrl,
     bool? inverse,
+    String? newName,
   });
   Future<void> removeAtomicIpSet(String ipSetName);
   Stream<List<GreatIpSet>> getGreatIpSetsStream();
@@ -117,7 +124,11 @@ abstract class SetRepo {
   Future<List<App>> getApps(String appSetName);
   Future<void> removeApp(List<int> ids);
   Future<void> addAppSet(AppSet appSet);
-  Future<void> updateAppSet(String name, {List<String>? clashRuleUrls});
+  Future<void> updateAppSet(
+    String name, {
+    List<String>? clashRuleUrls,
+    String? newName,
+  });
   Future<void> removeAppSet(String appSetName);
   Stream<List<AppSet>> getAppSetsStream();
 }
@@ -361,11 +372,16 @@ class DbHelper implements SelectorRepo, RouteRepo, SetRepo, DnsRepo {
   }
 
   @override
-  Future<void> updateAppSet(String name, {List<String>? clashRuleUrls}) async {
+  Future<void> updateAppSet(
+    String name, {
+    List<String>? clashRuleUrls,
+    String? newName,
+  }) async {
     await _databaseProvider.database.updateName(
       _databaseProvider.database.appSets,
       name,
       AppSetsCompanion(
+        name: newName != null ? Value(newName) : const Value.absent(),
         clashRuleUrls: clashRuleUrls != null
             ? Value(clashRuleUrls)
             : const Value.absent(),
@@ -443,6 +459,7 @@ class DbHelper implements SelectorRepo, RouteRepo, SetRepo, DnsRepo {
     bool? useBloomFilter,
     String? geoUrl,
     bool? inverse,
+    String? newName,
   }) async {
     // await _databaseProvider.database.managers.atomicDomainSets
     //     .filter((f) => f.name.equals(name))
@@ -461,6 +478,7 @@ class DbHelper implements SelectorRepo, RouteRepo, SetRepo, DnsRepo {
       _databaseProvider.database.atomicDomainSets,
       name,
       AtomicDomainSetsCompanion(
+        name: newName != null ? Value(newName) : const Value.absent(),
         geositeConfig: geositeConfig != null
             ? Value(geositeConfig)
             : const Value.absent(),
@@ -498,6 +516,7 @@ class DbHelper implements SelectorRepo, RouteRepo, SetRepo, DnsRepo {
   Future<void> updateGreateDomainSet(
     String name, {
     GreatDomainSetConfig? greatDomainSet,
+    String? newName,
   }) async {
     // await _databaseProvider.database.managers.greatDomainSets
     //     .filter((f) => f.name.equals(name))
@@ -514,6 +533,7 @@ class DbHelper implements SelectorRepo, RouteRepo, SetRepo, DnsRepo {
       _databaseProvider.database.greatDomainSets,
       name,
       GreatDomainSetsCompanion(
+        name: newName != null ? Value(newName) : const Value.absent(),
         oppositeName: greatDomainSet != null
             ? Value(greatDomainSet.oppositeName)
             : const Value.absent(),
