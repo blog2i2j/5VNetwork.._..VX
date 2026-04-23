@@ -358,113 +358,90 @@ List<Widget> _getBottomButtons(BuildContext context, User? user) {
           child: ActivatedIcon(),
         ),
       ),
-    Row(
-      children: [
-        if ((user == null || (user.lifetimePro == false)) &&
-            !context.watch<AuthBloc>().state.isActivated)
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: OutlinedButton.icon(
-                onPressed: () {
-                  if (useStripe) {
-                    launchUrl(
-                      getProPaymentLink(user?.email ?? '', user?.id ?? ''),
-                    );
-                  } else {
-                    showProPromotionDialog(context);
-                  }
-                },
-                icon: Icon(
-                  Icons.stars_rounded,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                label: AutoSizeText(
-                  AppLocalizations.of(context)!.upgradeToPermanentPro,
-                  maxLines: 1,
-                  minFontSize: 12,
-                ),
-              ),
-            ),
+    if ((user == null || (user.lifetimePro == false)) &&
+        !context.watch<AuthBloc>().state.isActivated)
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 5),
+        child: OutlinedButton.icon(
+          onPressed: () {
+            if (useStripe) {
+              launchUrl(getProPaymentLink(user?.email ?? '', user?.id ?? ''));
+            } else {
+              showProPromotionDialog(context, showTitle: false);
+            }
+          },
+          icon: Icon(
+            Icons.stars_rounded,
+            color: Theme.of(context).colorScheme.primary,
           ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: OutlinedButton.icon(
-              onPressed: () {
-                launchUrl(Uri.parse(websiteUrl));
-              },
-              label: Text(AppLocalizations.of(context)!.website),
-              icon: const Icon(Icons.link),
-            ),
+          label: AutoSizeText(
+            AppLocalizations.of(context)!.upgradeToPermanentPro,
+            maxLines: 1,
+            minFontSize: 12,
           ),
         ),
-      ],
+      ),
+    if ((!useStripe && (user == null || (user.lifetimePro == false))))
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 5),
+        child: OutlinedButton.icon(
+          onPressed: () {
+            if (user == null) {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text(AppLocalizations.of(context)!.loginBeforeRestore),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: Text(AppLocalizations.of(context)!.close),
+                    ),
+                  ],
+                ),
+              );
+            } else {
+              context.read<ProPurchases>().restore();
+            }
+          },
+          icon: Icon(
+            Icons.history_rounded,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          label: AutoSizeText(
+            AppLocalizations.of(context)!.restoreIAP,
+            maxLines: 1,
+            minFontSize: 12,
+          ),
+        ),
+      ),
+    Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5),
+      child: OutlinedButton.icon(
+        onPressed: () {
+          launchUrl(Uri.parse(websiteUrl));
+        },
+        label: Text(AppLocalizations.of(context)!.website),
+        icon: const Icon(Icons.link),
+      ),
     ),
     const SizedBox(height: 5),
-    
-    Row(
-      children: [
-        if ((!useStripe && (user == null || (user.lifetimePro == false))))
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: OutlinedButton.icon(
-                onPressed: () {
-                  if (user == null) {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text(
-                          AppLocalizations.of(context)!.loginBeforePurchase,
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(),
-                            child: Text(AppLocalizations.of(context)!.close),
-                          ),
-                        ],
-                      ),
-                    );
-                  } else {
-                    context.read<ProPurchases>().restore();
-                  }
-                },
-                icon: Icon(
-                  Icons.history_rounded,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                label: AutoSizeText(
-                  AppLocalizations.of(context)!.restoreIAP,
-                  maxLines: 1,
-                  minFontSize: 12,
-                ),
-              ),
-            ),
-          ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: OutlinedButton.icon(
-              onPressed: () async {
-                context.read<SharedPreferences>().setReviewAutoPromptDisabled(
-                  true,
-                );
-                if (await inAppReview.isAvailable()) {
-                  inAppReview.requestReview();
-                } else {
-                  inAppReview.openStoreListing(
-                    appStoreId: '6744701950',
-                    microsoftStoreId: '9PHBCBZ9R1FX',
-                  );
-                }
-              },
-              label: Text(AppLocalizations.of(context)!.rateApp),
-              icon: const Icon(Icons.rate_review_outlined),
-            ),
-          ),
-        ),
-      ],
+    Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5),
+      child: OutlinedButton.icon(
+        onPressed: () async {
+          context.read<SharedPreferences>().setReviewAutoPromptDisabled(true);
+          if (await inAppReview.isAvailable()) {
+            inAppReview.requestReview();
+          } else {
+            inAppReview.openStoreListing(
+              appStoreId: '6744701950',
+              microsoftStoreId: '9PHBCBZ9R1FX',
+            );
+          }
+        },
+        label: Text(AppLocalizations.of(context)!.rateApp),
+        icon: const Icon(Icons.rate_review_outlined),
+      ),
     ),
     const Gap(5),
     Padding(

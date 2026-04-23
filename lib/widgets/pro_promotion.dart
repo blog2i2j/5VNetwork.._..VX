@@ -39,7 +39,7 @@ final useStripe =
     (androidApkRelease) ||
     appFlavor == "pkg" ||
     Platform.isLinux;
-void showProPromotionDialog(BuildContext context) {
+void showProPromotionDialog(BuildContext context, {bool showTitle = true}) {
   if (Provider.of<MyLayout>(context, listen: false).isCompact) {
     Navigator.of(context, rootNavigator: true).push(
       CupertinoPageRoute(
@@ -47,7 +47,7 @@ void showProPromotionDialog(BuildContext context) {
           appBar: AppBar(title: largeProIcon),
           body: Padding(
             padding: const EdgeInsets.all(16),
-            child: !useStripe ? const IAPPurchase() : const ProPromotion(),
+            child: !useStripe ? IAPPurchase(showTitle: showTitle) : const ProPromotion(),
           ),
         ),
       ),
@@ -68,7 +68,7 @@ void showProPromotionDialog(BuildContext context) {
               child: Text(AppLocalizations.of(context)!.cancel),
             ),
         ],
-        content: !useStripe ? const IAPPurchase() : const ProPromotion(),
+        content: !useStripe ? IAPPurchase(showTitle: showTitle) : const ProPromotion(),
       ),
     );
   }
@@ -209,7 +209,8 @@ class BuyLifeTimeCard extends StatelessWidget {
 }
 
 class IAPPurchase extends StatelessWidget {
-  const IAPPurchase({super.key});
+  const IAPPurchase({super.key, this.showTitle = true});
+  final bool showTitle;
 
   void _onPressed(BuildContext context) async {
     final user = context.read<AuthBloc>().state.user;
@@ -299,11 +300,12 @@ class IAPPurchase extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            AppLocalizations.of(context)!.proFeatureDescription,
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          const Gap(10),
+          if (showTitle)
+            Text(
+              AppLocalizations.of(context)!.proFeatureDescription,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+          if (showTitle) const Gap(10),
           SizedBox(
             width: 400,
             child: Consumer<ProPurchases>(

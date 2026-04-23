@@ -331,21 +331,29 @@ class _NodesHelperState extends State<NodesHelper> {
           children: [
             // Segmented control
             SegmentedButton<NodesHelperSegment>(
+              showSelectedIcon:
+                  AppLocalizations.of(context)!.localeName == 'zh',
               segments: [
                 ButtonSegment(
                   value: NodesHelperSegment.fastest,
                   label: Text(AppLocalizations.of(context)!.speed),
-                  icon: const Icon(Icons.speed, size: 16),
+                  icon: AppLocalizations.of(context)!.localeName != 'zh'
+                      ? null
+                      : const Icon(Icons.speed, size: 16),
                 ),
                 ButtonSegment(
                   value: NodesHelperSegment.lowestLatency,
                   label: Text(AppLocalizations.of(context)!.latency),
-                  icon: const Icon(Icons.network_check, size: 16),
+                  icon: AppLocalizations.of(context)!.localeName != 'zh'
+                      ? null
+                      : const Icon(Icons.network_check, size: 16),
                 ),
                 ButtonSegment(
                   value: NodesHelperSegment.recent,
                   label: Text(AppLocalizations.of(context)!.recent),
-                  icon: const Icon(Icons.history, size: 16),
+                  icon: AppLocalizations.of(context)!.localeName != 'zh'
+                      ? null
+                      : const Icon(Icons.history, size: 16),
                 ),
               ],
               selected: {_selectedSegment},
