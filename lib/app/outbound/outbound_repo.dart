@@ -255,6 +255,10 @@ class OutboundRepo {
       query.orderBy([
         (t) => OrderingTerm(expression: t.ping, mode: OrderingMode.asc),
       ]);
+    } else {
+      query.orderBy([
+        (t) => OrderingTerm(expression: t.id, mode: OrderingMode.asc),
+      ]);
     }
 
     // Apply limit if specified
@@ -581,7 +585,10 @@ class OutboundRepo {
       await db.deleteById(db.subscriptions, [id]);
       return;
     } catch (e) {
-      logger.e('removeSubscription: direct delete failed, trying fallback', error: e);
+      logger.e(
+        'removeSubscription: direct delete failed, trying fallback',
+        error: e,
+      );
     }
 
     try {
@@ -620,9 +627,9 @@ class OutboundRepo {
             'removeSubscription: deleting handlers failed, detaching handlers',
             error: e,
           );
-          await (db.update(db.outboundHandlers)..where(
-            (t) => t.subId.equals(id),
-          )).write(const OutboundHandlersCompanion(subId: Value(null)));
+          await (db.update(db.outboundHandlers)
+                ..where((t) => t.subId.equals(id)))
+              .write(const OutboundHandlersCompanion(subId: Value(null)));
         }
 
         // 6. Delete subscription record.

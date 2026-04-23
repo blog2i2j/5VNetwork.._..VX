@@ -71,7 +71,6 @@ part 'realtime_speed.dart';
 part 'route.dart';
 part 'active_nodes.dart';
 part 'proxy_selector.dart';
-part 'home0.dart';
 part 'home_customize.dart';
 part 'home_standard.dart';
 part 'home_edit.dart';

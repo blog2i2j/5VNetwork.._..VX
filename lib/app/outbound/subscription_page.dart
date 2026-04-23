@@ -264,7 +264,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
     final selectedIndex = _subscriptionUpdateIntervals.indexOf(savedInterval);
     final normalizedSelectedIndex = selectedIndex >= 0 ? selectedIndex : 7;
     if (isCompact) {
-      await Navigator.of(context).push<void>(
+      await Navigator.of(context, rootNavigator: true).push<void>(
         MaterialPageRoute(
           builder: (context) => _SubscriptionUpdateSettingsPage(
             initialAutoUpdate: autoUpdate,

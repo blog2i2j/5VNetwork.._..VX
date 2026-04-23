@@ -245,9 +245,15 @@ class RealtimeSpeedNotifier extends ChangeNotifier {
         final name = await _outboundRepo.getHandlerName(stat.id);
         late OutboundHandler handler;
         if (stat.id.contains('-')) {
-          handler = (await _outboundRepo.getHandlerById(
+          final h = (await _outboundRepo.getHandlerById(
             int.parse(stat.id.split('-').last),
-          ))!;
+          ));
+          if (h != null) {
+            handler = h;
+          } else {
+            logger.w("handler not found: ${stat.id}");
+            continue;
+          }
         } else {
           handler = (await _outboundRepo.getHandlerById(int.parse(stat.id)))!;
         }

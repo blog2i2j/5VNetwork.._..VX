@@ -158,6 +158,7 @@ class AutoSubscriptionUpdater with ChangeNotifier {
             existingByTag[handler.config.outbound.tag] = handler;
           }
         }
+        int newHandlerId = SnowflakeId.generate();
         final updatedIds = <int>{};
         for (final config in fetchRes.handlers) {
           final existing = existingByTag[config.tag];
@@ -174,7 +175,7 @@ class AutoSubscriptionUpdater with ChangeNotifier {
             final inserted = await db.insertReturning(
               db.outboundHandlers,
               OutboundHandlersCompanion(
-                id: Value(SnowflakeId.generate()),
+                id: Value(newHandlerId++),
                 config: Value(HandlerConfig(outbound: nextConfig)),
                 subId: Value(sub.id),
               ),
