@@ -1,4 +1,4 @@
-name: Build Windows
+name: Build Windows Exe
 
 on:
   # push:
@@ -122,13 +122,6 @@ jobs:
           $version = "${{ steps.get_version.outputs.version }}" -replace '^v', ''
           (Get-Content inno/install_github_action.iss -Raw) -replace '__REPLACE_WITH_NEW_VERSION__', $version | Set-Content inno/install_github_action.iss -NoNewline
 
-      - name: Set version in pubspec.yaml
-        shell: pwsh
-        run: |
-          $version = "${{ steps.get_version.outputs.version }}" -replace '^v', ''
-          $msixVersion = "$version.0"
-          (Get-Content pubspec.yaml -Raw) -replace 'msix_version: [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+', "msix_version: $msixVersion" | Set-Content pubspec.yaml -NoNewline
-
       - name: Copy files to inno compiler
         shell: pwsh
         run: |
@@ -162,31 +155,6 @@ jobs:
             inno/Output/VXInstaller.exe \
             --repo ${{ github.repository_owner }}/vx \
             --clobber
-
-      - uses: microsoft/setup-msstore-cli@v1
-
-      - name: Configure the Microsoft Store CLI
-        env:
-          TENANT_ID: ${{ secrets.TENANT_ID }}
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-          SELLER_ID: ${{ secrets.SELLER_ID }}
-        shell: pwsh
-        run: msstore reconfigure --tenantId $env:TENANT_ID --clientId $env:CLIENT_ID --clientSecret $env:CLIENT_SECRET --sellerId $env:SELLER_ID
-
-      - name: Create MSIX package
-        env:
-          LOG_KEY: ${{ secrets.LOG_KEY }}
-        run: |
-          dart run msix:create --store --windows-build-args "  --split-debug-info=symbols --dart-define=STORE=true --dart-define=LOG_KEY=$env:LOG_KEY" -n store
-
-      - name: Upload debug symbols (Windows Store)
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-        run: flutter pub run sentry_dart_plugin
-
-      - name: Upload MSIX draft to the Microsoft Store (no certification submit)
-        run: msstore publish --noCommit -v
 
   # build-windows-arm64:
   #   runs-on: windows-11-arm
