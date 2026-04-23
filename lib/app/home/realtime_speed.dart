@@ -263,12 +263,12 @@ class RealtimeSpeedNotifier extends ChangeNotifier {
         newList.add(nodeInfo);
       } else {
         nodeInfo = nodeInfos[nodeInfoIndex];
-        if (nodeInfo.stats.$3 == 0 &&
-            nodeInfo.stats.$4 == 0 &&
-            stats.$3 == 0 &&
-            stats.$4 == 0) {
-          continue;
-        }
+        // if (nodeInfo.stats.$3 == 0 &&
+        //     nodeInfo.stats.$4 == 0 &&
+        //     stats.$3 == 0 &&
+        //     stats.$4 == 0) {
+        //   continue;
+        // }
         nodeInfo.stats = stats;
         newList.add(nodeInfo);
       }
@@ -1447,166 +1447,244 @@ class _NodeCardState extends State<NodeCard> {
     final uploadSpeed = latestStats?.$3 ?? 0;
     final downloadSpeed = latestStats?.$4 ?? 0;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Material(
-          color: Colors.transparent,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(8),
-            onTap: () {
-              // Ensure "All" group is visible
-              context.read<OutboundBloc>().add(
-                SelectedGroupChangeEvent(allGroup),
-              );
-              GoRouter.of(context).go('/node');
-              final tableState = outboundTableKey.currentState;
-              if (tableState != null) {
-                int? handlerId;
-                if (widget.nodeInfo.id.contains('-')) {
-                  handlerId = int.tryParse(widget.nodeInfo.id.split('-').last);
-                } else {
-                  handlerId = int.tryParse(widget.nodeInfo.id);
-                }
-                if (handlerId != null) {
-                  tableState.scrollToHandler(handlerId);
-                }
-              }
-            },
-            child: // Header: Country flag + Name + IP
-            Row(
-              children: [
-                // Country flag
-                Padding(
-                  padding: const EdgeInsets.all(6),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.surfaceContainerHighest,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: Colors.white.withOpacity(0.1),
-                        width: 1,
-                      ),
-                    ),
-                    child: widget.nodeInfo.country,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                // Node info
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(8),
+                onTap: () {
+                  // Ensure "All" group is visible
+                  context.read<OutboundBloc>().add(
+                    SelectedGroupChangeEvent(allGroup),
+                  );
+                  GoRouter.of(context).go('/node');
+                  final tableState = outboundTableKey.currentState;
+                  if (tableState != null) {
+                    int? handlerId;
+                    if (widget.nodeInfo.id.contains('-')) {
+                      handlerId = int.tryParse(
+                        widget.nodeInfo.id.split('-').last,
+                      );
+                    } else {
+                      handlerId = int.tryParse(widget.nodeInfo.id);
+                    }
+                    if (handlerId != null) {
+                      tableState.scrollToHandler(handlerId);
+                    }
+                  }
+                },
+                child: // Header: Country flag + Name + IP
+                Row(
                   children: [
-                    Text(
-                      widget.nodeInfo.name,
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
+                    // Country flag
+                    Padding(
+                      padding: const EdgeInsets.all(6),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.surfaceContainerHighest,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.1),
+                            width: 1,
+                          ),
+                        ),
+                        child: widget.nodeInfo.country,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
-                    Text(
-                      widget.nodeInfo.serverIp,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        fontSize: 10,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    const SizedBox(width: 8),
+                    // Node info
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.nodeInfo.name,
+                          style: Theme.of(context).textTheme.titleSmall
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          widget.nodeInfo.serverIp,
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
+                                fontSize: 10,
+                              ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
 
-        const SizedBox(height: 10),
-        // Stats grid
-        Row(
-          children: [
-            Expanded(
-              child: _StatItem(
-                label: AppLocalizations.of(context)!.realtimeRate,
-                value: bytesToReadable(throughput),
-                icon: Icons.speed,
-                color: ShimmerPurple,
-                isSelected: false /*  _selectedChartType == 'rate' */,
-                onTap: () => {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      content: Text(
-                        AppLocalizations.of(context)!.realtimeRateDesc,
-                      ),
+            const SizedBox(height: 10),
+            if (constraints.maxWidth < 300) ...[
+              Row(
+                children: [
+                  Expanded(
+                    child: _StatItem(
+                      label: AppLocalizations.of(context)!.realtimeRate,
+                      value: bytesToReadable(throughput),
+                      icon: Icons.speed,
+                      color: ShimmerPurple,
+                      isSelected: false /*  _selectedChartType == 'rate' */,
+                      onTap: () => {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            content: Text(
+                              AppLocalizations.of(context)!.realtimeRateDesc,
+                            ),
+                          ),
+                        ),
+                      },
                     ),
                   ),
-                },
-              ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: _StatItem(
-                label: AppLocalizations.of(context)!.realtimeLatency,
-                value: latency > 0 ? '${latency}ms' : '--',
-                icon: Icons.network_check,
-                color: VioletBlue,
-                isSelected: false /* _selectedChartType == 'latency' */,
-                onTap: () => {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      content: Text(
-                        AppLocalizations.of(context)!.realtimeLatencyDesc,
-                      ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: _StatItem(
+                      label: AppLocalizations.of(context)!.realtimeLatency,
+                      value: latency > 0 ? '${latency}ms' : '--',
+                      icon: Icons.network_check,
+                      color: VioletBlue,
+                      isSelected: false /* _selectedChartType == 'latency' */,
+                      onTap: () => {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            content: Text(
+                              AppLocalizations.of(context)!.realtimeLatencyDesc,
+                            ),
+                          ),
+                        ),
+                      },
                     ),
                   ),
-                },
+                ],
               ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: _StatItem(
-                label: AppLocalizations.of(context)!.upload,
-                value: bytesToReadable(uploadSpeed),
-                icon: Icons.arrow_upward_rounded,
-                color: XPink,
-                isSelected: false,
+              Gap(10),
+              Row(
+                children: [
+                  Expanded(
+                    child: _StatItem(
+                      label: AppLocalizations.of(context)!.upload,
+                      value: bytesToReadable(uploadSpeed),
+                      icon: Icons.arrow_upward_rounded,
+                      color: XPink,
+                      isSelected: false,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: _StatItem(
+                      label: AppLocalizations.of(context)!.download,
+                      value: bytesToReadable(downloadSpeed),
+                      icon: Icons.arrow_downward_rounded,
+                      color: XBlue,
+                      isSelected: false,
+                    ),
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: _StatItem(
-                label: AppLocalizations.of(context)!.download,
-                value: bytesToReadable(downloadSpeed),
-                icon: Icons.arrow_downward_rounded,
-                color: XBlue,
-                isSelected: false,
+            ],
+            if (constraints.maxWidth >= 300)
+              // Stats grid
+              Row(
+                children: [
+                  Expanded(
+                    child: _StatItem(
+                      label: AppLocalizations.of(context)!.realtimeRate,
+                      value: bytesToReadable(throughput),
+                      icon: Icons.speed,
+                      color: ShimmerPurple,
+                      isSelected: false /*  _selectedChartType == 'rate' */,
+                      onTap: () => {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            content: Text(
+                              AppLocalizations.of(context)!.realtimeRateDesc,
+                            ),
+                          ),
+                        ),
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: _StatItem(
+                      label: AppLocalizations.of(context)!.realtimeLatency,
+                      value: latency > 0 ? '${latency}ms' : '--',
+                      icon: Icons.network_check,
+                      color: VioletBlue,
+                      isSelected: false /* _selectedChartType == 'latency' */,
+                      onTap: () => {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            content: Text(
+                              AppLocalizations.of(context)!.realtimeLatencyDesc,
+                            ),
+                          ),
+                        ),
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: _StatItem(
+                      label: AppLocalizations.of(context)!.upload,
+                      value: bytesToReadable(uploadSpeed),
+                      icon: Icons.arrow_upward_rounded,
+                      color: XPink,
+                      isSelected: false,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: _StatItem(
+                      label: AppLocalizations.of(context)!.download,
+                      value: bytesToReadable(downloadSpeed),
+                      icon: Icons.arrow_downward_rounded,
+                      color: XBlue,
+                      isSelected: false,
+                    ),
+                  ),
+                ],
               ),
-            ),
+            // // Chart area
+            // if (_selectedChartType != null) ...[
+            //   const SizedBox(height: 16),
+            //   Container(
+            //     height: 120,
+            //     padding: const EdgeInsets.all(12),
+            //     margin: const EdgeInsets.symmetric(horizontal: 0),
+            //     decoration: BoxDecoration(
+            //       color: Theme.of(context).colorScheme.surface,
+            //       borderRadius: BorderRadius.circular(12),
+            //     ),
+            //     child: _NodeChart(
+            //       nodeInfo: widget.nodeInfo,
+            //       chartType: _selectedChartType!,
+            //     ),
+            //   ),
+            // ],
+            // const SizedBox(height: 12),
           ],
-        ),
-        // // Chart area
-        // if (_selectedChartType != null) ...[
-        //   const SizedBox(height: 16),
-        //   Container(
-        //     height: 120,
-        //     padding: const EdgeInsets.all(12),
-        //     margin: const EdgeInsets.symmetric(horizontal: 0),
-        //     decoration: BoxDecoration(
-        //       color: Theme.of(context).colorScheme.surface,
-        //       borderRadius: BorderRadius.circular(12),
-        //     ),
-        //     child: _NodeChart(
-        //       nodeInfo: widget.nodeInfo,
-        //       chartType: _selectedChartType!,
-        //     ),
-        //   ),
-        // ],
-        // const SizedBox(height: 12),
-      ],
+        );
+      },
     );
   }
 }
