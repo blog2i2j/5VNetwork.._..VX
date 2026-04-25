@@ -929,11 +929,16 @@ class _LogListState extends State<LogList> {
                     left: 16,
                     right: 16,
                   ),
-                  child: Text(
-                    log.reason,
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.error,
-                    ),
+                  child: FutureBuilder<String>(
+                    future: _formatRejectReason(log.reason),
+                    builder: (context, snapshot) {
+                      return Text(
+                        snapshot.data ?? log.reason,
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          color: Theme.of(context).colorScheme.error,
+                        ),
+                      );
+                    },
                   ),
                 ),
                 _getAddressListTile(log.dst, showTrailing: false),
@@ -955,6 +960,30 @@ class _LogListState extends State<LogList> {
     );
   }
 
+  Future<String> _formatRejectReason(String reason) async {
+    final ipv6UnsupportedPattern = RegExp(
+      r'^handler not support ipv6:\s*(\d+)$',
+    );
+    final match = ipv6UnsupportedPattern.firstMatch(reason);
+    if (match == null) {
+      return reason;
+    }
+
+    final handlerId = match.group(1);
+    if (handlerId == null || handlerId.isEmpty) {
+      return reason;
+    }
+
+    try {
+      final handlerName = await context.read<OutboundRepo>().getHandlerName(
+        handlerId,
+      );
+      return 'handler not support ipv6: $handlerName';
+    } catch (_) {
+      return reason;
+    }
+  }
+
   Widget _getDomainListTile(
     String title,
     String domain, {
@@ -962,6 +991,8 @@ class _LogListState extends State<LogList> {
     bool showTrailing = true,
   }) {
     bool domainAdded = false;
+    final rootDomain = getRootDomain(domain);
+    final rootDomainStartIndex = domain.lastIndexOf(rootDomain);
     return ListTile(
       title: Row(
         children: [
@@ -1017,10 +1048,43 @@ class _LogListState extends State<LogList> {
           // ),
         ],
       ),
-      subtitle: Text(
-        domain,
-        maxLines: 3,
-        style: Theme.of(context).textTheme.bodyLarge,
+      subtitle: Wrap(
+        children: [
+          if (rootDomainStartIndex > 0)
+            Text(
+              domain.substring(0, rootDomainStartIndex),
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          _DomainSetPickerButton(
+            onChanged: (setName) async {
+              try {
+                final xController = context.read<XController>();
+                final d = Domain(
+                  type: Domain_Type.RootDomain,
+                  value: rootDomain,
+                );
+                await Provider.of<SetRepo>(
+                  context,
+                  listen: false,
+                ).addGeoDomain(setName, d);
+                xController.addGeoDomain(setName, d);
+              } on DriftRemoteException catch (e) {
+                if (e.remoteCause is SqliteException &&
+                    (e.remoteCause as SqliteException).extendedResultCode ==
+                        2067) {
+                  snack(rootLocalizations()?.addFailedUniqueConstraint);
+                }
+              } catch (e) {
+                logger.d('add root domain error', error: e);
+              }
+            },
+            child: Text(
+              rootDomain,
+              maxLines: 3,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          ),
+        ],
       ),
       trailing: !showTrailing
           ? null
