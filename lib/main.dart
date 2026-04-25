@@ -577,8 +577,8 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> with WidgetsBindingObserver {
-  static const int _reviewMinOpenCount = 8;
-  static const int _reviewMinDaysSinceFirstUse = 7;
+  static const int _reviewMinOpenCount = kDebugMode ? 0 : 8;
+  static const int _reviewMinDaysSinceFirstUse = kDebugMode ? 0 : 7;
   static const int _reviewPromptMaxTimes = 1;
 
   Locale? _locale;
@@ -777,7 +777,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   }
 
   void _scheduleReviewPrompt(SharedPreferences pref) {
-    Future<void>.delayed(const Duration(seconds: 12), () async {
+    Future<void>.delayed(const Duration(seconds: 5), () async {
       await _maybePromptForReview(pref);
     });
   }
