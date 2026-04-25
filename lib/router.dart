@@ -185,9 +185,13 @@ final compactRouteConfig = RoutingConfig(
             GoRoute(
               path: '/node',
               pageBuilder: (context, state) {
+                final extra =
+                    state.extra is NodePageExtra
+                    ? state.extra as NodePageExtra
+                    : null;
                 return CustomTransitionPage(
                   key: state.pageKey,
-                  child: const OutboundPage(),
+                  child: OutboundPage(extra: extra),
                   transitionsBuilder:
                       (context, animation, secondaryAnimation, child) => child,
                 );
@@ -285,9 +289,13 @@ RoutingConfig largeScreenRouteConfig(SharedPreferences pref) {
               GoRoute(
                 path: '/node',
                 pageBuilder: (context, state) {
+                  final extra =
+                      state.extra is NodePageExtra
+                      ? state.extra as NodePageExtra
+                      : null;
                   return CustomTransitionPage(
                     key: state.pageKey,
-                    child: const OutboundPage(),
+                    child: OutboundPage(extra: extra),
                     transitionsBuilder:
                         (context, animation, secondaryAnimation, child) =>
                             child,

@@ -14,6 +14,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'dart:convert';
+import 'dart:async';
 import 'dart:io';
 
 import 'package:ads/ad.dart';
@@ -53,8 +54,18 @@ part 'group_selector.dart';
 
 final AllGroup allGroup = AllGroup();
 
+class NodePageExtra {
+  final int? initialHandlerId;
+  final int requestToken;
+
+  NodePageExtra({required this.initialHandlerId})
+    : requestToken = DateTime.now().microsecondsSinceEpoch;
+}
+
 class OutboundPage extends StatefulWidget {
-  const OutboundPage({super.key});
+  final NodePageExtra? extra;
+
+  const OutboundPage({super.key, this.extra});
 
   @override
   State<OutboundPage> createState() => _OutboundPageState();
@@ -64,6 +75,55 @@ enum OutboundPageSegment { nodes, subscriptions }
 
 class _OutboundPageState extends State<OutboundPage> {
   OutboundPageSegment _segment = OutboundPageSegment.nodes;
+  int? _lastHandledRequestToken;
+
+  @override
+  void initState() {
+    super.initState();
+    _scheduleInitialHandlerJump();
+  }
+
+  @override
+  void didUpdateWidget(covariant OutboundPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.extra?.requestToken != widget.extra?.requestToken) {
+      _scheduleInitialHandlerJump();
+    }
+  }
+
+  void _scheduleInitialHandlerJump({int remainingAttempts = 8}) {
+    final extra = widget.extra;
+    if (extra == null || extra.initialHandlerId == null) return;
+    if (_lastHandledRequestToken == extra.requestToken) return;
+
+    if (_segment != OutboundPageSegment.nodes) {
+      setState(() {
+        _segment = OutboundPageSegment.nodes;
+      });
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+
+      final targetHandlerId = extra.initialHandlerId!;
+      final state = context.read<OutboundBloc>().state;
+      final isHandlerVisible = state.handlers.any((h) => h.id == targetHandlerId);
+      if (!isHandlerVisible) {
+        context.read<OutboundBloc>().add(SelectedGroupChangeEvent(allGroup));
+      }
+
+      final scrolled =
+          outboundTableKey.currentState?.scrollToHandler(targetHandlerId) ?? false;
+      if (scrolled) {
+        _lastHandledRequestToken = extra.requestToken;
+        return;
+      }
+
+      if (remainingAttempts > 0) {
+        _scheduleInitialHandlerJump(remainingAttempts: remainingAttempts - 1);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,9 +140,12 @@ class _OutboundPageState extends State<OutboundPage> {
                 ],
               ),
               const Gap(5),
-              const Expanded(
+              Expanded(
                 child: TabBarView(
-                  children: [OutboundTable(), SubscriptionPage()],
+                  children: [
+                    OutboundTable(key: outboundTableKey),
+                    const SubscriptionPage(),
+                  ],
                 ),
               ),
             ],
@@ -134,9 +197,12 @@ class OutboundTable extends StatefulWidget {
 
 class OutboundTableState extends State<OutboundTable> {
   final _scrollController = ScrollController();
+  Timer? _highlightResetTimer;
+  int? _highlightedHandlerId;
 
   @override
   void dispose() {
+    _highlightResetTimer?.cancel();
     _scrollController.dispose();
     super.dispose();
   }
@@ -146,20 +212,22 @@ class OutboundTableState extends State<OutboundTable> {
     super.didChangeDependencies();
   }
 
-  void scrollToTop() {
+  bool scrollToTop() {
+    if (!_scrollController.hasClients) return false;
     _scrollController.animateTo(
       0,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
+    return true;
   }
 
-  void scrollToHandler(int handlerId) {
-    if (!_scrollController.hasClients) return;
+  bool scrollToHandler(int handlerId) {
+    if (!_scrollController.hasClients) return false;
     final state = context.read<OutboundBloc>().state;
     final handlers = state.handlers;
     final index = handlers.indexWhere((h) => h.id == handlerId);
-    if (index == -1) return;
+    if (index == -1) return false;
 
     final viewMode = state.viewMode;
     double offset = 0;
@@ -179,6 +247,25 @@ class OutboundTableState extends State<OutboundTable> {
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
+    _highlightHandler(handlerId);
+    return true;
+  }
+
+  void _highlightHandler(int handlerId) {
+    _highlightResetTimer?.cancel();
+    if (mounted) {
+      setState(() {
+        _highlightedHandlerId = handlerId;
+      });
+    }
+    _highlightResetTimer = Timer(const Duration(seconds: 2), () {
+      if (!mounted) return;
+      setState(() {
+        if (_highlightedHandlerId == handlerId) {
+          _highlightedHandlerId = null;
+        }
+      });
+    });
   }
 
   @override
@@ -364,6 +451,9 @@ class OutboundTableState extends State<OutboundTable> {
                                                               ),
                                                               handler:
                                                                   handlers[index],
+                                                            jumpHighlighted:
+                                                                _highlightedHandlerId ==
+                                                                handlers[index].id,
                                                               selectedAs4:
                                                                   r.$1 != 0 &&
                                                                   startCloseCubit
@@ -461,6 +551,16 @@ class OutboundTableState extends State<OutboundTable> {
                                                           cols: cols,
                                                           handler:
                                                               handlers[index],
+                                                          color:
+                                                              _highlightedHandlerId ==
+                                                                  handlers[index].id
+                                                              ? Theme.of(context)
+                                                                    .colorScheme
+                                                                    .primaryContainer
+                                                                    .withValues(
+                                                                      alpha: 0.75,
+                                                                    )
+                                                              : null,
                                                           showDot: showDot,
                                                         );
                                                       },
@@ -636,7 +736,8 @@ class _HandlerRowState extends State<HandlerRow> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.handler != widget.handler ||
         oldWidget.cols != widget.cols ||
-        oldWidget.showDot != widget.showDot) {
+        oldWidget.showDot != widget.showDot ||
+        oldWidget.color != widget.color) {
       _shouldRebuild = true;
     }
   }
@@ -667,8 +768,11 @@ class _HandlerRowState extends State<HandlerRow> {
     }
     // print('build ${widget.handler.id}');
     _shouldRebuild = false;
-    _cache = Container(
+    _cache = AnimatedContainer(
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.easeInOut,
       decoration: BoxDecoration(
+        color: widget.color,
         border: widget.showBorder
             ? Border(
                 bottom: BorderSide(
@@ -678,7 +782,6 @@ class _HandlerRowState extends State<HandlerRow> {
             : null,
       ),
       child: OutboundMenuAnchor(
-        color: widget.color,
         handler: widget.handler,
         clickable: widget.clickable,
         child: Row(children: _getCells(context, widget.cols, widget.handler)),
@@ -919,7 +1022,7 @@ class OutboundMenuAnchor extends StatelessWidget {
       ],
       builder: (context, menuController, child) {
         return Material(
-          color: color,
+          color: color ?? Colors.transparent,
           child: GestureDetector(
             onLongPressStart: (details) {
               if (!desktopPlatforms) {

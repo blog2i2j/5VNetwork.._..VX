@@ -20,6 +20,7 @@ class NodeInfo {
   final String name;
   final String serverIp;
   final Widget country;
+  final OutboundHandler handler;
   NodeStats stats;
   NodeInfo({
     required this.id,
@@ -27,6 +28,7 @@ class NodeInfo {
     required this.serverIp,
     required this.country,
     required this.stats,
+    required this.handler,
   });
 }
 
@@ -265,6 +267,7 @@ class RealtimeSpeedNotifier extends ChangeNotifier {
               : handler.serverIp,
           country: handler.countryIcon,
           stats: stats,
+          handler: handler,
         );
         newList.add(nodeInfo);
       } else {
@@ -1464,25 +1467,18 @@ class _NodeCardState extends State<NodeCard> {
               child: InkWell(
                 borderRadius: BorderRadius.circular(8),
                 onTap: () {
-                  // Ensure "All" group is visible
-                  context.read<OutboundBloc>().add(
-                    SelectedGroupChangeEvent(allGroup),
-                  );
-                  GoRouter.of(context).go('/node');
-                  final tableState = outboundTableKey.currentState;
-                  if (tableState != null) {
-                    int? handlerId;
-                    if (widget.nodeInfo.id.contains('-')) {
-                      handlerId = int.tryParse(
-                        widget.nodeInfo.id.split('-').last,
-                      );
-                    } else {
-                      handlerId = int.tryParse(widget.nodeInfo.id);
-                    }
-                    if (handlerId != null) {
-                      tableState.scrollToHandler(handlerId);
-                    }
+                  int? handlerId;
+                  if (widget.nodeInfo.id.contains('-')) {
+                    handlerId = int.tryParse(
+                      widget.nodeInfo.id.split('-').last,
+                    );
+                  } else {
+                    handlerId = int.tryParse(widget.nodeInfo.id);
                   }
+                  GoRouter.of(context).go(
+                    '/node',
+                    extra: NodePageExtra(initialHandlerId: handlerId),
+                  );
                 },
                 child: // Header: Country flag + Name + IP
                 Row(
@@ -1517,7 +1513,7 @@ class _NodeCardState extends State<NodeCard> {
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          widget.nodeInfo.serverIp,
+                          '${widget.nodeInfo.serverIp} · ${widget.nodeInfo.handler.displayProtocol()}',
                           style: Theme.of(context).textTheme.bodySmall
                               ?.copyWith(
                                 color: Theme.of(

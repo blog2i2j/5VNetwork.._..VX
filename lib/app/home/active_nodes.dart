@@ -63,14 +63,12 @@ class CurrentNodes extends StatelessWidget {
                   child: InkWell(
                     borderRadius: BorderRadius.circular(8),
                     onTap: () {
-                      context.read<OutboundBloc>().add(
-                        SelectedGroupChangeEvent(allGroup),
+                      GoRouter.of(context).go(
+                        '/node',
+                        extra: NodePageExtra(
+                          initialHandlerId: snapshot.data![index].id,
+                        ),
                       );
-                      context.read<OutboundBloc>().add(
-                        const SortHandlersEvent((Col.active, -1)),
-                      );
-                      GoRouter.of(context).go('/node');
-                      outboundTableKey.currentState?.scrollToTop();
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(right: 8.0),

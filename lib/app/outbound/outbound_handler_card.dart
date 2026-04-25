@@ -30,6 +30,7 @@ class OutboundHandlerCard extends StatelessWidget {
   const OutboundHandlerCard({
     super.key,
     required this.handler,
+    required this.jumpHighlighted,
     required this.selectedAs4,
     required this.proxySelectorMode,
     required this.showAddress,
@@ -37,6 +38,7 @@ class OutboundHandlerCard extends StatelessWidget {
   });
 
   final OutboundHandler handler;
+  final bool jumpHighlighted;
   final bool selectedAs4;
   final ProxySelectorMode proxySelectorMode;
   final bool showAddress;
@@ -51,51 +53,80 @@ class OutboundHandlerCard extends StatelessWidget {
             (proxySelectorMode == ProxySelectorMode.manual && handler.selected));
     final isMultiSelected =
         multiSelect && handler.selectedInMultipleSelect;
+    final highlightColor = theme.colorScheme.primaryContainer;
 
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        Card(
-          elevation: (isMultiSelected || isRoutingSelected) ? 8 : 2,
-          shape: RoundedRectangleBorder(
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeInOut,
+          decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            side: isMultiSelected
-                ? BorderSide(color: theme.colorScheme.primary, width: 2.5)
-                : isRoutingSelected ? const BorderSide(color: XBlue, width: 2)
-                : BorderSide.none,
+            boxShadow: jumpHighlighted
+                ? [
+                    BoxShadow(
+                      color: highlightColor.withValues(alpha: 0.45),
+                      blurRadius: 18,
+                      spreadRadius: 2,
+                    ),
+                  ]
+                : null,
           ),
-          child: Container(
-            padding: EdgeInsets.fromLTRB(
-              16,
-              16,
-              multiSelect ? 40 : 16,
-              16,
-            ),
-            decoration: BoxDecoration(
+          child: Card(
+            elevation:
+                jumpHighlighted ? 10 : (isMultiSelected || isRoutingSelected) ? 8 : 2,
+            shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
-              gradient: isMultiSelected
-                  ? LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        theme.colorScheme.primary.withOpacity(0.12),
-                        theme.colorScheme.primary.withOpacity(0.06),
-                      ],
-                    )
+              side: jumpHighlighted
+                  ? BorderSide(color: highlightColor, width: 2.5)
+                  : isMultiSelected
+                  ? BorderSide(color: theme.colorScheme.primary, width: 2.5)
                   : isRoutingSelected
-                  ? LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        XBlue.withOpacity(0.1),
-                        XBlue.withOpacity(0.05),
-                      ],
-                    )
-                  : null,
+                  ? const BorderSide(color: XBlue, width: 2)
+                  : BorderSide.none,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+            child: Container(
+              padding: EdgeInsets.fromLTRB(
+                16,
+                16,
+                multiSelect ? 40 : 16,
+                16,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                gradient: jumpHighlighted
+                    ? LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          highlightColor.withValues(alpha: 0.45),
+                          highlightColor.withValues(alpha: 0.18),
+                        ],
+                      )
+                    : isMultiSelected
+                    ? LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          theme.colorScheme.primary.withOpacity(0.12),
+                          theme.colorScheme.primary.withOpacity(0.06),
+                        ],
+                      )
+                    : isRoutingSelected
+                    ? LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          XBlue.withOpacity(0.1),
+                          XBlue.withOpacity(0.05),
+                        ],
+                      )
+                    : null,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                 // Header: Country Flag + Name
                 Row(
                   children: [
@@ -286,7 +317,8 @@ class OutboundHandlerCard extends StatelessWidget {
                     ),
                   ],
                 ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
