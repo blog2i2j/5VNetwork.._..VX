@@ -313,6 +313,13 @@ class XApiClient {
     return await _xApiClient.handlerUsable(request);
   }
 
+  Future<HandlerCountryTestResponse> handlerCountryTest(
+    HandlerCountryTestRequest request,
+  ) async {
+    await _completer.future;
+    return await _xApiClient.handlerCountryTest(request);
+  }
+
   Future<int> rtt(RttTestRequest request) async {
     await _completer.future;
     return (await _xApiClient.rttTest(request)).ping;

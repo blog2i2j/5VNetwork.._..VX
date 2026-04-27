@@ -258,7 +258,7 @@ class OutboundTableState extends State<OutboundTable> {
         _highlightedHandlerId = handlerId;
       });
     }
-    _highlightResetTimer = Timer(const Duration(seconds: 2), () {
+    _highlightResetTimer = Timer(const Duration(milliseconds: 500), () {
       if (!mounted) return;
       setState(() {
         if (_highlightedHandlerId == handlerId) {

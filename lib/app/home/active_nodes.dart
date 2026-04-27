@@ -473,8 +473,6 @@ class _NodeListItemState extends State<_NodeListItem> {
             handler.id,
             ok: ok ? 1 : -1,
             ping: res.ping,
-            serverIp: res.ip,
-            country: res.country,
             pingTestTime: DateTime.now().millisecondsSinceEpoch ~/ 1000,
             speed: ok ? null : 0,
           );

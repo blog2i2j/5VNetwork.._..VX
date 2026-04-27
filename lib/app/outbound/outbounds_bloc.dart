@@ -837,101 +837,108 @@ class OutboundBloc extends Bloc<OutboundEvent, OutboundState> {
       pingMode = _pref.pingMode;
     }
 
-    late final List<Future> futures;
-    if (pingMode == PingMode.Real) {
-      futures = handlersToBeTested
-          .map(
-            (h) => _xApiClient
-                .handlerUsable(HandlerUsableRequest(handler: h.toConfig()))
-                .then((res) {
-                  _handlersUsableTesting.remove(h.id);
-                  final handlers = List<OutboundHandler>.from(state.handlers);
-                  final index = handlers.indexWhere((hh) => hh.id == h.id);
-                  final ok = res.ping > 0;
-                  if (index >= 0) {
-                    handlers[index] = handlers[index].copyWith(
-                      usableTesting: false,
+    const batchSize = 100;
+    for (var i = 0; i < handlersToBeTested.length; i += batchSize) {
+      final end = (i + batchSize < handlersToBeTested.length)
+          ? i + batchSize
+          : handlersToBeTested.length;
+      final batch = handlersToBeTested.sublist(i, end);
+
+      late final List<Future> futures;
+      if (pingMode == PingMode.Real) {
+        futures = batch
+            .map(
+              (h) => _xApiClient
+                  .handlerUsable(HandlerUsableRequest(handler: h.toConfig()))
+                  .then((res) {
+                    _handlersUsableTesting.remove(h.id);
+                    final handlers = List<OutboundHandler>.from(state.handlers);
+                    final index = handlers.indexWhere((hh) => hh.id == h.id);
+                    final ok = res.ping > 0;
+                    if (index >= 0) {
+                      handlers[index] = handlers[index].copyWith(
+                        usableTesting: false,
+                        ok: ok ? 1 : -1,
+                        ping: res.ping,
+                        speed: ok ? null : 0,
+                      );
+                      emit(
+                        state.copyWith(
+                          handlers: _sortHandlers(handlers, state.sortCol),
+                        ),
+                      );
+                    }
+                    _outboundRepo.updateHandler(
+                      h.id,
                       ok: ok ? 1 : -1,
                       ping: res.ping,
-                      countryCode: res.country,
+                      pingTestTime:
+                          DateTime.now().millisecondsSinceEpoch ~/ 1000,
                       speed: ok ? null : 0,
                     );
-                    emit(
-                      state.copyWith(
-                        handlers: _sortHandlers(handlers, state.sortCol),
-                      ),
-                    );
-                  }
-                  print('updateHandler: ${h.id}, ${res.country}, ${res.ip}');
-                  _outboundRepo.updateHandler(
-                    h.id,
+                  })
+                  .catchError((e) {
+                    onError(e, h);
+                  }),
+            )
+            .toList();
+      } else {
+        futures = batch.map((h) async {
+          late final OutboundHandlerConfig config;
+          if (h.config.hasOutbound()) {
+            config = h.config.outbound;
+          } else {
+            config = h.config.chain.handlers.first;
+          }
+          int port = config.port;
+          if (port == 0) {
+            port = config.ports.first.from;
+          }
+
+          late Future<int> f;
+          if (Tm.instance.state == TmStatus.connected) {
+            f = _xController.rttTest(config.address, port);
+          } else {
+            f = _xApiClient.rtt(
+              RttTestRequest(addr: config.address, port: port),
+            );
+          }
+
+          return f
+              .then((res) {
+                _handlersUsableTesting.remove(h.id);
+                final handlers = List<OutboundHandler>.from(state.handlers);
+                final index = handlers.indexWhere((hh) => hh.id == h.id);
+                final ok = res > 0;
+                if (index >= 0) {
+                  handlers[index] = handlers[index].copyWith(
+                    usableTesting: false,
                     ok: ok ? 1 : -1,
-                    ping: res.ping,
-                    serverIp: res.ip,
-                    country: res.country,
-                    pingTestTime: DateTime.now().millisecondsSinceEpoch ~/ 1000,
+                    ping: res,
                     speed: ok ? null : 0,
                   );
-                })
-                .catchError((e) {
-                  onError(e, h);
-                }),
-          )
-          .toList();
-    } else {
-      futures = handlersToBeTested.map((h) async {
-        late final OutboundHandlerConfig config;
-        if (h.config.hasOutbound()) {
-          config = h.config.outbound;
-        } else {
-          config = h.config.chain.handlers.first;
-        }
-        int port = config.port;
-        if (port == 0) {
-          port = config.ports.first.from;
-        }
-
-        late Future<int> f;
-        if (Tm.instance.state == TmStatus.connected) {
-          f = _xController.rttTest(config.address, port);
-        } else {
-          f = _xApiClient.rtt(RttTestRequest(addr: config.address, port: port));
-        }
-
-        return f
-            .then((res) {
-              _handlersUsableTesting.remove(h.id);
-              final handlers = List<OutboundHandler>.from(state.handlers);
-              final index = handlers.indexWhere((hh) => hh.id == h.id);
-              final ok = res > 0;
-              if (index >= 0) {
-                handlers[index] = handlers[index].copyWith(
-                  usableTesting: false,
+                  emit(
+                    state.copyWith(
+                      handlers: _sortHandlers(handlers, state.sortCol),
+                    ),
+                  );
+                }
+                _outboundRepo.updateHandler(
+                  h.id,
                   ok: ok ? 1 : -1,
                   ping: res,
+                  pingTestTime: DateTime.now().millisecondsSinceEpoch ~/ 1000,
                   speed: ok ? null : 0,
                 );
-                emit(
-                  state.copyWith(
-                    handlers: _sortHandlers(handlers, state.sortCol),
-                  ),
-                );
-              }
-              _outboundRepo.updateHandler(
-                h.id,
-                ok: ok ? 1 : -1,
-                ping: res,
-                pingTestTime: DateTime.now().millisecondsSinceEpoch ~/ 1000,
-                speed: ok ? null : 0,
-              );
-            })
-            .catchError((e) {
-              onError(e, h);
-            });
-      }).toList();
-    }
+              })
+              .catchError((e) {
+                onError(e, h);
+              });
+        }).toList();
+      }
 
-    await Future.wait(futures);
+      await Future.wait(futures);
+    }
   }
 
   Future<void> _onSubscriptionDelete(
@@ -1004,7 +1011,80 @@ class OutboundBloc extends Bloc<OutboundEvent, OutboundState> {
     List<OutboundHandler> handlers,
     Emitter<OutboundState> emit,
   ) async {
-    add(StatusTestEvent(handlers: handlers, pingMode: PingMode.Real));
+    final handlersToBeTested = handlers;
+    final newList = List<OutboundHandler>.from(state.handlers);
+    for (var ha in handlersToBeTested) {
+      final index = newList.indexWhere((h) => h.id == ha.id);
+      if (index >= 0) {
+        newList[index] = newList[index].copyWith(usableTesting: true);
+      }
+    }
+    emit(state.copyWith(handlers: newList));
+
+    _handlersUsableTesting.addAll(handlersToBeTested.map((h) => h.id));
+
+    _outboundRepo.updateHandlerFields(
+      handlersToBeTested.map((h) => h.id).toList(),
+      ok: 0,
+    );
+
+    void onError(dynamic e, OutboundHandler h) {
+      _handlersUsableTesting.remove(h.id);
+      final handlers = List<OutboundHandler>.from(state.handlers);
+      final index = handlers.indexWhere((hh) => hh.id == h.id);
+      if (index >= 0) {
+        handlers[index] = handlers[index].copyWith(usableTesting: false, ok: 0);
+        emit(state.copyWith(handlers: _sortHandlers(handlers, state.sortCol)));
+      }
+      _outboundRepo.updateHandler(h.id, ok: 0, serverIp: '', country: '');
+      // reportError(e, StackTrace.current);
+      logger.e('statusTest error', error: e);
+    }
+
+    const batchSize = 100;
+    for (var i = 0; i < handlersToBeTested.length; i += batchSize) {
+      final end = (i + batchSize < handlersToBeTested.length)
+          ? i + batchSize
+          : handlersToBeTested.length;
+      final batch = handlersToBeTested.sublist(i, end);
+
+      late final List<Future> futures;
+      futures = batch
+          .map(
+            (h) => _xApiClient
+                .handlerCountryTest(
+                  HandlerCountryTestRequest(handler: h.toConfig()),
+                )
+                .then((res) {
+                  _handlersUsableTesting.remove(h.id);
+                  final handlers = List<OutboundHandler>.from(state.handlers);
+                  final index = handlers.indexWhere((hh) => hh.id == h.id);
+                  if (index >= 0) {
+                    handlers[index] = handlers[index].copyWith(
+                      usableTesting: false,
+                      ok: 1,
+                      countryCode: res.country,
+                    );
+                    emit(
+                      state.copyWith(
+                        handlers: _sortHandlers(handlers, state.sortCol),
+                      ),
+                    );
+                  }
+                  _outboundRepo.updateHandler(
+                    h.id,
+                    ok: 1,
+                    country: res.country,
+                    serverIp: res.ip,
+                  );
+                })
+                .catchError((e) {
+                  onError(e, h);
+                }),
+          )
+          .toList();
+      await Future.wait(futures);
+    }
   }
 
   void _multiSelect(MultiSelectEvent e, Emitter<OutboundState> emit) {
