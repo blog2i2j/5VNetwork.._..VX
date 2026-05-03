@@ -22,7 +22,7 @@ Future<AppDatabase?> _initDatabase(
   try {
     final path = await getDbPath(pref);
     final db = AppDatabase(path: path, interceptor: interceptor);
-
+    await db.customSelect('SELECT 1').get();
     // if (Platform.isAndroid) {
     //   // PRAGMA quick_check returns one row "ok" if healthy,
     //   // or multiple rows describing each corruption found.
