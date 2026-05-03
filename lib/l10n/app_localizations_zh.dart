@@ -327,6 +327,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get subscriptionAddress => '订阅地址';
 
   @override
+  String get subscriptionShareLinkQueryExtra => '附加参数';
+
+  @override
+  String get subscriptionShareLinkQueryExtraHint => 'tx=10&foo=1&sig=a1b2';
+
+  @override
+  String get subscriptionShareLinkQueryExtraHelper => '在解析前追加到每个节点的订阅链接。';
+
+  @override
+  String get subscriptionShareLinkQueryExtraInvalid => '请填写有效的 JSON 对象或查询字符串（例如 key=value&key2=value2）';
+
+  @override
   String get empty => '空';
 
   @override
@@ -791,7 +803,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get startFailedReasonTunNeedAdmin => 'Tun需要管理员身份。请以管理员身份重新运行VX或更换入站模式。';
+  String get startFailedReasonTunNeedAdmin => 'TUN入站模式需要以管理员身份运行VX或者安装Service（在设置页面安装）';
 
   @override
   String get startFailedReasonNoNode => '无节点';
@@ -812,6 +824,26 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get tunNeedAdmin => 'TUN需要以管理员身份运行';
+
+  @override
+  String get windowsServiceRequiresAdmin => '此操作需要管理员权限。请以管理员身份重启 VX 后重试。';
+
+  @override
+  String windowsServiceInstallFailed(String error) {
+    return 'VX Service 安装失败：$error';
+  }
+
+  @override
+  String get windowsServiceInstalled => 'VX Service 已安装';
+
+  @override
+  String get windowsServiceRemoved => 'VX Service 已移除';
+
+  @override
+  String get windowsServiceInstall => '安装 VX Service';
+
+  @override
+  String get windowsServiceRemove => '移除 VX Service';
 
   @override
   String decodeResult(num value1, num value2) {
@@ -1624,6 +1656,60 @@ class AppLocalizationsZh extends AppLocalizations {
   String get randomPorts => '随机端口';
 
   @override
+  String get outboundPortStrategyRandomAllPortsSameTime => '随机（所有端口同时使用）';
+
+  @override
+  String get outboundNameCannotBeDirectOrDns => '名称不能为 \"direct\" 或 \"dns\"';
+
+  @override
+  String get outboundServerAddressCannotBeEmpty => '服务器地址不能为空';
+
+  @override
+  String get outboundPortCannotBeEmpty => '端口不能为空';
+
+  @override
+  String get outboundPortHintExample => '443,444,1080-1090';
+
+  @override
+  String get outboundPortSelectStrategy => '端口选择策略';
+
+  @override
+  String get outboundPortStrategyOneSwitchByInterval => '单个（按间隔切换端口）';
+
+  @override
+  String get outboundSetIntervalOrMinMax => '请设置间隔，或最小/最大间隔';
+
+  @override
+  String get outboundPortSwitchIntervalSeconds => '间隔（秒）';
+
+  @override
+  String get outboundPortSwitchIntervalHelper => '用于固定切换间隔';
+
+  @override
+  String get outboundRequiredWhenIntervalEmpty => '未填写间隔时必填';
+
+  @override
+  String get outboundMinIntervalMustBeLeqMax => '必须 ≤ 最大间隔';
+
+  @override
+  String get outboundMinIntervalSeconds => '最小间隔（秒）';
+
+  @override
+  String get outboundMaxIntervalMustBeGeqMin => '必须 ≥ 最小间隔';
+
+  @override
+  String get outboundMaxIntervalSeconds => '最大间隔（秒）';
+
+  @override
+  String get outboundMux => 'Mux';
+
+  @override
+  String get outboundUdpOverTcp => 'UDP over TCP';
+
+  @override
+  String get outboundStream => '传输流';
+
+  @override
   String get staticPorts => '固定端口';
 
   @override
@@ -1667,6 +1753,47 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get selectorSetting => '选择器设定';
+
+  @override
+  String selectorTestFieldsTitle(String tag) {
+    return '编辑 $tag';
+  }
+
+  @override
+  String get selectorTestSpeedTestSizeLabel => '测速数据量';
+
+  @override
+  String get selectorTestByteSuffix => '字节';
+
+  @override
+  String get selectorTestSpeedTestSizeHelper => '1000000 字节 = 1 MB。测速时，使用多少数据。越多，结果越准确，但是消耗高。';
+
+  @override
+  String get selectorTestSpeedTestIntervalLabel => '测速间隔';
+
+  @override
+  String get selectorTestMinutesSuffix => '分钟';
+
+  @override
+  String get selectorTestSpeedTestIntervalHelper => '多久测一次速度';
+
+  @override
+  String get selectorTestPingTestIntervalLabel => '延迟测试间隔';
+
+  @override
+  String get selectorTestPingTestIntervalHelper => '多久测一次延迟';
+
+  @override
+  String get selectorTestUnusableTestIntervalLabel => '不可用节点复测间隔';
+
+  @override
+  String get selectorTestUnusableTestIntervalHelper => '多久对筛选出的不可用节点再次检测是否恢复';
+
+  @override
+  String get selectorTestMustBeNonNegativeInteger => '必须为非负整数';
+
+  @override
+  String get selectorTestMustBeAtMostUint32Max => '不能超过 4294967295';
 
   @override
   String get serverKey => '服务器/密钥';
@@ -2120,6 +2247,20 @@ class AppLocalizationsZh extends AppLocalizations {
   String get realtimeLatencyDesc => '观测到的此节点的实时延迟：从开始请求到收到响应所花费的时间。越低越好';
 
   @override
+  String get realtimeSpeedSamplingInterval => '实时速率采样间隔';
+
+  @override
+  String realtimeSpeedSamplingSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 秒',
+      one: '1 秒',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get download => '下载';
 
   @override
@@ -2350,43 +2491,123 @@ class AppLocalizationsZh extends AppLocalizations {
   String get resetCompletedMessage => '数据库和偏好设置已重置。请重启 VX 继续使用。';
 
   @override
+  String get repairDbSchemaTitle => '修复数据库结构';
+
+  @override
+  String get repairDbSchemaAction => '修复数据库结构';
+
+  @override
+  String get repairDbSchemaSuccess => '数据库结构修复成功';
+
+  @override
+  String repairDbSchemaFailed(String error) {
+    return '数据库结构修复失败: $error';
+  }
+
+  @override
   String resetFailed(String error) {
     return '重置失败: $error';
   }
 
   @override
-  String get policyTimeout => 'Policy Timeout';
+  String get policyTimeout => '策略超时';
 
   @override
-  String get policyTimeoutNoTimeoutHint => '0 means no timeout';
+  String get policyTimeoutNoTimeoutHint => '0 表示不超时';
 
   @override
-  String get policyTcpIdleTimeout => 'TCP Idle Timeout';
+  String get policyTcpIdleTimeout => 'TCP 空闲超时';
 
   @override
-  String get policyTcpIdleTimeoutDesc => 'If uplink or downlink data is absent during this period, the connection will be closed.';
+  String get policyTcpIdleTimeoutDesc => '若在此期间上行或下行均无数据，将关闭连接。';
 
   @override
-  String get policyUdpIdleTimeout => 'UDP Idle Timeout';
+  String get policyUdpIdleTimeout => 'UDP 空闲超时';
 
   @override
-  String get policyUdpIdleTimeoutDesc => 'If no uplink data is received during this period, the connection will be closed.';
+  String get policyUdpIdleTimeoutDesc => '若在此期间未收到上行数据，将关闭连接。';
 
   @override
-  String get policyUpLinkOnlyTimeout => 'UpLink Only Timeout';
+  String get policyUpLinkOnlyTimeout => '仅上行空闲超时';
 
   @override
-  String get policyUpLinkOnlyTimeoutDesc => 'If a TCP connection\'s downlink stream is done, the idle timeout switches to this value.';
+  String get policyUpLinkOnlyTimeoutDesc => '当 TCP 连接的下行数据流结束时，空闲超时切换为此值。';
 
   @override
-  String get policyDownLinkOnlyTimeout => 'DownLink Only Timeout';
+  String get policyDownLinkOnlyTimeout => '仅下行空闲超时';
 
   @override
-  String get policyDownLinkOnlyTimeoutDesc => 'If a TCP connection\'s uplink stream is done, the idle timeout switches to this value.';
+  String get policyDownLinkOnlyTimeoutDesc => '当 TCP 连接的上行数据流结束时，空闲超时切换为此值。';
 
   @override
   String get tutorial => '教程';
 
   @override
   String get selectGroup => '选择分组';
+
+  @override
+  String get addConcurrentDnsServer => '添加并发DNS服务器';
+
+  @override
+  String get addSerialDnsServer => '添加串行DNS服务器';
+
+  @override
+  String get concurrentDnsServerType => '并发DNS服务器';
+
+  @override
+  String get serialDnsServerType => '串行DNS服务器';
+
+  @override
+  String get useSystemDnsResolver => '使用系统DNS解析器';
+
+  @override
+  String get alwaysReturnEmptyDnsAnswer => '总是返回空DNS结果';
+
+  @override
+  String get dnsPool => '地址池';
+
+  @override
+  String get dnsServers => 'DNS服务器';
+
+  @override
+  String get invalidInterval => '无效的间隔';
+
+  @override
+  String get addresses => '地址列表';
+
+  @override
+  String get clientIp => '客户端IP';
+
+  @override
+  String get lruSize => 'LRU大小';
+
+  @override
+  String get useGoRuntimeDnsResolver => '使用 Go 运行时 DNS 解析器。';
+
+  @override
+  String get alwaysReturnEmptyDnsResponse => 'DNS 查询总是返回空响应。';
+
+  @override
+  String get dnsTypeFake => 'Fake';
+
+  @override
+  String get dnsTypePlain => 'UDP/TCP';
+
+  @override
+  String get dnsTypeDoh => 'HTTPS';
+
+  @override
+  String get dnsTypeTls => 'TLS';
+
+  @override
+  String get dnsTypeQuic => 'QUIC';
+
+  @override
+  String get dnsTypeGo => 'Go';
+
+  @override
+  String get dnsTypeEmpty => 'Empty';
+
+  @override
+  String get reservedDnsServerName => 'DNS 服务器名称 \"hijack\" 为保留名';
 }

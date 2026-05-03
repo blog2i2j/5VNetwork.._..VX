@@ -175,6 +175,9 @@ class XConfigHelper {
   Future<o.OutboundConfig> _getOutboundConfig(RouterConfig routerConfig) async {
     final config = o.OutboundConfig(
       hysteriaRejectQuic: _persistentStateRepo.rejectQuicHysteria,
+      handlerLinkStats: true,
+      handlerMeter: true,
+      totalCounter: true,
       handlers: [
         o.HandlerConfig(
           outbound: o.OutboundHandlerConfig(
@@ -253,8 +256,6 @@ class XConfigHelper {
       sniff: _persistentStateRepo.sniff,
       fallbackTimeout: _persistentStateRepo.fallbackTimeout,
       sessionStats: true,
-      handlerLinkStats: true,
-      handlerMeter: true,
     );
     return config;
   }
@@ -397,6 +398,9 @@ class XConfigHelper {
 
   static const _dnsTag = 'dns';
   static const _tunTag = 'tun';
+  static final selectorNotOkayException = ConfigException(
+    'Free users can only use manual single node mode',
+  );
 
   Future<SelectorsConfig> getSelectorsConfig(RouterConfig routerConfig) async {
     if (!_authBloc.state.pro) {
@@ -481,44 +485,86 @@ class XConfigHelper {
 
     late final DnsConfig config;
     config = DnsConfig(
-      enableFakeDns: _persistentStateRepo.fakeDns,
+      dnsHijack: DnsHijackConfig(enableFakeDns: _persistentStateRepo.fakeDns),
+      requestDomainResolver: Resolver(dnsServers: ['hijack']),
       records: await (_databaseProvider.database.select(
         _databaseProvider.database.dnsRecords,
       )).get().then((value) => value.map((e) => e.dnsRecord).toList()),
+      serialDnsServers: [],
+      concurrentDnsServers: []
     );
-    if (_persistentStateRepo.inboundMode == InboundMode.tun ||
-        _persistentStateRepo.inboundMode == InboundMode.wfp) {
-      final customRouteMode = await _databaseProvider
-          .database
-          .managers
-          .customRouteModes
-          .filter((e) => e.name.equals(routeMode))
-          .getSingle();
-      config.dnsRules.addAll(customRouteMode.dnsRules.rules);
-      for (final rule in customRouteMode.dnsRules.rules) {
-        // the dns server is not in the config, add it
-        if (!config.dnsServers.any((e) => e.name == rule.dnsServerName)) {
-          final dnsServer = await _databaseProvider.database.managers.dnsServers
-              .filter((e) => e.name.equals(rule.dnsServerName))
-              .getSingleOrNull();
-          if (dnsServer == null) {
-            throw ConfigException('DNS server ${rule.dnsServerName} not found');
-          }
-          config.dnsServers.add(dnsServer.dnsServer);
+
+    final customRouteMode = await _databaseProvider
+        .database
+        .managers
+        .customRouteModes
+        .filter((e) => e.name.equals(routeMode))
+        .getSingle();
+    config.dnsHijack.dnsRules.addAll(customRouteMode.dnsRules.rules);
+    for (final rule in customRouteMode.dnsRules.rules) {
+      // the dns server is not in the config, add it
+      if (!config.dnsServers.any((e) => e.name == rule.dnsServerName)) {
+        final dnsServer = await _databaseProvider.database.managers.dnsServers
+            .filter((e) => e.name.equals(rule.dnsServerName))
+            .getSingleOrNull();
+        if (dnsServer == null) {
+          throw ConfigException('DNS server ${rule.dnsServerName} not found');
+        }
+        if (dnsServer.dnsServer != null) {
+          config.dnsServers.add(dnsServer.dnsServer!);
+        } else if (dnsServer.concurrentDnsServer != null) {
+          config.concurrentDnsServers.add(dnsServer.concurrentDnsServer!);
+        } else if (dnsServer.serialDnsServer != null) {
+          config.serialDnsServers.add(dnsServer.serialDnsServer!);
         }
       }
-      // internal dns servers
-      config.internalDnsServers.addAll(customRouteMode.internalDnsServers);
-      for (final server in customRouteMode.internalDnsServers) {
-        if (!config.dnsServers.any((e) => e.name == server)) {
-          final dnsServer = await _databaseProvider.database.managers.dnsServers
-              .filter((e) => e.name.equals(server))
-              .getSingleOrNull();
-          if (dnsServer == null) {
-            throw ConfigException('DNS server $server not found');
-          }
-          config.dnsServers.add(dnsServer.dnsServer);
+    }
+
+    // internal dns servers
+    config.internalResolver = Resolver(
+      dnsServers: [...customRouteMode.internalDnsServers],
+    );
+    for (final server in customRouteMode.internalDnsServers) {
+      if (!config.dnsServers.any((e) => e.name == server)) {
+        final dnsServer = await _databaseProvider.database.managers.dnsServers
+            .filter((e) => e.name.equals(server))
+            .getSingleOrNull();
+        if (dnsServer == null) {
+          throw ConfigException('DNS server $server not found');
         }
+        if (dnsServer.dnsServer != null) {
+          config.dnsServers.add(dnsServer.dnsServer!);
+        } else if (dnsServer.concurrentDnsServer != null) {
+          config.concurrentDnsServers.add(dnsServer.concurrentDnsServer!);
+        } else if (dnsServer.serialDnsServer != null) {
+          config.serialDnsServers.add(dnsServer.serialDnsServer!);
+        }
+      }
+    }
+
+    Future<void> ensureDnsServerByName(String serverName) async {
+      if (config.dnsServers.any((e) => e.name == serverName)) {
+        return;
+      }
+      final dnsServer = await _databaseProvider.database.managers.dnsServers
+          .filter((e) => e.name.equals(serverName))
+          .getSingleOrNull();
+      if (dnsServer == null) {
+        throw ConfigException('DNS server $serverName not found');
+      }
+      if (dnsServer.dnsServer != null) {
+        config.dnsServers.add(dnsServer.dnsServer!);
+      }
+    }
+
+    for (final concurrent in config.concurrentDnsServers) {
+      for (final name in concurrent.dnsServers) {
+        await ensureDnsServerByName(name);
+      }
+    }
+    for (final serial in config.serialDnsServers) {
+      for (final name in serial.dnsServers) {
+        await ensureDnsServerByName(name);
       }
     }
     final dnsRecords = await (_databaseProvider.database.select(
@@ -532,7 +578,6 @@ class XConfigHelper {
     DnsConfig dnsConfig,
   ) async {
     late final RouterConfig routerConfig;
-    GreatDomainSetConfig? proxyDnsDomainSet;
     late final GeoConfig geoConfig;
 
     final mode = _persistentStateRepo.routingMode;
@@ -865,7 +910,7 @@ class XConfigHelper {
     }
 
     // dns rules
-    for (final dnsRule in dnsConfig.dnsRules) {
+    for (final dnsRule in dnsConfig.dnsHijack.dnsRules) {
       for (final domainTag in dnsRule.domainTags) {
         await prepareDomainSet(domainTag);
       }

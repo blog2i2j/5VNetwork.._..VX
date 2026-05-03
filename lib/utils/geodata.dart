@@ -88,71 +88,76 @@ class GeoDataHelper {
   }
 
   Future<void> makeGeoDataAvailable({bool update = false}) async {
-    logger.d('makeGeoDataAvailable');
-    // check if there is geo data
-    final dir = Directory(resouceDirPath);
-    final geoSiteFile = File(join(dir.path, 'geoip.dat'));
-    final geoIpFile = File(join(dir.path, 'geosite.dat'));
-    if (!geoSiteFile.existsSync() || !geoIpFile.existsSync() || update) {
-      await downloadAndProcessGeo();
-    }
-    // download all clash rule files and clean files that are not in the urls
-    final clashUrls = <String>{};
-    final geoUrls = <String>{};
-    await databaseHelper.getAtomicDomainSets().then((values) async {
-      for (final set in values) {
-        clashUrls.addAll(set.clashRuleUrls ?? []);
-        if (set.geoUrl != null && set.geoUrl!.isNotEmpty) {
-          geoUrls.add(set.geoUrl!);
+    try {
+      logger.d('makeGeoDataAvailable');
+      // check if there is geo data
+      final dir = Directory(resouceDirPath);
+      final geoSiteFile = File(join(dir.path, 'geoip.dat'));
+      final geoIpFile = File(join(dir.path, 'geosite.dat'));
+      if (!geoSiteFile.existsSync() || !geoIpFile.existsSync() || update) {
+        await downloadAndProcessGeo();
+      }
+      // download all clash rule files and clean files that are not in the urls
+      final clashUrls = <String>{};
+      final geoUrls = <String>{};
+      await databaseHelper.getAtomicDomainSets().then((values) async {
+        for (final set in values) {
+          clashUrls.addAll(set.clashRuleUrls ?? []);
+          if (set.geoUrl != null && set.geoUrl!.isNotEmpty) {
+            geoUrls.add(set.geoUrl!);
+          }
+        }
+      });
+      await databaseHelper.getAppSets().then((values) async {
+        for (final set in values) {
+          clashUrls.addAll(set.clashRuleUrls ?? []);
+        }
+      });
+      await databaseHelper.getAtomicIpSets().then((values) async {
+        for (final set in values) {
+          clashUrls.addAll(set.clashRuleUrls ?? []);
+          if (set.geoUrl != null && set.geoUrl!.isNotEmpty) {
+            geoUrls.add(set.geoUrl!);
+          }
+        }
+      });
+      final futures = <Future>[];
+      for (final url in clashUrls) {
+        final path = await getClashRulesPath(url);
+        if (!File(path).existsSync() || update) {
+          futures.add(downloader.download(url, path));
         }
       }
-    });
-    await databaseHelper.getAppSets().then((values) async {
-      for (final set in values) {
-        clashUrls.addAll(set.clashRuleUrls ?? []);
-      }
-    });
-    await databaseHelper.getAtomicIpSets().then((values) async {
-      for (final set in values) {
-        clashUrls.addAll(set.clashRuleUrls ?? []);
-        if (set.geoUrl != null && set.geoUrl!.isNotEmpty) {
-          geoUrls.add(set.geoUrl!);
+      for (final url in geoUrls) {
+        final path = await getGeoUrlPath(url);
+        if (!File(path).existsSync() || update) {
+          futures.add(downloader.download(url, path));
         }
       }
-    });
-    final futures = <Future>[];
-    for (final url in clashUrls) {
-      final path = await getClashRulesPath(url);
-      if (!File(path).existsSync() || update) {
-        futures.add(downloader.download(url, path));
+      await Future.wait(futures);
+      // clean files that are not in the urls
+      final paths = <String>{};
+      for (final url in clashUrls) {
+        paths.add(await getClashRulesPath(url));
       }
-    }
-    for (final url in geoUrls) {
-      final path = await getGeoUrlPath(url);
-      if (!File(path).existsSync() || update) {
-        futures.add(downloader.download(url, path));
+      for (final url in geoUrls) {
+        paths.add(await getGeoUrlPath(url));
       }
-    }
-    await Future.wait(futures);
-    // clean files that are not in the urls
-    final paths = <String>{};
-    for (final url in clashUrls) {
-      paths.add(await getClashRulesPath(url));
-    }
-    for (final url in geoUrls) {
-      paths.add(await getGeoUrlPath(url));
-    }
-    for (final file in (await getClashRulesDir()).listSync()) {
-      if (!paths.contains(file.path)) {
-        file.deleteSync();
+      for (final file in (await getClashRulesDir()).listSync()) {
+        if (!paths.contains(file.path)) {
+          file.deleteSync();
+        }
       }
-    }
-    for (final file in (await getGeoDir()).listSync()) {
-      if (!paths.contains(file.path)) {
-        file.deleteSync();
+      for (final file in (await getGeoDir()).listSync()) {
+        if (!paths.contains(file.path)) {
+          file.deleteSync();
+        }
       }
+      pref.setLastGeoUpdate(DateTime.now());
+    } catch (e) {
+      logger.e('makeGeoDataAvailable error', error: e);
+      // await reportError(e, StackTrace.current);
     }
-    pref.setLastGeoUpdate(DateTime.now());
   }
 
   /// Start auto-update for geo files based on user preferences

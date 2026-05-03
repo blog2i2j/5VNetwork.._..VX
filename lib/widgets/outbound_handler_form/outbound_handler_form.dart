@@ -124,9 +124,13 @@ class OutboundHandlerFormState extends State<OutboundHandlerForm>
   final _nameController = TextEditingController();
   final _serverAddress = TextEditingController();
   final _port = TextEditingController();
+  final _onePortIntervalController = TextEditingController();
+  final _onePortMinIntervalController = TextEditingController();
+  final _onePortMaxIntervalController = TextEditingController();
   final _muxConcurrencyController = TextEditingController();
   final _muxConnectionController = TextEditingController();
   bool _enableMux = false;
+  _PortSelectStrategyUi _portSelectStrategy = _PortSelectStrategyUi.random;
 
   bool _enableUdpOverTcp = false;
   final _transportInputGlobalKey = GlobalKey<_TransportInputState>();
@@ -138,6 +142,28 @@ class OutboundHandlerFormState extends State<OutboundHandlerForm>
     _nameController.text = widget.config?.tag ?? '';
     _serverAddress.text = widget.config?.address ?? '';
     _port.text = portString(widget.config ?? OutboundHandlerConfig());
+    _port.addListener(_onPortChanged);
+    if (widget.config != null) {
+      switch (widget.config!.whichPortSelectStrategy()) {
+        case OutboundHandlerConfig_PortSelectStrategy.one:
+          _portSelectStrategy = _PortSelectStrategyUi.one;
+          final one = widget.config!.one;
+          if (one.interval != 0) {
+            _onePortIntervalController.text = one.interval.toString();
+          }
+          if (one.minInterval != 0) {
+            _onePortMinIntervalController.text = one.minInterval.toString();
+          }
+          if (one.maxInterval != 0) {
+            _onePortMaxIntervalController.text = one.maxInterval.toString();
+          }
+          break;
+        case OutboundHandlerConfig_PortSelectStrategy.random:
+        case OutboundHandlerConfig_PortSelectStrategy.notSet:
+          _portSelectStrategy = _PortSelectStrategyUi.random;
+          break;
+      }
+    }
     // if (widget.handler?.config.transport != null) {
     //   _transportConfig.mergeFromMessage(widget.handler!.config.transport);
     // }
@@ -218,6 +244,13 @@ class OutboundHandlerFormState extends State<OutboundHandlerForm>
       // _transportConfig.clear();
     }
     final wireguard = _selectedProtocolLabel == ProxyProtocolLabel.wireguard;
+    final hasMultiplePorts = _hasMultiplePorts;
+    final onePortStrategy = _portSelectStrategy == _PortSelectStrategyUi.one;
+    final onePortInterval = int.tryParse(_onePortIntervalController.text) ?? 0;
+    final onePortMinInterval =
+        int.tryParse(_onePortMinIntervalController.text) ?? 0;
+    final onePortMaxInterval =
+        int.tryParse(_onePortMaxIntervalController.text) ?? 0;
     return OutboundHandlerConfig(
       tag: _nameController.text,
       address: wireguard ? '' : _serverAddress.text,
@@ -236,6 +269,16 @@ class OutboundHandlerFormState extends State<OutboundHandlerForm>
               maxConnection: int.parse(_muxConnectionController.text),
             )
           : null,
+      random: (!wireguard && hasMultiplePorts && !onePortStrategy)
+          ? RandomPortSelectStrategy()
+          : null,
+      one: (!wireguard && hasMultiplePorts && onePortStrategy)
+          ? OnePortSelectStrategy(
+              interval: onePortInterval,
+              minInterval: onePortMinInterval,
+              maxInterval: onePortMaxInterval,
+            )
+          : null,
     );
   }
 
@@ -243,10 +286,35 @@ class OutboundHandlerFormState extends State<OutboundHandlerForm>
   void dispose() {
     _nameController.dispose();
     _serverAddress.dispose();
+    _port.removeListener(_onPortChanged);
     _muxConcurrencyController.dispose();
     _muxConnectionController.dispose();
     _port.dispose();
+    _onePortIntervalController.dispose();
+    _onePortMinIntervalController.dispose();
+    _onePortMaxIntervalController.dispose();
     super.dispose();
+  }
+
+  void _onPortChanged() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  bool get _hasMultiplePorts {
+    final ports = tryParsePorts(_port.text.trim());
+    if (ports == null) {
+      return false;
+    }
+    var totalPortCount = 0;
+    for (final range in ports) {
+      totalPortCount += (range.to - range.from + 1);
+      if (totalPortCount > 1) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @override
@@ -258,7 +326,9 @@ class OutboundHandlerFormState extends State<OutboundHandlerForm>
       validator: (value) {
         if (value != null && value.isNotEmpty) {
           if (value == directEN || value == 'dns') {
-            return 'Name cannot be "direct" or "dns"';
+            return AppLocalizations.of(
+              context,
+            )!.outboundNameCannotBeDirectOrDns;
           }
         }
         return null;
@@ -323,7 +393,9 @@ class OutboundHandlerFormState extends State<OutboundHandlerForm>
                 controller: _serverAddress,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Server address cannot be empty';
+                    return AppLocalizations.of(
+                      context,
+                    )!.outboundServerAddressCannotBeEmpty;
                   }
                   _serverAddress.text = value;
                   return null;
@@ -338,7 +410,9 @@ class OutboundHandlerFormState extends State<OutboundHandlerForm>
                 controller: _port,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Port cannot be empty';
+                    return AppLocalizations.of(
+                      context,
+                    )!.outboundPortCannotBeEmpty;
                   }
                   if (int.tryParse(value) != null) {
                     return null;
@@ -346,18 +420,180 @@ class OutboundHandlerFormState extends State<OutboundHandlerForm>
                   if (tryParsePorts(value) != null) {
                     return null;
                   }
-                  return 'Invalid port';
+                  return AppLocalizations.of(context)!.invalidPort;
                 },
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context)!.port,
-                  hintText: '443',
+                  hintText: AppLocalizations.of(
+                    context,
+                  )!.outboundPortHintExample,
                 ).applyDefaults(Theme.of(context).inputDecorationTheme),
               ),
               const Gap(10),
+              if (_hasMultiplePorts) ...[
+                DropdownMenu<_PortSelectStrategyUi>(
+                  initialSelection: _portSelectStrategy,
+                  label: Text(
+                    AppLocalizations.of(context)!.outboundPortSelectStrategy,
+                  ),
+                  onSelected: (value) {
+                    if (value == null) {
+                      return;
+                    }
+                    setState(() {
+                      _portSelectStrategy = value;
+                    });
+                  },
+                  dropdownMenuEntries: [
+                    DropdownMenuEntry(
+                      value: _PortSelectStrategyUi.random,
+                      label: AppLocalizations.of(
+                        context,
+                      )!.outboundPortStrategyRandomAllPortsSameTime,
+                    ),
+                    DropdownMenuEntry(
+                      value: _PortSelectStrategyUi.one,
+                      label: AppLocalizations.of(
+                        context,
+                      )!.outboundPortStrategyOneSwitchByInterval,
+                    ),
+                  ],
+                ),
+                const Gap(8),
+                if (_portSelectStrategy == _PortSelectStrategyUi.one)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: TextFormField(
+                      controller: _onePortIntervalController,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (!_hasMultiplePorts ||
+                            _portSelectStrategy != _PortSelectStrategyUi.one) {
+                          return null;
+                        }
+                        final interval = value?.trim() ?? '';
+                        final min = _onePortMinIntervalController.text.trim();
+                        final max = _onePortMaxIntervalController.text.trim();
+                        if (interval.isEmpty && (min.isEmpty || max.isEmpty)) {
+                          return AppLocalizations.of(
+                            context,
+                          )!.outboundSetIntervalOrMinMax;
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(
+                          context,
+                        )!.outboundPortSwitchIntervalSeconds,
+                        helperText: AppLocalizations.of(
+                          context,
+                        )!.outboundPortSwitchIntervalHelper,
+                      ),
+                    ),
+                  ),
+                if (_portSelectStrategy == _PortSelectStrategyUi.one)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            controller: _onePortMinIntervalController,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
+                            keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if (!_hasMultiplePorts ||
+                                  _portSelectStrategy !=
+                                      _PortSelectStrategyUi.one) {
+                                return null;
+                              }
+                              final interval = _onePortIntervalController.text
+                                  .trim();
+                              if (interval.isNotEmpty) {
+                                return null;
+                              }
+                              if ((value?.trim() ?? '').isEmpty) {
+                                return AppLocalizations.of(
+                                  context,
+                                )!.outboundRequiredWhenIntervalEmpty;
+                              }
+                              final min = int.tryParse(value!.trim());
+                              final max = int.tryParse(
+                                _onePortMaxIntervalController.text.trim(),
+                              );
+                              if (min == null || max == null) {
+                                return null;
+                              }
+                              if (min > max) {
+                                return AppLocalizations.of(
+                                  context,
+                                )!.outboundMinIntervalMustBeLeqMax;
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              labelText: AppLocalizations.of(
+                                context,
+                              )!.outboundMinIntervalSeconds,
+                            ),
+                          ),
+                        ),
+                        const Gap(10),
+                        Expanded(
+                          child: TextFormField(
+                            controller: _onePortMaxIntervalController,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
+                            keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if (!_hasMultiplePorts ||
+                                  _portSelectStrategy !=
+                                      _PortSelectStrategyUi.one) {
+                                return null;
+                              }
+                              final interval = _onePortIntervalController.text
+                                  .trim();
+                              if (interval.isNotEmpty) {
+                                return null;
+                              }
+                              if ((value?.trim() ?? '').isEmpty) {
+                                return AppLocalizations.of(
+                                  context,
+                                )!.outboundRequiredWhenIntervalEmpty;
+                              }
+                              final max = int.tryParse(value!.trim());
+                              final min = int.tryParse(
+                                _onePortMinIntervalController.text.trim(),
+                              );
+                              if (min == null || max == null) {
+                                return null;
+                              }
+                              if (max < min) {
+                                return AppLocalizations.of(
+                                  context,
+                                )!.outboundMaxIntervalMustBeGeqMin;
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              labelText: AppLocalizations.of(
+                                context,
+                              )!.outboundMaxIntervalSeconds,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
             ],
             DropdownMenu(
-              label: const Text('Domain Strategy'),
+              label: Text(AppLocalizations.of(context)!.domainStrategy),
               initialSelection: _domainStrategy,
               onSelected: (value) {
                 setState(() {
@@ -385,7 +621,7 @@ class OutboundHandlerFormState extends State<OutboundHandlerForm>
                 children: [
                   SwitchListTile(
                     title: Text(
-                      'Mux',
+                      AppLocalizations.of(context)!.outboundMux,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     value: _enableMux,
@@ -416,7 +652,9 @@ class OutboundHandlerFormState extends State<OutboundHandlerForm>
                                 return null;
                               },
                               decoration: InputDecoration(
-                                labelText: 'Max Concurrency',
+                                labelText: AppLocalizations.of(
+                                  context,
+                                )!.maxConcurrency,
                                 helperText: AppLocalizations.of(
                                   context,
                                 )!.maxConcurrency,
@@ -440,7 +678,9 @@ class OutboundHandlerFormState extends State<OutboundHandlerForm>
                               },
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
-                                labelText: 'Max Connection',
+                                labelText: AppLocalizations.of(
+                                  context,
+                                )!.maxConnection,
                                 helperText: AppLocalizations.of(
                                   context,
                                 )!.maxConnection,
@@ -459,7 +699,7 @@ class OutboundHandlerFormState extends State<OutboundHandlerForm>
                       _selectedProtocolLabel == ProxyProtocolLabel.vless)
                     SwitchListTile(
                       title: Text(
-                        'UDP over TCP',
+                        AppLocalizations.of(context)!.outboundUdpOverTcp,
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       subtitle: Text(
@@ -509,7 +749,7 @@ class OutboundHandlerFormState extends State<OutboundHandlerForm>
                       const Expanded(child: Divider(height: 1)),
                       const Gap(10),
                       Text(
-                        'Stream',
+                        AppLocalizations.of(context)!.outboundStream,
                         style: Theme.of(context).textTheme.titleSmall,
                       ),
                       const Gap(10),
@@ -550,3 +790,5 @@ mixin OutboundHandlerConfigGetter {
 mixin TransportConfigGetter {
   TransportConfig? get transportConfig;
 }
+
+enum _PortSelectStrategyUi { random, one }

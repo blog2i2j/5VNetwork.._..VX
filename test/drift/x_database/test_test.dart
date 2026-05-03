@@ -42,7 +42,7 @@ void main() {
   });
 
   test('generate clean.db', () async {
-    const outputPath = 'clean.db'; // will be created in project root
+    const outputPath = 'assets/clean.db'; // will be created in project root
     final file = File(outputPath);
     if (await file.exists()) {
       await file.delete();

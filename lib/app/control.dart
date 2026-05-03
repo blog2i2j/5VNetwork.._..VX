@@ -25,6 +25,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vx/app/blocs/inbound.dart';
 import 'package:vx/app/home/home.dart';
 import 'package:vx/app/routing/default.dart';
+import 'package:vx/app/routing/selector_test_fields_form.dart';
 import 'package:vx/app/x_controller.dart';
 import 'package:vx/pref_helper.dart';
 import 'package:vx/utils/logger.dart';
@@ -213,7 +214,7 @@ class Inbound extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final disableTun = Platform.isWindows && !isRunningAsAdmin && isStore;
+    final disableTun = Platform.isWindows && !isRunningAsAdmin && isWinStore;
     return Card(
       elevation: 0,
       color: Theme.of(context).colorScheme.surfaceContainer,
@@ -304,7 +305,7 @@ class ProxySelector extends StatelessWidget {
                   child: IgnorePointer(
                     child: home
                         ? const ProxySelectorHome()
-                        : const DefaultProxySelectorControl(),
+                        : const DefaultProxySelectorControl(showEdit: false),
                   ),
                 ),
                 const Positioned(
@@ -406,36 +407,85 @@ class DefaultProxySelector extends StatelessWidget {
   }
 }
 
-class DefaultProxySelectorControl extends StatelessWidget {
-  const DefaultProxySelectorControl({super.key, this.showName = true});
+class DefaultProxySelectorControl extends StatefulWidget {
+  const DefaultProxySelectorControl({
+    super.key,
+    this.showName = true,
+    this.showEdit = true,
+  });
 
   final bool showName;
+  final bool showEdit;
+
+  @override
+  State<DefaultProxySelectorControl> createState() =>
+      _DefaultProxySelectorControlState();
+}
+
+class _DefaultProxySelectorControlState
+    extends State<DefaultProxySelectorControl> {
+  Future<void> _editDefaultProxySelector() async {
+    final state = context.read<ProxySelectorBloc>().state;
+    final config = state.autoNodeSetting;
+    if (config == null) return;
+    final edited = await showSelectorTestFieldsForm(context, config);
+    if (edited == null || !mounted) return;
+    await context.read<SelectorRepo>().updateSelector(edited);
+    await context.read<XController>().selectorSelectStrategyOrLandhandlerChange(
+      edited,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+
     return Card(
       elevation: 0,
       color: Theme.of(context).colorScheme.surfaceContainer,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (showName)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 5),
-                child: Text(
-                  AppLocalizations.of(context)!.proxy,
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.primary,
+      child: Stack(
+        children: [
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (widget.showName)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: Text(
+                      AppLocalizations.of(context)!.proxy,
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
                   ),
+                const DefaultProxySelector(),
+              ],
+            ),
+          ),
+          if (widget.showEdit)
+            Positioned(
+              right: 5,
+              top: 5,
+              child: MenuAnchor(
+                menuChildren: [
+                  MenuItemButton(
+                    leadingIcon: const Icon(Icons.edit_outlined),
+                    onPressed: _editDefaultProxySelector,
+                    child: const Text('Edit'),
+                  ),
+                ],
+                builder: (context, controller, child) => IconButton(
+                  onPressed: () {
+                    controller.isOpen ? controller.close() : controller.open();
+                  },
+                  icon: const Icon(Icons.more_vert),
                 ),
               ),
-            const DefaultProxySelector(),
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }
@@ -453,6 +503,7 @@ class ManualModeCard extends StatelessWidget {
     >(
       selector: (state) => state.manualNodeSetting,
       builder: (context, r) {
+        logger.d("manualNodeSetting: $r");
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

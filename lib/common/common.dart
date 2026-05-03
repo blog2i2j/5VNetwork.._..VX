@@ -44,12 +44,12 @@ List<int> generateUniqueNumbers(int count, {int min = 1, int max = 100}) {
 
 final emailRegExp = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
 final numericRegExp = RegExp(r'^\d+$');
-const isStore = bool.fromEnvironment('STORE');
+const isWinStore = bool.fromEnvironment('STORE');
 const isPkg = appFlavor == 'pkg';
 final androidApkRelease =
     Platform.isAndroid && !const bool.fromEnvironment('PLAY_STORE');
 final autoUpdateSupported =
-    androidApkRelease || (Platform.isWindows && !isStore) || Platform.isLinux;
+    androidApkRelease || (Platform.isWindows && !isWinStore) || Platform.isLinux;
 String getUserCountryFromLocale() {
   final locale = PlatformDispatcher.instance.locale;
   return locale.countryCode ?? 'Unknown';

@@ -19,6 +19,7 @@ import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:vx/app/outbound/outbound_repo.dart';
 import 'package:vx/app/routing/repo.dart';
+import 'package:vx/app/routing/selector_test_fields_form.dart';
 import 'package:vx/app/x_controller.dart';
 import 'package:vx/l10n/app_localizations.dart';
 import 'package:gap/gap.dart';
@@ -49,6 +50,30 @@ class _SelectorWidgetState extends State<SelectorWidget> {
   final width = 300;
   List<SelectorConfig> _configs = [];
   StreamSubscription? _selectorSubscription;
+
+  Future<void> _removeSelectorAt(int index) async {
+    final controller = context.read<XController>();
+    await context.read<SelectorRepo>().removeSelector(_configs[index].tag);
+    controller.selectorRemove(_configs[index].tag);
+    _configs.removeAt(index);
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  Future<void> _showEditSelectorForm(int index) async {
+    final config = _configs[index];
+    final edited = await showSelectorTestFieldsForm(context, config);
+      if (edited == null) return;
+      await context.read<SelectorRepo>().updateSelector(edited);
+      if (!mounted) return;
+      setState(() {
+        _configs[index] = edited;
+      });
+      context.read<XController>().selectorSelectStrategyOrLandhandlerChange(
+        edited,
+      );
+  }
 
   @override
   void initState() {
@@ -199,17 +224,25 @@ class _SelectorWidgetState extends State<SelectorWidget> {
                         Positioned(
                           right: 5,
                           top: 5,
-                          child: IconButton(
-                            onPressed: () async {
-                              final controller = context.read<XController>();
-                              await context.read<SelectorRepo>().removeSelector(
-                                _configs[index].tag,
-                              );
-                              controller.selectorRemove(_configs[index].tag);
-                              _configs.removeAt(index);
-                              setState(() {});
-                            },
-                            icon: const Icon(Icons.delete_outline),
+                          child: MenuAnchor(
+                            menuChildren: [
+                              MenuItemButton(
+                                leadingIcon: const Icon(Icons.edit_outlined),
+                                onPressed: () => _showEditSelectorForm(index),
+                                child: const Text('Edit'),
+                              ),
+                              MenuItemButton(
+                                leadingIcon: const Icon(Icons.delete_outline),
+                                onPressed: () => _removeSelectorAt(index),
+                                child: const Text('Delete'),
+                              ),
+                            ],
+                            builder: (context, controller, child) => IconButton(
+                              onPressed: () {
+                                controller.isOpen ? controller.close() : controller.open();
+                              },
+                              icon: const Icon(Icons.more_vert),
+                            ),
                           ),
                         ),
                       ],
@@ -319,158 +352,160 @@ class _SelectorConfigWidgetState extends State<SelectorConfigWidget>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          AppLocalizations.of(context)!.range,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-          ),
-        ),
-        const Gap(5),
-        Row(
-          children: [
-            ChoiceChip(
-              label: Text(AppLocalizations.of(context)!.allNodes),
-              selected: widget.config.filter.all,
-              onSelected: (value) async {
-                if (value) {
-                  _onAllChange(true);
-                }
-              },
+          Text(
+            AppLocalizations.of(context)!.range,
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
-            const Gap(5),
-            ChoiceChip(
-              label: Text(AppLocalizations.of(context)!.partialNodes),
-              selected: !widget.config.filter.all,
-              onSelected: (value) async {
-                if (value) {
-                  _onAllChange(false);
-                }
-              },
-            ),
-          ],
-        ),
-        if (!widget.config.filter.all)
-          _SelectorFilter(
-            config: widget.config,
-            selectorRepo: _repo,
-            onFilterChange: widget.onFilterChange,
           ),
-        const Gap(10),
-        Text(
-          AppLocalizations.of(context)!.selectingStrategy,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-          ),
-        ),
-        const Gap(5),
-        Wrap(
-          spacing: 5,
-          runSpacing: 5,
-          children: [
-            ...SelectorConfig_SelectingStrategy.values.map(
-              (e) => ChoiceChip(
-                label: Text(e.toLocalString(context)),
-                selected: widget.config.strategy == e,
-                onSelected: (value) {
+          const Gap(5),
+          Row(
+            children: [
+              ChoiceChip(
+                label: Text(AppLocalizations.of(context)!.allNodes),
+                selected: widget.config.filter.all,
+                onSelected: (value) async {
                   if (value) {
-                    _onSelectStrategyChange(e);
+                    _onAllChange(true);
                   }
                 },
               ),
-            ),
-          ],
-        ),
-        if (widget.config.strategy == SelectorConfig_SelectingStrategy.ALL_OK ||
-            widget.config.strategy ==
-                SelectorConfig_SelectingStrategy.TOP_PING ||
-            widget.config.strategy ==
-                SelectorConfig_SelectingStrategy.TOP_THROUGHPUT ||
-            widget.config.strategy == SelectorConfig_SelectingStrategy.ALL)
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Gap(10),
-              Text(
-                AppLocalizations.of(context)!.balanceStrategy,
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              ),
               const Gap(5),
-              Row(
-                children: [
-                  ChoiceChip(
-                    label: Text(
-                      SelectorConfig_BalanceStrategy.RANDOM.toLocalString(
-                        context,
-                      ),
-                      // style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    selected:
-                        widget.config.balanceStrategy ==
-                        SelectorConfig_BalanceStrategy.RANDOM,
-                    onSelected: (value) {
-                      if (value) {
-                        _onBalanceStrategyChange(
-                          SelectorConfig_BalanceStrategy.RANDOM,
-                        );
-                      }
-                    },
-                  ),
-                  const Gap(5),
-                  ChoiceChip(
-                    label: Text(
-                      SelectorConfig_BalanceStrategy.MEMORY.toLocalString(
-                        context,
-                      ),
-                    ),
-                    selected:
-                        widget.config.balanceStrategy ==
-                        SelectorConfig_BalanceStrategy.MEMORY,
-                    onSelected: (value) {
-                      if (value) {
-                        _onBalanceStrategyChange(
-                          SelectorConfig_BalanceStrategy.MEMORY,
-                        );
-                      }
-                    },
-                  ),
-                ],
+              ChoiceChip(
+                label: Text(AppLocalizations.of(context)!.partialNodes),
+                selected: !widget.config.filter.all,
+                onSelected: (value) async {
+                  if (value) {
+                    _onAllChange(false);
+                  }
+                },
               ),
             ],
           ),
-        const Gap(10),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Tooltip(
-              preferBelow: false,
-              message: AppLocalizations.of(context)!.nodeChainDesc,
-              child: Text(
-                AppLocalizations.of(context)!.nodeChain,
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+          if (!widget.config.filter.all)
+            _SelectorFilter(
+              config: widget.config,
+              selectorRepo: _repo,
+              onFilterChange: widget.onFilterChange,
+            ),
+          const Gap(10),
+          Text(
+            AppLocalizations.of(context)!.selectingStrategy,
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const Gap(5),
+          Wrap(
+            spacing: 5,
+            runSpacing: 5,
+            children: [
+              ...SelectorConfig_SelectingStrategy.values.map(
+                (e) => ChoiceChip(
+                  label: Text(e.toLocalString(context)),
+                  selected: widget.config.strategy == e,
+                  onSelected: (value) {
+                    if (value) {
+                      _onSelectStrategyChange(e);
+                    }
+                  },
                 ),
               ),
+            ],
+          ),
+          if (widget.config.strategy ==
+                  SelectorConfig_SelectingStrategy.ALL_OK ||
+              widget.config.strategy ==
+                  SelectorConfig_SelectingStrategy.TOP_PING ||
+              widget.config.strategy ==
+                  SelectorConfig_SelectingStrategy.TOP_THROUGHPUT ||
+              widget.config.strategy == SelectorConfig_SelectingStrategy.ALL)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Gap(10),
+                Text(
+                  AppLocalizations.of(context)!.balanceStrategy,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                const Gap(5),
+                Row(
+                  children: [
+                    ChoiceChip(
+                      label: Text(
+                        SelectorConfig_BalanceStrategy.RANDOM.toLocalString(
+                          context,
+                        ),
+                        // style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      selected:
+                          widget.config.balanceStrategy ==
+                          SelectorConfig_BalanceStrategy.RANDOM,
+                      onSelected: (value) {
+                        if (value) {
+                          _onBalanceStrategyChange(
+                            SelectorConfig_BalanceStrategy.RANDOM,
+                          );
+                        }
+                      },
+                    ),
+                    const Gap(5),
+                    ChoiceChip(
+                      label: Text(
+                        SelectorConfig_BalanceStrategy.MEMORY.toLocalString(
+                          context,
+                        ),
+                      ),
+                      selected:
+                          widget.config.balanceStrategy ==
+                          SelectorConfig_BalanceStrategy.MEMORY,
+                      onSelected: (value) {
+                        if (value) {
+                          _onBalanceStrategyChange(
+                            SelectorConfig_BalanceStrategy.MEMORY,
+                          );
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ],
             ),
-            const SizedBox(height: 5, width: double.infinity),
-            LandHandlerSelect(
-              landHandlers: widget.config.landHandlers,
-              onAdd: (handlerId) {
-                _onLandHandlerChange(handlerId, true);
-              },
-              onRemove: (handlerId) {
-                _onLandHandlerChange(handlerId, false);
-              },
-              onReplace: _onLandHandlerReplace,
-            ),
-          ],
-        ),
-      ],
-    );
+          const Gap(10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Tooltip(
+                preferBelow: false,
+                message: AppLocalizations.of(context)!.nodeChainDesc,
+                child: Text(
+                  AppLocalizations.of(context)!.nodeChain,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 5, width: double.infinity),
+              LandHandlerSelect(
+                landHandlers: widget.config.landHandlers,
+                onAdd: (handlerId) {
+                  _onLandHandlerChange(handlerId, true);
+                },
+                onRemove: (handlerId) {
+                  _onLandHandlerChange(handlerId, false);
+                },
+                onReplace: _onLandHandlerReplace,
+              ),
+            ],
+          ),
+        ],
+      );
   }
 }
 

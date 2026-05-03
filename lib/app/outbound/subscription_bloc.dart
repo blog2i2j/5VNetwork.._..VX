@@ -46,10 +46,16 @@ class AddSubscriptionEvent extends SubscriptionEvent {
 }
 
 class SubscriptionEditedEvent extends SubscriptionEvent {
-  const SubscriptionEditedEvent({required this.id, this.name, this.link});
+  const SubscriptionEditedEvent({
+    required this.id,
+    this.name,
+    this.link,
+    this.shareLinkQueryExtra,
+  });
   final int id;
   final String? name;
   final String? link;
+  final String? shareLinkQueryExtra;
 }
 
 class SubscriptionState extends Equatable {
@@ -92,8 +98,9 @@ class SubscriptionBloc extends Bloc<SubscriptionEvent, SubscriptionState> {
       e.id,
       name: e.name,
       link: e.link,
+      shareLinkQueryExtra: e.shareLinkQueryExtra,
     );
-    if (e.link != null) {
+    if (e.link != null || e.shareLinkQueryExtra != null) {
       final newSet = Set<int>.from(state.updatingSubs);
       emit(state.copyWith(updatingSubs: newSet..add(e.id)));
       try {

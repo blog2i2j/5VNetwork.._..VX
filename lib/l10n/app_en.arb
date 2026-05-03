@@ -105,6 +105,10 @@
   "unableToGetNodes": "Failed to get nodes, your pasteboard does not contain a subscription url that VX can parse",
   "unableToGetNodesEmptyClipboard": "Failed to get nodes, clipboard is empty",
   "subscriptionAddress": "Subscription Address",
+  "subscriptionShareLinkQueryExtra": "Extra link query",
+  "subscriptionShareLinkQueryExtraHint": "tx=10&foo=1&sig=a1b2",
+  "subscriptionShareLinkQueryExtraHelper": "Appended to each node URL before parsing.",
+  "subscriptionShareLinkQueryExtraInvalid": "Use a valid JSON object or query string (e.g. key=value&key2=value2)",
   "empty": "Empty",
   "invalidHttp": "Invalid HTTPS URL",
   "noNode": "No Node",
@@ -305,7 +309,7 @@
       }
     }
   },
-  "startFailedReasonTunNeedAdmin": "Tun inbound is only available when running as administrator. Rerun VX as administrator or change inbound mode.",
+  "startFailedReasonTunNeedAdmin": "To use TUN mode, please run VX as an administrator or install Service (the installation button is in Settings page)",
   "startFailedReasonNoNode": "No node",
   "startFailedReasonNoEnabledNode": "No enabled nodes, enable at least one node",
   "startFailedReasonNoSelected": "No selected node",
@@ -319,6 +323,19 @@
   },
   "failedToAddSubscription": "Failed to add subscription, there is an existing subscription with the same link",
   "tunNeedAdmin": "To use tun, rerun VX as administrator",
+  "windowsServiceRequiresAdmin": "This action requires administrator permission. Restart VX as administrator and try again.",
+  "windowsServiceInstallFailed": "VX Service installation failed: {error}",
+  "@windowsServiceInstallFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "windowsServiceInstalled": "Windows service installed",
+  "windowsServiceRemoved": "Windows service removed",
+  "windowsServiceInstall": "Install VX Service",
+  "windowsServiceRemove": "Remove VX Service",
   "decodeResult": "Successfully got {value1} {value1, plural, =1{node} other{nodes}}, {value2} {value2, plural, =1{node failed} other{nodes failed}}",
   "@decodeResult": {
     "placeholders": {
@@ -706,6 +723,24 @@
   "enableSystemExtension": "Please enable VX SystemExtension by going to System Settings -> General -> Login Items & Extensions -> Network Extensions",
   "systemProxyPortSetting": "System Proxy Port Setting",
   "randomPorts": "Random Ports",
+  "outboundPortStrategyRandomAllPortsSameTime": "Random (all ports at same time)",
+  "outboundNameCannotBeDirectOrDns": "Name cannot be \"direct\" or \"dns\"",
+  "outboundServerAddressCannotBeEmpty": "Server address cannot be empty",
+  "outboundPortCannotBeEmpty": "Port cannot be empty",
+  "outboundPortHintExample": "443,444,1080-1090",
+  "outboundPortSelectStrategy": "Port Select Strategy",
+  "outboundPortStrategyOneSwitchByInterval": "One (switch port by interval)",
+  "outboundSetIntervalOrMinMax": "Set interval, or min/max interval",
+  "outboundPortSwitchIntervalSeconds": "Interval (seconds)",
+  "outboundPortSwitchIntervalHelper": "Use this for fixed switch interval",
+  "outboundRequiredWhenIntervalEmpty": "Required when interval is empty",
+  "outboundMinIntervalMustBeLeqMax": "Must be <= max interval",
+  "outboundMinIntervalSeconds": "Min Interval (seconds)",
+  "outboundMaxIntervalMustBeGeqMin": "Must be >= min interval",
+  "outboundMaxIntervalSeconds": "Max Interval (seconds)",
+  "outboundMux": "Mux",
+  "outboundUdpOverTcp": "UDP over TCP",
+  "outboundStream": "Stream",
   "staticPorts": "Static Ports",
   "whenNoDomain": "Sniff When No Domain Info",
   "enable": "Enable",
@@ -721,6 +756,26 @@
   "nodeSub": "Node/Subscription",
   "routeSetDNSSelector": "Rule/Set/Selector/DNS",
   "selectorSetting": "Selector Settings",
+  "selectorTestFieldsTitle": "Edit {tag}",
+  "@selectorTestFieldsTitle": {
+    "placeholders": {
+      "tag": {
+        "type": "String"
+      }
+    }
+  },
+  "selectorTestSpeedTestSizeLabel": "Speed test size",
+  "selectorTestByteSuffix": "Byte",
+  "selectorTestSpeedTestSizeHelper": "1000000 Byte = 1 MB",
+  "selectorTestSpeedTestIntervalLabel": "Speed test interval",
+  "selectorTestMinutesSuffix": "min",
+  "selectorTestSpeedTestIntervalHelper": "Periodically test speed of all filtered handlers",
+  "selectorTestPingTestIntervalLabel": "Ping test interval",
+  "selectorTestPingTestIntervalHelper": "Periodically test ping of all filtered handlers",
+  "selectorTestUnusableTestIntervalLabel": "Unusable test interval",
+  "selectorTestUnusableTestIntervalHelper": "Periodically test filtered but unusable handlers whether they are usable or not",
+  "selectorTestMustBeNonNegativeInteger": "Must be a non-negative integer",
+  "selectorTestMustBeAtMostUint32Max": "Must be at most 4294967295",
   "serverKey": "Server/Key",
   "lanSync": "LAN Sync",
   "sync": "Sync",
@@ -888,6 +943,15 @@
   "realtimeRateDesc": "Observerd rate of the node: speed of downloading 10KB data.",
   "realtimeLatency": "Latency",
   "realtimeLatencyDesc": "Observerd latency of the node: the time used to get a response",
+  "realtimeSpeedSamplingInterval": "Realtime speed sampling interval",
+  "realtimeSpeedSamplingSeconds": "{count, plural, =1{1 second} other{{count} seconds}}",
+  "@realtimeSpeedSamplingSeconds": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "download": "Download",
   "noData": "No data yet",
   "autoTestNodes": "Nodes Test",
@@ -972,6 +1036,17 @@
   "resetAction": "Reset",
   "resetCompletedTitle": "Reset complete",
   "resetCompletedMessage": "Database and preferences have been reset. Restart VX to continue.",
+  "repairDbSchemaTitle": "Repair database schema",
+  "repairDbSchemaAction": "Repair DB Schema",
+  "repairDbSchemaSuccess": "Database schema repaired successfully",
+  "repairDbSchemaFailed": "Failed to repair database schema: {error}",
+  "@repairDbSchemaFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "resetFailed": "Failed to reset: {error}",
   "@resetFailed": {
     "placeholders": {
@@ -991,5 +1066,27 @@
   "policyDownLinkOnlyTimeout": "DownLink Only Timeout",
   "policyDownLinkOnlyTimeoutDesc": "If a TCP connection's uplink stream is done, the idle timeout switches to this value.",
   "tutorial": "Tutorial",
-  "selectGroup": "Select Group"
+  "selectGroup": "Select Group",
+  "addConcurrentDnsServer": "Add Concurrent DNS Server",
+  "addSerialDnsServer": "Add Serial DNS Server",
+  "concurrentDnsServerType": "Concurrent DNS Server",
+  "serialDnsServerType": "Serial DNS Server",
+  "useSystemDnsResolver": "Use system DNS resolver",
+  "alwaysReturnEmptyDnsAnswer": "Always return empty DNS answer",
+  "dnsPool": "Pool",
+  "dnsServers": "DNS Servers",
+  "invalidInterval": "Invalid interval",
+  "addresses": "Addresses",
+  "clientIp": "Client IP",
+  "lruSize": "LRU Size",
+  "useGoRuntimeDnsResolver": "Use Go runtime DNS resolver.",
+  "alwaysReturnEmptyDnsResponse": "Always returns empty response for DNS queries.",
+  "dnsTypeFake": "Fake",
+  "dnsTypePlain": "UDP/TCP",
+  "dnsTypeDoh": "HTTPS",
+  "dnsTypeTls": "TLS",
+  "dnsTypeQuic": "QUIC",
+  "dnsTypeGo": "Go",
+  "dnsTypeEmpty": "Empty",
+  "reservedDnsServerName": "DNS server name \"hijack\" is reserved"
 }

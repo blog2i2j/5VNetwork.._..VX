@@ -38,6 +38,7 @@ import 'package:vx/app/layout_provider.dart';
 import 'package:vx/app/outbound/outbounds_bloc.dart';
 import 'package:vx/app/outbound/subscription_bloc.dart';
 import 'package:vx/common/common.dart';
+import 'package:vx/common/share_link_query_extra.dart';
 import 'package:vx/data/database.dart';
 import 'package:vx/utils/logger.dart';
 import 'package:vx/widgets/pro_icon.dart';
@@ -660,12 +661,23 @@ class _SubScriptionListTileState extends State<SubScriptionListTile> {
     }
     if (subscriptiopnFormData != null &&
         (subscriptiopnFormData.link != group.link ||
-            subscriptiopnFormData.name != group.name)) {
+            subscriptiopnFormData.name != group.name ||
+            subscriptiopnFormData.shareLinkQueryExtra !=
+                group.shareLinkQueryExtra)) {
       outboundBloc.add(
         SubscriptionEditedEvent(
           id: group.id,
-          name: subscriptiopnFormData.name,
-          link: subscriptiopnFormData.link,
+          name: subscriptiopnFormData.name != group.name
+              ? subscriptiopnFormData.name
+              : null,
+          link: subscriptiopnFormData.link != group.link
+              ? subscriptiopnFormData.link
+              : null,
+          shareLinkQueryExtra:
+              subscriptiopnFormData.shareLinkQueryExtra !=
+                  group.shareLinkQueryExtra
+              ? subscriptiopnFormData.shareLinkQueryExtra
+              : null,
         ),
       );
     }
@@ -930,9 +942,14 @@ class UpdateSubButton extends StatelessWidget {
 }
 
 class SubscriptionFormData {
-  SubscriptionFormData({this.name = '', this.link = ''});
+  SubscriptionFormData({
+    this.name = '',
+    this.link = '',
+    this.shareLinkQueryExtra = '',
+  });
   String name;
   String link;
+  String shareLinkQueryExtra;
 }
 
 class SubscriptionForm extends StatefulWidget {
@@ -951,12 +968,14 @@ class SubscriptionForm extends StatefulWidget {
 class _SubscriptionFormState extends State<SubscriptionForm> {
   final _nameController = TextEditingController();
   final _linkController = TextEditingController();
+  final _shareLinkQueryExtraController = TextEditingController();
 
   @override
   void initState() {
     // TODO: implement initState
     _nameController.text = widget.data.name;
     _linkController.text = widget.data.link;
+    _shareLinkQueryExtraController.text = widget.data.shareLinkQueryExtra;
     super.initState();
   }
 
@@ -965,6 +984,7 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
     // TODO: implement dispose
     _nameController.dispose();
     _linkController.dispose();
+    _shareLinkQueryExtraController.dispose();
     super.dispose();
   }
 
@@ -988,7 +1008,7 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
           const Gap(10),
           TextFormField(
             controller: _linkController,
-            maxLines: 2,
+            maxLines: 5,
             decoration: InputDecoration(
               labelText: AppLocalizations.of(context)!.subscriptionAddress,
               border: const OutlineInputBorder(),
@@ -1002,6 +1022,33 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
               //   return AppLocalizations.of(context)!.invalidHttp;
               // }
               widget.data.link = value;
+              return null;
+            },
+            style: const TextStyle(letterSpacing: 0),
+          ),
+          const Gap(10),
+          TextFormField(
+            controller: _shareLinkQueryExtraController,
+            onChanged: (value) => widget.data.shareLinkQueryExtra = value,
+            decoration: InputDecoration(
+              labelText: AppLocalizations.of(
+                context,
+              )!.subscriptionShareLinkQueryExtra,
+              hintText: AppLocalizations.of(
+                context,
+              )!.subscriptionShareLinkQueryExtraHint,
+              helperText: AppLocalizations.of(
+                context,
+              )!.subscriptionShareLinkQueryExtraHelper,
+              border: const OutlineInputBorder(),
+            ),
+            validator: (value) {
+              final v = value ?? '';
+              if (!isValidShareLinkQueryExtra(v)) {
+                return AppLocalizations.of(
+                  context,
+                )!.subscriptionShareLinkQueryExtraInvalid;
+              }
               return null;
             },
             style: const TextStyle(letterSpacing: 0),
@@ -1030,6 +1077,7 @@ class _EditSubscriptionFullScreenState
     // TODO: implement initState
     _formData.name = widget.group.name;
     _formData.link = widget.group.link;
+    _formData.shareLinkQueryExtra = widget.group.shareLinkQueryExtra;
     super.initState();
   }
 
@@ -1077,6 +1125,7 @@ class _EditSubscriptionDialogState extends State<EditSubscriptionDialog> {
     // TODO: implement initState
     _formData.name = widget.group.name;
     _formData.link = widget.group.link;
+    _formData.shareLinkQueryExtra = widget.group.shareLinkQueryExtra;
     super.initState();
   }
 

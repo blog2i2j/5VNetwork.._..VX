@@ -733,6 +733,30 @@ abstract class AppLocalizations {
   /// **'Subscription Address'**
   String get subscriptionAddress;
 
+  /// No description provided for @subscriptionShareLinkQueryExtra.
+  ///
+  /// In en, this message translates to:
+  /// **'Extra link query'**
+  String get subscriptionShareLinkQueryExtra;
+
+  /// No description provided for @subscriptionShareLinkQueryExtraHint.
+  ///
+  /// In en, this message translates to:
+  /// **'tx=10&foo=1&sig=a1b2'**
+  String get subscriptionShareLinkQueryExtraHint;
+
+  /// No description provided for @subscriptionShareLinkQueryExtraHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Appended to each node URL before parsing.'**
+  String get subscriptionShareLinkQueryExtraHelper;
+
+  /// No description provided for @subscriptionShareLinkQueryExtraInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Use a valid JSON object or query string (e.g. key=value&key2=value2)'**
+  String get subscriptionShareLinkQueryExtraInvalid;
+
   /// No description provided for @empty.
   ///
   /// In en, this message translates to:
@@ -1612,7 +1636,7 @@ abstract class AppLocalizations {
   /// No description provided for @startFailedReasonTunNeedAdmin.
   ///
   /// In en, this message translates to:
-  /// **'Tun inbound is only available when running as administrator. Rerun VX as administrator or change inbound mode.'**
+  /// **'To use TUN mode, please run VX as an administrator or install Service (the installation button is in Settings page)'**
   String get startFailedReasonTunNeedAdmin;
 
   /// No description provided for @startFailedReasonNoNode.
@@ -1650,6 +1674,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'To use tun, rerun VX as administrator'**
   String get tunNeedAdmin;
+
+  /// No description provided for @windowsServiceRequiresAdmin.
+  ///
+  /// In en, this message translates to:
+  /// **'This action requires administrator permission. Restart VX as administrator and try again.'**
+  String get windowsServiceRequiresAdmin;
+
+  /// No description provided for @windowsServiceInstallFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'VX Service installation failed: {error}'**
+  String windowsServiceInstallFailed(String error);
+
+  /// No description provided for @windowsServiceInstalled.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows service installed'**
+  String get windowsServiceInstalled;
+
+  /// No description provided for @windowsServiceRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows service removed'**
+  String get windowsServiceRemoved;
+
+  /// No description provided for @windowsServiceInstall.
+  ///
+  /// In en, this message translates to:
+  /// **'Install VX Service'**
+  String get windowsServiceInstall;
+
+  /// No description provided for @windowsServiceRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove VX Service'**
+  String get windowsServiceRemove;
 
   /// No description provided for @decodeResult.
   ///
@@ -3127,6 +3187,114 @@ abstract class AppLocalizations {
   /// **'Random Ports'**
   String get randomPorts;
 
+  /// No description provided for @outboundPortStrategyRandomAllPortsSameTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Random (all ports at same time)'**
+  String get outboundPortStrategyRandomAllPortsSameTime;
+
+  /// No description provided for @outboundNameCannotBeDirectOrDns.
+  ///
+  /// In en, this message translates to:
+  /// **'Name cannot be \"direct\" or \"dns\"'**
+  String get outboundNameCannotBeDirectOrDns;
+
+  /// No description provided for @outboundServerAddressCannotBeEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Server address cannot be empty'**
+  String get outboundServerAddressCannotBeEmpty;
+
+  /// No description provided for @outboundPortCannotBeEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Port cannot be empty'**
+  String get outboundPortCannotBeEmpty;
+
+  /// No description provided for @outboundPortHintExample.
+  ///
+  /// In en, this message translates to:
+  /// **'443,444,1080-1090'**
+  String get outboundPortHintExample;
+
+  /// No description provided for @outboundPortSelectStrategy.
+  ///
+  /// In en, this message translates to:
+  /// **'Port Select Strategy'**
+  String get outboundPortSelectStrategy;
+
+  /// No description provided for @outboundPortStrategyOneSwitchByInterval.
+  ///
+  /// In en, this message translates to:
+  /// **'One (switch port by interval)'**
+  String get outboundPortStrategyOneSwitchByInterval;
+
+  /// No description provided for @outboundSetIntervalOrMinMax.
+  ///
+  /// In en, this message translates to:
+  /// **'Set interval, or min/max interval'**
+  String get outboundSetIntervalOrMinMax;
+
+  /// No description provided for @outboundPortSwitchIntervalSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'Interval (seconds)'**
+  String get outboundPortSwitchIntervalSeconds;
+
+  /// No description provided for @outboundPortSwitchIntervalHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Use this for fixed switch interval'**
+  String get outboundPortSwitchIntervalHelper;
+
+  /// No description provided for @outboundRequiredWhenIntervalEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Required when interval is empty'**
+  String get outboundRequiredWhenIntervalEmpty;
+
+  /// No description provided for @outboundMinIntervalMustBeLeqMax.
+  ///
+  /// In en, this message translates to:
+  /// **'Must be <= max interval'**
+  String get outboundMinIntervalMustBeLeqMax;
+
+  /// No description provided for @outboundMinIntervalSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'Min Interval (seconds)'**
+  String get outboundMinIntervalSeconds;
+
+  /// No description provided for @outboundMaxIntervalMustBeGeqMin.
+  ///
+  /// In en, this message translates to:
+  /// **'Must be >= min interval'**
+  String get outboundMaxIntervalMustBeGeqMin;
+
+  /// No description provided for @outboundMaxIntervalSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'Max Interval (seconds)'**
+  String get outboundMaxIntervalSeconds;
+
+  /// No description provided for @outboundMux.
+  ///
+  /// In en, this message translates to:
+  /// **'Mux'**
+  String get outboundMux;
+
+  /// No description provided for @outboundUdpOverTcp.
+  ///
+  /// In en, this message translates to:
+  /// **'UDP over TCP'**
+  String get outboundUdpOverTcp;
+
+  /// No description provided for @outboundStream.
+  ///
+  /// In en, this message translates to:
+  /// **'Stream'**
+  String get outboundStream;
+
   /// No description provided for @staticPorts.
   ///
   /// In en, this message translates to:
@@ -3216,6 +3384,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Selector Settings'**
   String get selectorSetting;
+
+  /// No description provided for @selectorTestFieldsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit {tag}'**
+  String selectorTestFieldsTitle(String tag);
+
+  /// No description provided for @selectorTestSpeedTestSizeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Speed test size'**
+  String get selectorTestSpeedTestSizeLabel;
+
+  /// No description provided for @selectorTestByteSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'Byte'**
+  String get selectorTestByteSuffix;
+
+  /// No description provided for @selectorTestSpeedTestSizeHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'1000000 Byte = 1 MB'**
+  String get selectorTestSpeedTestSizeHelper;
+
+  /// No description provided for @selectorTestSpeedTestIntervalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Speed test interval'**
+  String get selectorTestSpeedTestIntervalLabel;
+
+  /// No description provided for @selectorTestMinutesSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'min'**
+  String get selectorTestMinutesSuffix;
+
+  /// No description provided for @selectorTestSpeedTestIntervalHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Periodically test speed of all filtered handlers'**
+  String get selectorTestSpeedTestIntervalHelper;
+
+  /// No description provided for @selectorTestPingTestIntervalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Ping test interval'**
+  String get selectorTestPingTestIntervalLabel;
+
+  /// No description provided for @selectorTestPingTestIntervalHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Periodically test ping of all filtered handlers'**
+  String get selectorTestPingTestIntervalHelper;
+
+  /// No description provided for @selectorTestUnusableTestIntervalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Unusable test interval'**
+  String get selectorTestUnusableTestIntervalLabel;
+
+  /// No description provided for @selectorTestUnusableTestIntervalHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Periodically test filtered but unusable handlers whether they are usable or not'**
+  String get selectorTestUnusableTestIntervalHelper;
+
+  /// No description provided for @selectorTestMustBeNonNegativeInteger.
+  ///
+  /// In en, this message translates to:
+  /// **'Must be a non-negative integer'**
+  String get selectorTestMustBeNonNegativeInteger;
+
+  /// No description provided for @selectorTestMustBeAtMostUint32Max.
+  ///
+  /// In en, this message translates to:
+  /// **'Must be at most 4294967295'**
+  String get selectorTestMustBeAtMostUint32Max;
 
   /// No description provided for @serverKey.
   ///
@@ -4111,6 +4357,18 @@ abstract class AppLocalizations {
   /// **'Observerd latency of the node: the time used to get a response'**
   String get realtimeLatencyDesc;
 
+  /// No description provided for @realtimeSpeedSamplingInterval.
+  ///
+  /// In en, this message translates to:
+  /// **'Realtime speed sampling interval'**
+  String get realtimeSpeedSamplingInterval;
+
+  /// No description provided for @realtimeSpeedSamplingSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 second} other{{count} seconds}}'**
+  String realtimeSpeedSamplingSeconds(int count);
+
   /// No description provided for @download.
   ///
   /// In en, this message translates to:
@@ -4567,6 +4825,30 @@ abstract class AppLocalizations {
   /// **'Database and preferences have been reset. Restart VX to continue.'**
   String get resetCompletedMessage;
 
+  /// No description provided for @repairDbSchemaTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Repair database schema'**
+  String get repairDbSchemaTitle;
+
+  /// No description provided for @repairDbSchemaAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Repair DB Schema'**
+  String get repairDbSchemaAction;
+
+  /// No description provided for @repairDbSchemaSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Database schema repaired successfully'**
+  String get repairDbSchemaSuccess;
+
+  /// No description provided for @repairDbSchemaFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to repair database schema: {error}'**
+  String repairDbSchemaFailed(String error);
+
   /// No description provided for @resetFailed.
   ///
   /// In en, this message translates to:
@@ -4644,6 +4926,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select Group'**
   String get selectGroup;
+
+  /// No description provided for @addConcurrentDnsServer.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Concurrent DNS Server'**
+  String get addConcurrentDnsServer;
+
+  /// No description provided for @addSerialDnsServer.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Serial DNS Server'**
+  String get addSerialDnsServer;
+
+  /// No description provided for @concurrentDnsServerType.
+  ///
+  /// In en, this message translates to:
+  /// **'Concurrent DNS Server'**
+  String get concurrentDnsServerType;
+
+  /// No description provided for @serialDnsServerType.
+  ///
+  /// In en, this message translates to:
+  /// **'Serial DNS Server'**
+  String get serialDnsServerType;
+
+  /// No description provided for @useSystemDnsResolver.
+  ///
+  /// In en, this message translates to:
+  /// **'Use system DNS resolver'**
+  String get useSystemDnsResolver;
+
+  /// No description provided for @alwaysReturnEmptyDnsAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Always return empty DNS answer'**
+  String get alwaysReturnEmptyDnsAnswer;
+
+  /// No description provided for @dnsPool.
+  ///
+  /// In en, this message translates to:
+  /// **'Pool'**
+  String get dnsPool;
+
+  /// No description provided for @dnsServers.
+  ///
+  /// In en, this message translates to:
+  /// **'DNS Servers'**
+  String get dnsServers;
+
+  /// No description provided for @invalidInterval.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid interval'**
+  String get invalidInterval;
+
+  /// No description provided for @addresses.
+  ///
+  /// In en, this message translates to:
+  /// **'Addresses'**
+  String get addresses;
+
+  /// No description provided for @clientIp.
+  ///
+  /// In en, this message translates to:
+  /// **'Client IP'**
+  String get clientIp;
+
+  /// No description provided for @lruSize.
+  ///
+  /// In en, this message translates to:
+  /// **'LRU Size'**
+  String get lruSize;
+
+  /// No description provided for @useGoRuntimeDnsResolver.
+  ///
+  /// In en, this message translates to:
+  /// **'Use Go runtime DNS resolver.'**
+  String get useGoRuntimeDnsResolver;
+
+  /// No description provided for @alwaysReturnEmptyDnsResponse.
+  ///
+  /// In en, this message translates to:
+  /// **'Always returns empty response for DNS queries.'**
+  String get alwaysReturnEmptyDnsResponse;
+
+  /// No description provided for @dnsTypeFake.
+  ///
+  /// In en, this message translates to:
+  /// **'Fake'**
+  String get dnsTypeFake;
+
+  /// No description provided for @dnsTypePlain.
+  ///
+  /// In en, this message translates to:
+  /// **'UDP/TCP'**
+  String get dnsTypePlain;
+
+  /// No description provided for @dnsTypeDoh.
+  ///
+  /// In en, this message translates to:
+  /// **'HTTPS'**
+  String get dnsTypeDoh;
+
+  /// No description provided for @dnsTypeTls.
+  ///
+  /// In en, this message translates to:
+  /// **'TLS'**
+  String get dnsTypeTls;
+
+  /// No description provided for @dnsTypeQuic.
+  ///
+  /// In en, this message translates to:
+  /// **'QUIC'**
+  String get dnsTypeQuic;
+
+  /// No description provided for @dnsTypeGo.
+  ///
+  /// In en, this message translates to:
+  /// **'Go'**
+  String get dnsTypeGo;
+
+  /// No description provided for @dnsTypeEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Empty'**
+  String get dnsTypeEmpty;
+
+  /// No description provided for @reservedDnsServerName.
+  ///
+  /// In en, this message translates to:
+  /// **'DNS server name \"hijack\" is reserved'**
+  String get reservedDnsServerName;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

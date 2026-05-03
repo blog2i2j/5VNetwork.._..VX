@@ -45,6 +45,7 @@ import 'package:vx/app/outbound/subscription_page.dart';
 import 'package:vx/app/routing/default.dart';
 import 'package:vx/app/routing/repo.dart';
 import 'package:vx/app/blocs/proxy_selector/proxy_selector_bloc.dart';
+import 'package:vx/app/routing/routing_page.dart';
 import 'package:vx/app/x_controller.dart';
 import 'package:vx/auth/auth_bloc.dart';
 import 'package:vx/common/circuler_buffer.dart';
@@ -187,7 +188,7 @@ class _Inbound extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final disableTun = Platform.isWindows && !isRunningAsAdmin && isStore;
+    final disableTun = Platform.isWindows && !isRunningAsAdmin && isWinStore;
     return HomeCard(
       title: AppLocalizations.of(context)!.inbound,
       icon: Icons.keyboard_double_arrow_right_rounded,

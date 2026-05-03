@@ -176,6 +176,23 @@ String getDllPath() {
   // }
 }
 
+String getServiceExePath() {
+  final String localExePath = join(
+    'data',
+    'flutter_assets',
+    'packages',
+    'tm_windows',
+    'assets',
+    'vx_service.exe',
+  );
+  String pathToExe = join(
+    Directory(Platform.resolvedExecutable).parent.path,
+    localExePath,
+  );
+  logger.d('pathToExe: $pathToExe');
+  return pathToExe;
+}
+
 String getSoPath() {
   final String localLibPath = join(
     'data',

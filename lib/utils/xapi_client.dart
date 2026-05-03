@@ -535,9 +535,14 @@ class XApiClient {
     );
   }
 
-  Future<DecodeResponse> decode(String data) async {
+  Future<DecodeResponse> decode(
+    String data, {
+    Map<String, String> shareLinkQueryExtra = const {},
+  }) async {
     await _completer.future;
-    return await _xApiClient.decode(DecodeRequest(data: data));
+    final req = DecodeRequest(data: data);
+    req.shareLinkQueryExtra.addAll(shareLinkQueryExtra);
+    return await _xApiClient.decode(req);
   }
 
   Future<DeployResponse> deploy({

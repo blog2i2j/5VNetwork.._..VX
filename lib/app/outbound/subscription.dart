@@ -35,7 +35,7 @@ import 'package:vx/utils/random.dart';
 import 'package:vx/data/database.dart';
 import 'package:vx/pref_helper.dart';
 import 'package:vx/utils/xapi_client.dart';
-import 'package:vx/xconfig_helper.dart';
+import 'package:vx/common/share_link_query_extra.dart';
 
 class MySubscription extends Subscription implements NodeGroup {
   MySubscription({
@@ -49,6 +49,7 @@ class MySubscription extends Subscription implements NodeGroup {
     required super.lastUpdate,
     required super.lastSuccessUpdate,
     required super.placeOnTop,
+    super.shareLinkQueryExtra = '',
   });
 }
 
@@ -146,9 +147,14 @@ class AutoSubscriptionUpdater with ChangeNotifier {
         SubscriptionsCompanion(lastUpdate: Value(now)),
       );
 
-      final fetchRes = await _apiClient.fetchSubscriptionContent(
-        FetchSubscriptionContentRequest(link: sub.link, handlers: handlers),
+      final fetchReq = FetchSubscriptionContentRequest(
+        link: sub.link,
+        handlers: handlers,
       );
+      fetchReq.shareLinkQueryExtra.addAll(
+        shareLinkQueryExtraFromStored(sub.shareLinkQueryExtra),
+      );
+      final fetchRes = await _apiClient.fetchSubscriptionContent(fetchReq);
       await db.transaction(() async {
         final existingHandlers = await _outRepo.getHandlers(subId: sub.id);
         final existingByTag = <String, OutboundHandler>{};

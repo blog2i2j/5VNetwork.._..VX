@@ -35,7 +35,7 @@ class NodeInfo {
 typedef NodeStats = (int throughput, int latency, int upload, int download);
 typedef DataPoint = (int value, DateTime timestamp);
 
-const int _interval = 3;
+const int _defaultSampleIntervalSeconds = 3;
 const int _averageGroupSize = 2; // Average every N entries into one
 const int _maxHistorySize = 100;
 
@@ -129,6 +129,8 @@ class RealtimeSpeedNotifier extends ChangeNotifier {
     _statusStream = _controller.statusStream().listen((event) async {
       if (event == XStatus.connected) {
         await _startSpeedStreamIfNeeded();
+        _fetchOutboundHandlers();
+        _fetchSelectedHandlers();
       } else if (event == XStatus.disconnected) {
         uploadSpeed = null;
         downloadSpeed = null;
@@ -144,13 +146,38 @@ class RealtimeSpeedNotifier extends ChangeNotifier {
         notifyListeners();
       }
     });
+    _handlerBeingUsedStream = _controller.handlerBeingUsedStream().listen((
+      event,
+    ) {
+      _selectorAndHandlers[event.selector] = event.tags.toSet();
+    });
   }
 
   final XController _controller;
   final OutboundRepo _outboundRepo;
   StreamSubscription<StatsResponse>? _speedStream;
   StreamSubscription<XStatus>? _statusStream;
+  StreamSubscription<HandlerBeingUsed>? _handlerBeingUsedStream;
   bool _statsWidgetsVisible = true;
+  int _sampleIntervalSeconds = _defaultSampleIntervalSeconds;
+  // selector and its selected handlers
+  Map<String, Set<String>> _selectorAndHandlers = {};
+  // handlers that are in outbound manager
+  Set<String> _outboundHandlers = {};
+
+  int get sampleIntervalSeconds => _sampleIntervalSeconds;
+
+  void _fetchOutboundHandlers() async {
+    final response = await _controller.outboundHandlers();
+    _outboundHandlers = response.toSet();
+  }
+
+  void _fetchSelectedHandlers() async {
+    final response = await _controller.selectedHandlers();
+    _selectorAndHandlers = response.map(
+      (key, value) => MapEntry(key, value.toSet()),
+    );
+  }
 
   /// Call when home widget visibility changes. When all stats widgets (upload,
   /// download, memory, connections) are hidden, the stats stream is cancelled.
@@ -166,20 +193,46 @@ class RealtimeSpeedNotifier extends ChangeNotifier {
     }
   }
 
+  Future<void> setSampleIntervalSeconds(int seconds) async {
+    final next = seconds.clamp(1, 60);
+    if (_sampleIntervalSeconds == next) return;
+    _sampleIntervalSeconds = next;
+
+    if (_speedStream != null) {
+      await _speedStream?.cancel();
+      _speedStream = null;
+      if (_statsWidgetsVisible && _controller.status == XStatus.connected) {
+        await _startSpeedStreamIfNeeded();
+      }
+    }
+    notifyListeners();
+  }
+
   Future<void> _startSpeedStreamIfNeeded() async {
     if (!_statsWidgetsVisible || _speedStream != null) return;
     try {
-      _speedStream = (await _controller.outboundStatsStream(_interval)).listen(
-        (event) {
-          _process(event);
-        },
-        onDone: () {
-          logger.d("speed stream done");
-        },
-        onError: (e) {
-          logger.e("error in speed stream", error: e);
-        },
-      );
+      StreamSubscription<StatsResponse>? speedStream;
+      speedStream =
+          (await _controller.outboundStatsStream(
+            _sampleIntervalSeconds,
+          )).listen(
+            (event) {
+              _process(event);
+            },
+            onDone: () {
+              logger.d("speed stream done");
+              if (_speedStream == speedStream) {
+                _speedStream = null;
+              }
+            },
+            onError: (e) {
+              logger.e("error in speed stream", error: e);
+              if (_speedStream == speedStream) {
+                _speedStream = null;
+              }
+            },
+          );
+      _speedStream = speedStream;
       logger.d("speed stream started");
     } catch (e) {
       logger.e("error starting speed stream", error: e);
@@ -190,6 +243,8 @@ class RealtimeSpeedNotifier extends ChangeNotifier {
   void dispose() {
     _statusStream?.cancel();
     _statusStream = null;
+    _handlerBeingUsedStream?.cancel();
+    _handlerBeingUsedStream = null;
     _speedStream?.cancel();
     _speedStream = null;
     super.dispose();
@@ -243,6 +298,13 @@ class RealtimeSpeedNotifier extends ChangeNotifier {
       final upRate = iv > 0 ? (stat.up.toInt() / iv).round() : 0;
       final downRate = iv > 0 ? (stat.down.toInt() / iv).round() : 0;
       final stats = (stat.rate.toInt(), stat.ping.toInt(), upRate, downRate);
+      // if it is not currently selected or in outbound handlers, do not show the node
+      if (!_selectorAndHandlers.values.any(
+            (element) => element.contains(stat.id),
+          ) &&
+          !_outboundHandlers.contains(stat.id)) {
+        continue;
+      }
       if (nodeInfoIndex < 0) {
         final name = await _outboundRepo.getHandlerName(stat.id);
         late OutboundHandler handler;
@@ -272,10 +334,16 @@ class RealtimeSpeedNotifier extends ChangeNotifier {
         newList.add(nodeInfo);
       } else {
         nodeInfo = nodeInfos[nodeInfoIndex];
+        // if no data for two intervals and not in selected handlers and outbound handlers
+        // do not show the node
         // if (nodeInfo.stats.$3 == 0 &&
         //     nodeInfo.stats.$4 == 0 &&
         //     stats.$3 == 0 &&
-        //     stats.$4 == 0) {
+        //     stats.$4 == 0 &&
+        //     !_selectorAndHandlers.values.any(
+        //       (element) => element.contains(nodeInfo!.id),
+        //     ) &&
+        //     !_outboundHandlers.contains(nodeInfo.id)) {
         //   continue;
         // }
         nodeInfo.stats = stats;
@@ -1451,10 +1519,10 @@ class _NodeCardState extends State<NodeCard> {
   @override
   Widget build(BuildContext context) {
     final latestStats = widget.nodeInfo.stats;
-    final throughput = latestStats?.$1 ?? 0;
-    final latency = latestStats?.$2 ?? 0;
-    final uploadSpeed = latestStats?.$3 ?? 0;
-    final downloadSpeed = latestStats?.$4 ?? 0;
+    final throughput = latestStats.$1;
+    final latency = latestStats.$2;
+    final uploadSpeed = latestStats.$3;
+    final downloadSpeed = latestStats.$4;
 
     return LayoutBuilder(
       builder: (context, constraints) {

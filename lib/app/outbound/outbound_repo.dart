@@ -521,6 +521,7 @@ class OutboundRepo {
               description: e.description,
               lastSuccessUpdate: e.lastSuccessUpdate,
               placeOnTop: e.placeOnTop,
+              shareLinkQueryExtra: e.shareLinkQueryExtra,
             ),
           )
           .toList(),
@@ -542,6 +543,7 @@ class OutboundRepo {
     String? link,
     bool? enabled,
     bool? placeOnTop,
+    String? shareLinkQueryExtra,
   }) async {
     return await databaseProvider.database.updateById(
       databaseProvider.database.subscriptions,
@@ -551,6 +553,9 @@ class OutboundRepo {
         link: link != null ? Value(link) : const Value.absent(),
         placeOnTop: placeOnTop != null
             ? Value(placeOnTop)
+            : const Value.absent(),
+        shareLinkQueryExtra: shareLinkQueryExtra != null
+            ? Value(shareLinkQueryExtra)
             : const Value.absent(),
       ),
     );

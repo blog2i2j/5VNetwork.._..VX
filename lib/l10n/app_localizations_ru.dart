@@ -327,6 +327,18 @@ class AppLocalizationsRu extends AppLocalizations {
   String get subscriptionAddress => 'Адрес подписки';
 
   @override
+  String get subscriptionShareLinkQueryExtra => 'Доп. параметры запроса (на строку)';
+
+  @override
+  String get subscriptionShareLinkQueryExtraHint => 'tx=10&foo=1&sig=a1b2';
+
+  @override
+  String get subscriptionShareLinkQueryExtraHelper => 'Добавляются к URL каждого узла перед разбором.';
+
+  @override
+  String get subscriptionShareLinkQueryExtraInvalid => 'Укажите корректный JSON-объект или строку запроса (напр. key=value&key2=value2)';
+
+  @override
   String get empty => 'Пустой';
 
   @override
@@ -826,6 +838,26 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get tunNeedAdmin => 'Для использования tun перезапустите VX от имени администратора.';
+
+  @override
+  String get windowsServiceRequiresAdmin => 'Для этого действия нужны права администратора. Перезапустите VX от имени администратора и повторите попытку.';
+
+  @override
+  String windowsServiceInstallFailed(String error) {
+    return 'Не удалось установить службу Windows: $error';
+  }
+
+  @override
+  String get windowsServiceInstalled => 'Служба Windows установлена';
+
+  @override
+  String get windowsServiceRemoved => 'Служба Windows удалена';
+
+  @override
+  String get windowsServiceInstall => 'Установить службу Windows';
+
+  @override
+  String get windowsServiceRemove => 'Удалить службу Windows';
 
   @override
   String decodeResult(num value1, num value2) {
@@ -1674,6 +1706,60 @@ class AppLocalizationsRu extends AppLocalizations {
   String get randomPorts => 'Случайные порты';
 
   @override
+  String get outboundPortStrategyRandomAllPortsSameTime => 'Случайно (все порты одновременно)';
+
+  @override
+  String get outboundNameCannotBeDirectOrDns => 'Имя не может быть «direct» или «dns»';
+
+  @override
+  String get outboundServerAddressCannotBeEmpty => 'Адрес сервера не может быть пустым';
+
+  @override
+  String get outboundPortCannotBeEmpty => 'Порт не может быть пустым';
+
+  @override
+  String get outboundPortHintExample => '443,444,1080-1090';
+
+  @override
+  String get outboundPortSelectStrategy => 'Стратегия выбора порта';
+
+  @override
+  String get outboundPortStrategyOneSwitchByInterval => 'Один (смена порта по интервалу)';
+
+  @override
+  String get outboundSetIntervalOrMinMax => 'Задайте интервал или мин./макс. интервал';
+
+  @override
+  String get outboundPortSwitchIntervalSeconds => 'Интервал (сек.)';
+
+  @override
+  String get outboundPortSwitchIntervalHelper => 'Фиксированный интервал переключения';
+
+  @override
+  String get outboundRequiredWhenIntervalEmpty => 'Обязательно, если интервал не задан';
+
+  @override
+  String get outboundMinIntervalMustBeLeqMax => 'Должно быть ≤ макс. интервала';
+
+  @override
+  String get outboundMinIntervalSeconds => 'Мин. интервал (сек.)';
+
+  @override
+  String get outboundMaxIntervalMustBeGeqMin => 'Должно быть ≥ мин. интервала';
+
+  @override
+  String get outboundMaxIntervalSeconds => 'Макс. интервал (сек.)';
+
+  @override
+  String get outboundMux => 'Mux';
+
+  @override
+  String get outboundUdpOverTcp => 'UDP поверх TCP';
+
+  @override
+  String get outboundStream => 'Поток';
+
+  @override
   String get staticPorts => 'Статические порты';
 
   @override
@@ -1717,6 +1803,47 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get selectorSetting => 'Настройки селектора';
+
+  @override
+  String selectorTestFieldsTitle(String tag) {
+    return 'Изменить $tag';
+  }
+
+  @override
+  String get selectorTestSpeedTestSizeLabel => 'Размер данных для теста скорости';
+
+  @override
+  String get selectorTestByteSuffix => 'байт';
+
+  @override
+  String get selectorTestSpeedTestSizeHelper => '1000000 байт = 1 МБ';
+
+  @override
+  String get selectorTestSpeedTestIntervalLabel => 'Интервал теста скорости';
+
+  @override
+  String get selectorTestMinutesSuffix => 'мин';
+
+  @override
+  String get selectorTestSpeedTestIntervalHelper => 'Periodically test speed of all filtered handlers';
+
+  @override
+  String get selectorTestPingTestIntervalLabel => 'Интервал ping-теста';
+
+  @override
+  String get selectorTestPingTestIntervalHelper => 'Periodically test ping of all filtered handlers';
+
+  @override
+  String get selectorTestUnusableTestIntervalLabel => 'Интервал проверки недоступных';
+
+  @override
+  String get selectorTestUnusableTestIntervalHelper => 'Periodically test filtered but unusable handlers whether they are usable or not';
+
+  @override
+  String get selectorTestMustBeNonNegativeInteger => 'Должно быть целым числом ≥ 0';
+
+  @override
+  String get selectorTestMustBeAtMostUint32Max => 'Не больше 4294967295';
 
   @override
   String get serverKey => 'Сервер/Ключ';
@@ -2170,6 +2297,22 @@ class AppLocalizationsRu extends AppLocalizations {
   String get realtimeLatencyDesc => 'Наблюдаемая задержка узла: время, затраченное на получение ответа.';
 
   @override
+  String get realtimeSpeedSamplingInterval => 'Интервал выборки скорости в реальном времени';
+
+  @override
+  String realtimeSpeedSamplingSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count сек',
+      many: '$count сек',
+      few: '$count сек',
+      one: '1 сек',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get download => 'Скачать';
 
   @override
@@ -2400,6 +2543,20 @@ class AppLocalizationsRu extends AppLocalizations {
   String get resetCompletedMessage => 'База данных и настройки сброшены. Перезапустите VX, чтобы продолжить.';
 
   @override
+  String get repairDbSchemaTitle => 'Исправить схему базы данных';
+
+  @override
+  String get repairDbSchemaAction => 'Исправить схему БД';
+
+  @override
+  String get repairDbSchemaSuccess => 'Схема базы данных успешно исправлена';
+
+  @override
+  String repairDbSchemaFailed(String error) {
+    return 'Не удалось исправить схему базы данных: $error';
+  }
+
+  @override
   String resetFailed(String error) {
     return 'Не удалось выполнить сброс: $error';
   }
@@ -2439,4 +2596,70 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get selectGroup => 'Select Group';
+
+  @override
+  String get addConcurrentDnsServer => 'Добавить параллельный DNS-сервер';
+
+  @override
+  String get addSerialDnsServer => 'Добавить последовательный DNS-сервер';
+
+  @override
+  String get concurrentDnsServerType => 'Параллельный DNS-сервер';
+
+  @override
+  String get serialDnsServerType => 'Последовательный DNS-сервер';
+
+  @override
+  String get useSystemDnsResolver => 'Использовать системный DNS-резолвер';
+
+  @override
+  String get alwaysReturnEmptyDnsAnswer => 'Всегда возвращать пустой DNS-ответ';
+
+  @override
+  String get dnsPool => 'Пул';
+
+  @override
+  String get dnsServers => 'DNS-серверы';
+
+  @override
+  String get invalidInterval => 'Неверный интервал';
+
+  @override
+  String get addresses => 'Адреса';
+
+  @override
+  String get clientIp => 'IP клиента';
+
+  @override
+  String get lruSize => 'Размер LRU';
+
+  @override
+  String get useGoRuntimeDnsResolver => 'Использовать DNS-резолвер Go runtime.';
+
+  @override
+  String get alwaysReturnEmptyDnsResponse => 'Всегда возвращать пустой ответ на DNS-запросы.';
+
+  @override
+  String get dnsTypeFake => 'Fake';
+
+  @override
+  String get dnsTypePlain => 'UDP/TCP';
+
+  @override
+  String get dnsTypeDoh => 'HTTPS';
+
+  @override
+  String get dnsTypeTls => 'TLS';
+
+  @override
+  String get dnsTypeQuic => 'QUIC';
+
+  @override
+  String get dnsTypeGo => 'Go';
+
+  @override
+  String get dnsTypeEmpty => 'Empty';
+
+  @override
+  String get reservedDnsServerName => 'Имя DNS-сервера \"hijack\" зарезервировано';
 }

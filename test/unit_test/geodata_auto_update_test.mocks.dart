@@ -69,79 +69,85 @@ class _FakeHandlerUsableResponse_4 extends _i1.SmartFake
     : super(parent, parentInvocation);
 }
 
-class _FakeResponseStream_5<R> extends _i1.SmartFake
+class _FakeHandlerCountryTestResponse_5 extends _i1.SmartFake
+    implements _i5.HandlerCountryTestResponse {
+  _FakeHandlerCountryTestResponse_5(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeResponseStream_6<R> extends _i1.SmartFake
     implements _i6.ResponseStream<R> {
-  _FakeResponseStream_5(Object parent, Invocation parentInvocation)
+  _FakeResponseStream_6(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeVproxyStatusResponse_6 extends _i1.SmartFake
+class _FakeVproxyStatusResponse_7 extends _i1.SmartFake
     implements _i5.VproxyStatusResponse {
-  _FakeVproxyStatusResponse_6(Object parent, Invocation parentInvocation)
+  _FakeVproxyStatusResponse_7(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeServerConfig_7 extends _i1.SmartFake implements _i7.ServerConfig {
-  _FakeServerConfig_7(Object parent, Invocation parentInvocation)
+class _FakeServerConfig_8 extends _i1.SmartFake implements _i7.ServerConfig {
+  _FakeServerConfig_8(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeUpdateSubscriptionResponse_8 extends _i1.SmartFake
+class _FakeUpdateSubscriptionResponse_9 extends _i1.SmartFake
     implements _i5.UpdateSubscriptionResponse {
-  _FakeUpdateSubscriptionResponse_8(Object parent, Invocation parentInvocation)
+  _FakeUpdateSubscriptionResponse_9(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeFetchSubscriptionContentResponse_9 extends _i1.SmartFake
+class _FakeFetchSubscriptionContentResponse_10 extends _i1.SmartFake
     implements _i5.FetchSubscriptionContentResponse {
-  _FakeFetchSubscriptionContentResponse_9(
+  _FakeFetchSubscriptionContentResponse_10(
     Object parent,
     Invocation parentInvocation,
   ) : super(parent, parentInvocation);
 }
 
-class _FakeDecodeResponse_10 extends _i1.SmartFake
+class _FakeDecodeResponse_11 extends _i1.SmartFake
     implements _i5.DecodeResponse {
-  _FakeDecodeResponse_10(Object parent, Invocation parentInvocation)
+  _FakeDecodeResponse_11(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeDeployResponse_11 extends _i1.SmartFake
+class _FakeDeployResponse_12 extends _i1.SmartFake
     implements _i5.DeployResponse {
-  _FakeDeployResponse_11(Object parent, Invocation parentInvocation)
+  _FakeDeployResponse_12(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeGenerateCertResponse_12 extends _i1.SmartFake
+class _FakeGenerateCertResponse_13 extends _i1.SmartFake
     implements _i5.GenerateCertResponse {
-  _FakeGenerateCertResponse_12(Object parent, Invocation parentInvocation)
+  _FakeGenerateCertResponse_13(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeParseClashRuleFileResponse_13 extends _i1.SmartFake
+class _FakeParseClashRuleFileResponse_14 extends _i1.SmartFake
     implements _i5.ParseClashRuleFileResponse {
-  _FakeParseClashRuleFileResponse_13(Object parent, Invocation parentInvocation)
+  _FakeParseClashRuleFileResponse_14(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeToUrlResponse_14 extends _i1.SmartFake implements _i5.ToUrlResponse {
-  _FakeToUrlResponse_14(Object parent, Invocation parentInvocation)
+class _FakeToUrlResponse_15 extends _i1.SmartFake implements _i5.ToUrlResponse {
+  _FakeToUrlResponse_15(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeGenerateECHResponse_15 extends _i1.SmartFake
+class _FakeGenerateECHResponse_16 extends _i1.SmartFake
     implements _i5.GenerateECHResponse {
-  _FakeGenerateECHResponse_15(Object parent, Invocation parentInvocation)
+  _FakeGenerateECHResponse_16(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeDnsServer_16 extends _i1.SmartFake implements _i8.DnsServer {
-  _FakeDnsServer_16(Object parent, Invocation parentInvocation)
+class _FakeDnsServer_17 extends _i1.SmartFake implements _i8.DnsServer {
+  _FakeDnsServer_17(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeDnsRecord_17 extends _i1.SmartFake implements _i8.DnsRecord {
-  _FakeDnsRecord_17(Object parent, Invocation parentInvocation)
+class _FakeDnsRecord_18 extends _i1.SmartFake implements _i8.DnsRecord {
+  _FakeDnsRecord_18(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
@@ -455,6 +461,28 @@ class MockXApiClient extends _i1.Mock implements _i3.XApiClient {
           as _i10.Future<_i5.HandlerUsableResponse>);
 
   @override
+  _i10.Future<_i5.HandlerCountryTestResponse> handlerCountryTest(
+    _i5.HandlerCountryTestRequest? request,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#handlerCountryTest, [request]),
+            returnValue: _i10.Future<_i5.HandlerCountryTestResponse>.value(
+              _FakeHandlerCountryTestResponse_5(
+                this,
+                Invocation.method(#handlerCountryTest, [request]),
+              ),
+            ),
+            returnValueForMissingStub:
+                _i10.Future<_i5.HandlerCountryTestResponse>.value(
+                  _FakeHandlerCountryTestResponse_5(
+                    this,
+                    Invocation.method(#handlerCountryTest, [request]),
+                  ),
+                ),
+          )
+          as _i10.Future<_i5.HandlerCountryTestResponse>);
+
+  @override
   _i10.Future<int> rtt(_i5.RttTestRequest? request) =>
       (super.noSuchMethod(
             Invocation.method(#rtt, [request]),
@@ -471,14 +499,14 @@ class MockXApiClient extends _i1.Mock implements _i3.XApiClient {
             Invocation.method(#speedTest, [request]),
             returnValue:
                 _i10.Future<_i6.ResponseStream<_i5.SpeedTestResponse>>.value(
-                  _FakeResponseStream_5<_i5.SpeedTestResponse>(
+                  _FakeResponseStream_6<_i5.SpeedTestResponse>(
                     this,
                     Invocation.method(#speedTest, [request]),
                   ),
                 ),
             returnValueForMissingStub:
                 _i10.Future<_i6.ResponseStream<_i5.SpeedTestResponse>>.value(
-                  _FakeResponseStream_5<_i5.SpeedTestResponse>(
+                  _FakeResponseStream_6<_i5.SpeedTestResponse>(
                     this,
                     Invocation.method(#speedTest, [request]),
                   ),
@@ -496,7 +524,7 @@ class MockXApiClient extends _i1.Mock implements _i3.XApiClient {
                 _i10.Future<
                   _i6.ResponseStream<_i5.MonitorServerResponse>
                 >.value(
-                  _FakeResponseStream_5<_i5.MonitorServerResponse>(
+                  _FakeResponseStream_6<_i5.MonitorServerResponse>(
                     this,
                     Invocation.method(#monitorServer, [server]),
                   ),
@@ -505,7 +533,7 @@ class MockXApiClient extends _i1.Mock implements _i3.XApiClient {
                 _i10.Future<
                   _i6.ResponseStream<_i5.MonitorServerResponse>
                 >.value(
-                  _FakeResponseStream_5<_i5.MonitorServerResponse>(
+                  _FakeResponseStream_6<_i5.MonitorServerResponse>(
                     this,
                     Invocation.method(#monitorServer, [server]),
                   ),
@@ -518,14 +546,14 @@ class MockXApiClient extends _i1.Mock implements _i3.XApiClient {
       (super.noSuchMethod(
             Invocation.method(#vproxyStatus, [server]),
             returnValue: _i10.Future<_i5.VproxyStatusResponse>.value(
-              _FakeVproxyStatusResponse_6(
+              _FakeVproxyStatusResponse_7(
                 this,
                 Invocation.method(#vproxyStatus, [server]),
               ),
             ),
             returnValueForMissingStub:
                 _i10.Future<_i5.VproxyStatusResponse>.value(
-                  _FakeVproxyStatusResponse_6(
+                  _FakeVproxyStatusResponse_7(
                     this,
                     Invocation.method(#vproxyStatus, [server]),
                   ),
@@ -538,13 +566,13 @@ class MockXApiClient extends _i1.Mock implements _i3.XApiClient {
       (super.noSuchMethod(
             Invocation.method(#serverConfig, [server]),
             returnValue: _i10.Future<_i7.ServerConfig>.value(
-              _FakeServerConfig_7(
+              _FakeServerConfig_8(
                 this,
                 Invocation.method(#serverConfig, [server]),
               ),
             ),
             returnValueForMissingStub: _i10.Future<_i7.ServerConfig>.value(
-              _FakeServerConfig_7(
+              _FakeServerConfig_8(
                 this,
                 Invocation.method(#serverConfig, [server]),
               ),
@@ -619,14 +647,14 @@ class MockXApiClient extends _i1.Mock implements _i3.XApiClient {
       (super.noSuchMethod(
             Invocation.method(#updateSubscriptions, [request]),
             returnValue: _i10.Future<_i5.UpdateSubscriptionResponse>.value(
-              _FakeUpdateSubscriptionResponse_8(
+              _FakeUpdateSubscriptionResponse_9(
                 this,
                 Invocation.method(#updateSubscriptions, [request]),
               ),
             ),
             returnValueForMissingStub:
                 _i10.Future<_i5.UpdateSubscriptionResponse>.value(
-                  _FakeUpdateSubscriptionResponse_8(
+                  _FakeUpdateSubscriptionResponse_9(
                     this,
                     Invocation.method(#updateSubscriptions, [request]),
                   ),
@@ -642,14 +670,14 @@ class MockXApiClient extends _i1.Mock implements _i3.XApiClient {
             Invocation.method(#fetchSubscriptionContent, [request]),
             returnValue:
                 _i10.Future<_i5.FetchSubscriptionContentResponse>.value(
-                  _FakeFetchSubscriptionContentResponse_9(
+                  _FakeFetchSubscriptionContentResponse_10(
                     this,
                     Invocation.method(#fetchSubscriptionContent, [request]),
                   ),
                 ),
             returnValueForMissingStub:
                 _i10.Future<_i5.FetchSubscriptionContentResponse>.value(
-                  _FakeFetchSubscriptionContentResponse_9(
+                  _FakeFetchSubscriptionContentResponse_10(
                     this,
                     Invocation.method(#fetchSubscriptionContent, [request]),
                   ),
@@ -667,14 +695,35 @@ class MockXApiClient extends _i1.Mock implements _i3.XApiClient {
           as _i10.Future<void>);
 
   @override
-  _i10.Future<_i5.DecodeResponse> decode(String? data) =>
+  _i10.Future<_i5.DecodeResponse> decode(
+    String? data, {
+    Map<String, String>? shareLinkQueryExtra = const {},
+  }) =>
       (super.noSuchMethod(
-            Invocation.method(#decode, [data]),
+            Invocation.method(
+              #decode,
+              [data],
+              {#shareLinkQueryExtra: shareLinkQueryExtra},
+            ),
             returnValue: _i10.Future<_i5.DecodeResponse>.value(
-              _FakeDecodeResponse_10(this, Invocation.method(#decode, [data])),
+              _FakeDecodeResponse_11(
+                this,
+                Invocation.method(
+                  #decode,
+                  [data],
+                  {#shareLinkQueryExtra: shareLinkQueryExtra},
+                ),
+              ),
             ),
             returnValueForMissingStub: _i10.Future<_i5.DecodeResponse>.value(
-              _FakeDecodeResponse_10(this, Invocation.method(#decode, [data])),
+              _FakeDecodeResponse_11(
+                this,
+                Invocation.method(
+                  #decode,
+                  [data],
+                  {#shareLinkQueryExtra: shareLinkQueryExtra},
+                ),
+              ),
             ),
           )
           as _i10.Future<_i5.DecodeResponse>);
@@ -698,7 +747,7 @@ class MockXApiClient extends _i1.Mock implements _i3.XApiClient {
               #disableOSFirewall: disableOSFirewall,
             }),
             returnValue: _i10.Future<_i5.DeployResponse>.value(
-              _FakeDeployResponse_11(
+              _FakeDeployResponse_12(
                 this,
                 Invocation.method(#deploy, [], {
                   #server: server,
@@ -711,7 +760,7 @@ class MockXApiClient extends _i1.Mock implements _i3.XApiClient {
               ),
             ),
             returnValueForMissingStub: _i10.Future<_i5.DeployResponse>.value(
-              _FakeDeployResponse_11(
+              _FakeDeployResponse_12(
                 this,
                 Invocation.method(#deploy, [], {
                   #server: server,
@@ -731,14 +780,14 @@ class MockXApiClient extends _i1.Mock implements _i3.XApiClient {
       (super.noSuchMethod(
             Invocation.method(#generateCert, [domain]),
             returnValue: _i10.Future<_i5.GenerateCertResponse>.value(
-              _FakeGenerateCertResponse_12(
+              _FakeGenerateCertResponse_13(
                 this,
                 Invocation.method(#generateCert, [domain]),
               ),
             ),
             returnValueForMissingStub:
                 _i10.Future<_i5.GenerateCertResponse>.value(
-                  _FakeGenerateCertResponse_12(
+                  _FakeGenerateCertResponse_13(
                     this,
                     Invocation.method(#generateCert, [domain]),
                   ),
@@ -798,14 +847,14 @@ class MockXApiClient extends _i1.Mock implements _i3.XApiClient {
       (super.noSuchMethod(
             Invocation.method(#parseClashRuleFile, [content]),
             returnValue: _i10.Future<_i5.ParseClashRuleFileResponse>.value(
-              _FakeParseClashRuleFileResponse_13(
+              _FakeParseClashRuleFileResponse_14(
                 this,
                 Invocation.method(#parseClashRuleFile, [content]),
               ),
             ),
             returnValueForMissingStub:
                 _i10.Future<_i5.ParseClashRuleFileResponse>.value(
-                  _FakeParseClashRuleFileResponse_13(
+                  _FakeParseClashRuleFileResponse_14(
                     this,
                     Invocation.method(#parseClashRuleFile, [content]),
                   ),
@@ -907,10 +956,10 @@ class MockXApiClient extends _i1.Mock implements _i3.XApiClient {
       (super.noSuchMethod(
             Invocation.method(#toUrl, [configs]),
             returnValue: _i10.Future<_i5.ToUrlResponse>.value(
-              _FakeToUrlResponse_14(this, Invocation.method(#toUrl, [configs])),
+              _FakeToUrlResponse_15(this, Invocation.method(#toUrl, [configs])),
             ),
             returnValueForMissingStub: _i10.Future<_i5.ToUrlResponse>.value(
-              _FakeToUrlResponse_14(this, Invocation.method(#toUrl, [configs])),
+              _FakeToUrlResponse_15(this, Invocation.method(#toUrl, [configs])),
             ),
           )
           as _i10.Future<_i5.ToUrlResponse>);
@@ -920,14 +969,14 @@ class MockXApiClient extends _i1.Mock implements _i3.XApiClient {
       (super.noSuchMethod(
             Invocation.method(#generateECHResponse, [domain]),
             returnValue: _i10.Future<_i5.GenerateECHResponse>.value(
-              _FakeGenerateECHResponse_15(
+              _FakeGenerateECHResponse_16(
                 this,
                 Invocation.method(#generateECHResponse, [domain]),
               ),
             ),
             returnValueForMissingStub:
                 _i10.Future<_i5.GenerateECHResponse>.value(
-                  _FakeGenerateECHResponse_15(
+                  _FakeGenerateECHResponse_16(
                     this,
                     Invocation.method(#generateECHResponse, [domain]),
                   ),
@@ -1005,6 +1054,24 @@ class MockDbHelper extends _i1.Mock implements _i20.DbHelper {
   _i10.Stream<List<_i8.DnsServer>> getDnsServersStream() =>
       (super.noSuchMethod(
             Invocation.method(#getDnsServersStream, []),
+            returnValue: _i10.Stream<List<_i8.DnsServer>>.empty(),
+            returnValueForMissingStub: _i10.Stream<List<_i8.DnsServer>>.empty(),
+          )
+          as _i10.Stream<List<_i8.DnsServer>>);
+
+  @override
+  _i10.Stream<List<_i8.DnsServer>> getConcurrentDnsServersStream() =>
+      (super.noSuchMethod(
+            Invocation.method(#getConcurrentDnsServersStream, []),
+            returnValue: _i10.Stream<List<_i8.DnsServer>>.empty(),
+            returnValueForMissingStub: _i10.Stream<List<_i8.DnsServer>>.empty(),
+          )
+          as _i10.Stream<List<_i8.DnsServer>>);
+
+  @override
+  _i10.Stream<List<_i8.DnsServer>> getSerialDnsServersStream() =>
+      (super.noSuchMethod(
+            Invocation.method(#getSerialDnsServersStream, []),
             returnValue: _i10.Stream<List<_i8.DnsServer>>.empty(),
             returnValueForMissingStub: _i10.Stream<List<_i8.DnsServer>>.empty(),
           )
@@ -1245,6 +1312,7 @@ class MockDbHelper extends _i1.Mock implements _i20.DbHelper {
     bool? useBloomFilter,
     String? geoUrl,
     bool? inverse,
+    String? newName,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
@@ -1256,6 +1324,7 @@ class MockDbHelper extends _i1.Mock implements _i20.DbHelper {
                 #useBloomFilter: useBloomFilter,
                 #geoUrl: geoUrl,
                 #inverse: inverse,
+                #newName: newName,
               },
             ),
             returnValue: _i10.Future<void>.value(),
@@ -1276,12 +1345,13 @@ class MockDbHelper extends _i1.Mock implements _i20.DbHelper {
   _i10.Future<void> updateGreateDomainSet(
     String? name, {
     _i16.GreatDomainSetConfig? greatDomainSet,
+    String? newName,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
               #updateGreateDomainSet,
               [name],
-              {#greatDomainSet: greatDomainSet},
+              {#greatDomainSet: greatDomainSet, #newName: newName},
             ),
             returnValue: _i10.Future<void>.value(),
             returnValueForMissingStub: _i10.Future<void>.value(),
@@ -1352,6 +1422,32 @@ class MockDbHelper extends _i1.Mock implements _i20.DbHelper {
           as _i10.Future<List<_i8.DnsServer>>);
 
   @override
+  _i10.Future<List<_i8.DnsServer>> getConcurrentDnsServers() =>
+      (super.noSuchMethod(
+            Invocation.method(#getConcurrentDnsServers, []),
+            returnValue: _i10.Future<List<_i8.DnsServer>>.value(
+              <_i8.DnsServer>[],
+            ),
+            returnValueForMissingStub: _i10.Future<List<_i8.DnsServer>>.value(
+              <_i8.DnsServer>[],
+            ),
+          )
+          as _i10.Future<List<_i8.DnsServer>>);
+
+  @override
+  _i10.Future<List<_i8.DnsServer>> getSerialDnsServers() =>
+      (super.noSuchMethod(
+            Invocation.method(#getSerialDnsServers, []),
+            returnValue: _i10.Future<List<_i8.DnsServer>>.value(
+              <_i8.DnsServer>[],
+            ),
+            returnValueForMissingStub: _i10.Future<List<_i8.DnsServer>>.value(
+              <_i8.DnsServer>[],
+            ),
+          )
+          as _i10.Future<List<_i8.DnsServer>>);
+
+  @override
   _i10.Future<void> updateDnsServer(
     _i8.DnsServer? ds, {
     String? dnsServerName,
@@ -1376,13 +1472,13 @@ class MockDbHelper extends _i1.Mock implements _i20.DbHelper {
       (super.noSuchMethod(
             Invocation.method(#addDnsServer, [dnsServerName, dnsServer]),
             returnValue: _i10.Future<_i8.DnsServer>.value(
-              _FakeDnsServer_16(
+              _FakeDnsServer_17(
                 this,
                 Invocation.method(#addDnsServer, [dnsServerName, dnsServer]),
               ),
             ),
             returnValueForMissingStub: _i10.Future<_i8.DnsServer>.value(
-              _FakeDnsServer_16(
+              _FakeDnsServer_17(
                 this,
                 Invocation.method(#addDnsServer, [dnsServerName, dnsServer]),
               ),
@@ -1400,17 +1496,113 @@ class MockDbHelper extends _i1.Mock implements _i20.DbHelper {
           as _i10.Future<void>);
 
   @override
+  _i10.Future<_i8.DnsServer> addConcurrentDnsServer(
+    String? name,
+    _i22.ConcurrentDnsServer? config,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#addConcurrentDnsServer, [name, config]),
+            returnValue: _i10.Future<_i8.DnsServer>.value(
+              _FakeDnsServer_17(
+                this,
+                Invocation.method(#addConcurrentDnsServer, [name, config]),
+              ),
+            ),
+            returnValueForMissingStub: _i10.Future<_i8.DnsServer>.value(
+              _FakeDnsServer_17(
+                this,
+                Invocation.method(#addConcurrentDnsServer, [name, config]),
+              ),
+            ),
+          )
+          as _i10.Future<_i8.DnsServer>);
+
+  @override
+  _i10.Future<void> updateConcurrentDnsServer(
+    _i8.DnsServer? row, {
+    String? name,
+    _i22.ConcurrentDnsServer? config,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(
+              #updateConcurrentDnsServer,
+              [row],
+              {#name: name, #config: config},
+            ),
+            returnValue: _i10.Future<void>.value(),
+            returnValueForMissingStub: _i10.Future<void>.value(),
+          )
+          as _i10.Future<void>);
+
+  @override
+  _i10.Future<void> removeConcurrentDnsServer(_i8.DnsServer? row) =>
+      (super.noSuchMethod(
+            Invocation.method(#removeConcurrentDnsServer, [row]),
+            returnValue: _i10.Future<void>.value(),
+            returnValueForMissingStub: _i10.Future<void>.value(),
+          )
+          as _i10.Future<void>);
+
+  @override
+  _i10.Future<_i8.DnsServer> addSerialDnsServer(
+    String? name,
+    _i22.SerialDnsServer? config,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#addSerialDnsServer, [name, config]),
+            returnValue: _i10.Future<_i8.DnsServer>.value(
+              _FakeDnsServer_17(
+                this,
+                Invocation.method(#addSerialDnsServer, [name, config]),
+              ),
+            ),
+            returnValueForMissingStub: _i10.Future<_i8.DnsServer>.value(
+              _FakeDnsServer_17(
+                this,
+                Invocation.method(#addSerialDnsServer, [name, config]),
+              ),
+            ),
+          )
+          as _i10.Future<_i8.DnsServer>);
+
+  @override
+  _i10.Future<void> updateSerialDnsServer(
+    _i8.DnsServer? row, {
+    String? name,
+    _i22.SerialDnsServer? config,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(
+              #updateSerialDnsServer,
+              [row],
+              {#name: name, #config: config},
+            ),
+            returnValue: _i10.Future<void>.value(),
+            returnValueForMissingStub: _i10.Future<void>.value(),
+          )
+          as _i10.Future<void>);
+
+  @override
+  _i10.Future<void> removeSerialDnsServer(_i8.DnsServer? row) =>
+      (super.noSuchMethod(
+            Invocation.method(#removeSerialDnsServer, [row]),
+            returnValue: _i10.Future<void>.value(),
+            returnValueForMissingStub: _i10.Future<void>.value(),
+          )
+          as _i10.Future<void>);
+
+  @override
   _i10.Future<_i8.DnsRecord> addDnsRecord(_i22.Record? record) =>
       (super.noSuchMethod(
             Invocation.method(#addDnsRecord, [record]),
             returnValue: _i10.Future<_i8.DnsRecord>.value(
-              _FakeDnsRecord_17(
+              _FakeDnsRecord_18(
                 this,
                 Invocation.method(#addDnsRecord, [record]),
               ),
             ),
             returnValueForMissingStub: _i10.Future<_i8.DnsRecord>.value(
-              _FakeDnsRecord_17(
+              _FakeDnsRecord_18(
                 this,
                 Invocation.method(#addDnsRecord, [record]),
               ),

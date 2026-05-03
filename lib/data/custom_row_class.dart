@@ -578,12 +578,16 @@ class AppSet extends DataClass implements Insertable<AppSet> {
 class DnsServer extends DataClass implements Insertable<DnsServer> {
   final int id;
   final String name;
-  final dns.DnsServerConfig dnsServer;
+  final dns.DnsServerConfig? dnsServer;
+  final dns.ConcurrentDnsServer? concurrentDnsServer;
+  final dns.SerialDnsServer? serialDnsServer;
   final DateTime? updatedAt;
   const DnsServer({
     required this.id,
     required this.name,
-    required this.dnsServer,
+    this.dnsServer,
+    this.concurrentDnsServer,
+    this.serialDnsServer,
     this.updatedAt,
   });
   @override
@@ -594,9 +598,21 @@ class DnsServer extends DataClass implements Insertable<DnsServer> {
     }
     map['id'] = Variable<int>(id);
     map['name'] = Variable<String>(name);
-    {
+    if (!nullToAbsent || dnsServer != null) {
       map['dns_server'] = Variable<Uint8List>(
-        $DnsServersTable.$converterdnsServer.toSql(dnsServer),
+        $DnsServersTable.$converterdnsServer.toSql(dnsServer!),
+      );
+    }
+    if (!nullToAbsent || concurrentDnsServer != null) {
+      map['concurrent_dns_server'] = Variable<Uint8List>(
+        $DnsServersTable.$converterconcurrentDnsServer.toSql(
+          concurrentDnsServer!,
+        ),
+      );
+    }
+    if (!nullToAbsent || serialDnsServer != null) {
+      map['serial_dns_server'] = Variable<Uint8List>(
+        $DnsServersTable.$converterserialDnsServer.toSql(serialDnsServer!),
       );
     }
     return map;
@@ -607,7 +623,13 @@ class DnsServer extends DataClass implements Insertable<DnsServer> {
       id: Value(id),
       name: Value(name),
       updatedAt: Value(updatedAt),
-      dnsServer: Value(dnsServer),
+      dnsServer: dnsServer == null ? const Value.absent() : Value(dnsServer!),
+      concurrentDnsServer: concurrentDnsServer == null
+          ? const Value.absent()
+          : Value(concurrentDnsServer!),
+      serialDnsServer: serialDnsServer == null
+          ? const Value.absent()
+          : Value(serialDnsServer!),
     );
   }
 
@@ -622,7 +644,15 @@ class DnsServer extends DataClass implements Insertable<DnsServer> {
           ? DateTime.parse(json['updatedAt'])
           : null,
       name: serializer.fromJson<String>(json['name']),
-      dnsServer: dns.DnsServerConfig.fromJson(json['dnsServer']),
+      dnsServer: json['dnsServer'] != null
+          ? dns.DnsServerConfig.fromJson(json['dnsServer'])
+          : null,
+      concurrentDnsServer: json['concurrentDnsServer'] != null
+          ? dns.ConcurrentDnsServer.fromJson(json['concurrentDnsServer'])
+          : null,
+      serialDnsServer: json['serialDnsServer'] != null
+          ? dns.SerialDnsServer.fromJson(json['serialDnsServer'])
+          : null,
     );
   }
   @override
@@ -632,7 +662,9 @@ class DnsServer extends DataClass implements Insertable<DnsServer> {
       'id': serializer.toJson<int>(id),
       'updatedAt': updatedAt?.toIso8601String(),
       'name': serializer.toJson<String>(name),
-      'dnsServer': dnsServer.writeToJson(),
+      'dnsServer': dnsServer?.writeToJson(),
+      'concurrentDnsServer': concurrentDnsServer?.writeToJson(),
+      'serialDnsServer': serialDnsServer?.writeToJson(),
     };
   }
 }

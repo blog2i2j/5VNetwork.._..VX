@@ -15,8 +15,10 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 import 'package:drift/drift.dart' hide Column;
+import 'package:ffi/ffi.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
@@ -272,14 +274,6 @@ class XController implements MessageFlutterApi {
 
       logger.d('db server port: ${config.servicePort}');
 
-      if (Platform.isWindows &&
-          _pref.inboundMode == InboundMode.tun &&
-          !isRunningAsAdmin &&
-          isStore) {
-        _statusStreamCtrl.add(XStatus.disconnected);
-        throw Exception("TUN requires admin");
-      }
-
       if (Platform.isLinux &&
           _pref.inboundMode == InboundMode.tun &&
           _pref.showRpmNotice &&
@@ -469,7 +463,7 @@ class XController implements MessageFlutterApi {
         [
           '-Command',
           'Start-Process',
-          '..\\vx-core\\win_service\\service\\service_install.exe',
+          '..\\vx-core\\win_service\\service_install\\service_install.exe',
           'install',
           '-Verb',
           'RunAs',
@@ -840,7 +834,7 @@ class XController implements MessageFlutterApi {
 
   void _onHandlerUsing(HandlerBeingUsed handlerBeingUsed) {
     logger.i(
-      "handler being used, ${handlerBeingUsed.tag4}, ${handlerBeingUsed.tag6}",
+      "handler being used, ${handlerBeingUsed.selector}, ${handlerBeingUsed.tags.join(', ')}",
     );
     // if (_handlerBeingUsedController.hasListener) {
     _handlerBeingUsedController.add(handlerBeingUsed);
@@ -1203,8 +1197,7 @@ class XController implements MessageFlutterApi {
   }
 
   Future<void> updateHandlerSpeed(String tag, int speed) async {
-    if (Tm.instance.state == TmStatus.connected &&
-        _pref.proxySelectorMode == ProxySelectorMode.auto) {
+    if (Tm.instance.state == TmStatus.connected) {
       final client = await getXClient();
       client.setOutboundHandlerSpeed(
         SetOutboundHandlerSpeedRequest(tag: tag, speed: speed),
@@ -1278,6 +1271,28 @@ class XController implements MessageFlutterApi {
       return (await client.rttTest(
         RttTestRequest(addr: addr, port: port),
       )).ping;
+    }
+    throw Exception("not connected");
+  }
+
+  Future<Map<String, List<String>>> selectedHandlers() async {
+    await waitForConnectedIfConnecting();
+    if (Tm.instance.state == TmStatus.connected) {
+      final client = await getXClient();
+      final response = await client.selectedHandlers(SelectedHandlersRequest());
+      return response.selectedHandlers.map(
+        (key, value) => MapEntry(key, value.strings),
+      );
+    }
+    throw Exception("not connected");
+  }
+
+  Future<List<String>> outboundHandlers() async {
+    await waitForConnectedIfConnecting();
+    if (Tm.instance.state == TmStatus.connected) {
+      final client = await getXClient();
+      final response = await client.currentOutbound(CurrentOutboundRequest());
+      return response.outboundTags;
     }
     throw Exception("not connected");
   }

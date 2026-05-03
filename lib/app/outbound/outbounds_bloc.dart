@@ -150,29 +150,30 @@ class OutboundBloc extends Bloc<OutboundEvent, OutboundState> {
       emit.forEach(
         _xController.handlerBeingUsedStream(),
         onData: (handlerBeingUsed) {
+          // only handlers selected by the default selector will be considered
           if (_pref.proxySelectorMode == ProxySelectorMode.manual) {
             return state;
           }
-
+          if (handlerBeingUsed.selector != '代理') {
+            return state;
+          }
+          if (handlerBeingUsed.tags.length != 1) {
+            return state;
+          }
+          final tag = handlerBeingUsed.tags.first;
           late final int handlerBeingUsedId4;
-          if (handlerBeingUsed.tag4.contains('-')) {
+          if (tag.contains('-')) {
             handlerBeingUsedId4 =
-                int.tryParse(
-                  handlerBeingUsed.tag4.split('-').firstOrNull ?? '',
-                ) ??
-                0;
+                int.tryParse(tag.split('-').firstOrNull ?? '') ?? 0;
           } else {
-            handlerBeingUsedId4 = int.tryParse(handlerBeingUsed.tag4) ?? 0;
+            handlerBeingUsedId4 = int.tryParse(tag) ?? 0;
           }
           late final int handlerBeingUsedId6;
-          if (handlerBeingUsed.tag6.contains('-')) {
+          if (tag.contains('-')) {
             handlerBeingUsedId6 =
-                int.tryParse(
-                  handlerBeingUsed.tag6.split('-').firstOrNull ?? '',
-                ) ??
-                0;
+                int.tryParse(tag.split('-').firstOrNull ?? '') ?? 0;
           } else {
-            handlerBeingUsedId6 = int.tryParse(handlerBeingUsed.tag6) ?? 0;
+            handlerBeingUsedId6 = int.tryParse(tag) ?? 0;
           }
           List<OutboundHandler> newHandlers = state.handlers;
           if ((handlerBeingUsedId4 != 0 || handlerBeingUsedId6 != 0) &&
@@ -182,6 +183,7 @@ class OutboundBloc extends Bloc<OutboundEvent, OutboundState> {
               (h) => h.id == handlerBeingUsedId4 || h.id == handlerBeingUsedId6,
             );
           }
+          logger.d('handler being used, ${handlerBeingUsedId4}, ${handlerBeingUsedId6}');
           return state.copyWith(
             handlers: newHandlers,
             using4: handlerBeingUsedId4,

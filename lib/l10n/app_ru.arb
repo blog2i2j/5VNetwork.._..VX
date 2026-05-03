@@ -105,6 +105,10 @@
   "unableToGetNodes": "Не удалось получить узлы, ваш буфер обмена не содержит URL-адрес подписки, который VX может обработать.",
   "unableToGetNodesEmptyClipboard": "Не удалось получить узлы, буфер обмена пуст.",
   "subscriptionAddress": "Адрес подписки",
+  "subscriptionShareLinkQueryExtra": "Доп. параметры запроса (на строку)",
+  "subscriptionShareLinkQueryExtraHint": "tx=10&foo=1&sig=a1b2",
+  "subscriptionShareLinkQueryExtraHelper": "Добавляются к URL каждого узла перед разбором.",
+  "subscriptionShareLinkQueryExtraInvalid": "Укажите корректный JSON-объект или строку запроса (напр. key=value&key2=value2)",
   "empty": "Пустой",
   "invalidHttp": "Недействительный HTTPS-адрес",
   "noNode": "Нет узла",
@@ -319,6 +323,19 @@
   },
   "failedToAddSubscription": "Не удалось добавить подписку, уже существует подписка с той же ссылкой.",
   "tunNeedAdmin": "Для использования tun перезапустите VX от имени администратора.",
+  "windowsServiceRequiresAdmin": "Для этого действия нужны права администратора. Перезапустите VX от имени администратора и повторите попытку.",
+  "windowsServiceInstallFailed": "Не удалось установить службу Windows: {error}",
+  "@windowsServiceInstallFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "windowsServiceInstalled": "Служба Windows установлена",
+  "windowsServiceRemoved": "Служба Windows удалена",
+  "windowsServiceInstall": "Установить службу Windows",
+  "windowsServiceRemove": "Удалить службу Windows",
   "decodeResult": "Успешно получено {value1} {value1, plural, =1{узел} other{узлы}}, {value2} {value2, plural, =1{узел вышел из строя} other{узлы вышли из строя}}",
   "@decodeResult": {
     "placeholders": {
@@ -706,6 +723,24 @@
   "enableSystemExtension": "Включите VX SystemExtension, перейдя в «Системные настройки» -> «Общие» -> «Элементы авторизации и расширения» -> «Сетевые расширения».",
   "systemProxyPortSetting": "Настройка порта системного прокси",
   "randomPorts": "Случайные порты",
+  "outboundPortStrategyRandomAllPortsSameTime": "Случайно (все порты одновременно)",
+  "outboundNameCannotBeDirectOrDns": "Имя не может быть «direct» или «dns»",
+  "outboundServerAddressCannotBeEmpty": "Адрес сервера не может быть пустым",
+  "outboundPortCannotBeEmpty": "Порт не может быть пустым",
+  "outboundPortHintExample": "443,444,1080-1090",
+  "outboundPortSelectStrategy": "Стратегия выбора порта",
+  "outboundPortStrategyOneSwitchByInterval": "Один (смена порта по интервалу)",
+  "outboundSetIntervalOrMinMax": "Задайте интервал или мин./макс. интервал",
+  "outboundPortSwitchIntervalSeconds": "Интервал (сек.)",
+  "outboundPortSwitchIntervalHelper": "Фиксированный интервал переключения",
+  "outboundRequiredWhenIntervalEmpty": "Обязательно, если интервал не задан",
+  "outboundMinIntervalMustBeLeqMax": "Должно быть ≤ макс. интервала",
+  "outboundMinIntervalSeconds": "Мин. интервал (сек.)",
+  "outboundMaxIntervalMustBeGeqMin": "Должно быть ≥ мин. интервала",
+  "outboundMaxIntervalSeconds": "Макс. интервал (сек.)",
+  "outboundMux": "Mux",
+  "outboundUdpOverTcp": "UDP поверх TCP",
+  "outboundStream": "Поток",
   "staticPorts": "Статические порты",
   "whenNoDomain": "Проверка при отсутствии информации о домене.",
   "enable": "Давать возможность",
@@ -721,6 +756,23 @@
   "nodeSub": "Узел/Подписка",
   "routeSetDNSSelector": "Правило/Набор/Селектор/DNS",
   "selectorSetting": "Настройки селектора",
+  "selectorTestFieldsTitle": "Изменить {tag}",
+  "@selectorTestFieldsTitle": {
+    "placeholders": {
+      "tag": {
+        "type": "String"
+      }
+    }
+  },
+  "selectorTestSpeedTestSizeLabel": "Размер данных для теста скорости",
+  "selectorTestByteSuffix": "байт",
+  "selectorTestSpeedTestSizeHelper": "1000000 байт = 1 МБ",
+  "selectorTestSpeedTestIntervalLabel": "Интервал теста скорости",
+  "selectorTestMinutesSuffix": "мин",
+  "selectorTestPingTestIntervalLabel": "Интервал ping-теста",
+  "selectorTestUnusableTestIntervalLabel": "Интервал проверки недоступных",
+  "selectorTestMustBeNonNegativeInteger": "Должно быть целым числом ≥ 0",
+  "selectorTestMustBeAtMostUint32Max": "Не больше 4294967295",
   "serverKey": "Сервер/Ключ",
   "lanSync": "Синхронизация по локальной сети",
   "sync": "Синхронизация",
@@ -884,6 +936,15 @@
   "realtimeRateDesc": "Наблюдаемая скорость узла: скорость загрузки данных размером 10 КБ.",
   "realtimeLatency": "Задержка",
   "realtimeLatencyDesc": "Наблюдаемая задержка узла: время, затраченное на получение ответа.",
+  "realtimeSpeedSamplingInterval": "Интервал выборки скорости в реальном времени",
+  "realtimeSpeedSamplingSeconds": "{count, plural, =1{1 сек} few{{count} сек} many{{count} сек} other{{count} сек}}",
+  "@realtimeSpeedSamplingSeconds": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "download": "Скачать",
   "noData": "Данные пока отсутствуют.",
   "autoTestNodes": "Тест узлов",
@@ -967,6 +1028,18 @@
   "resetAction": "Перезагрузить",
   "resetCompletedTitle": "Сброс завершен",
   "resetCompletedMessage": "База данных и настройки сброшены. Перезапустите VX, чтобы продолжить.",
+  "repairDbSchemaTitle": "Исправить схему базы данных",
+  "repairDbSchemaMessage": "Исправить схему базы данных, сверив ее с clean.db и добавив отсутствующие столбцы?",
+  "repairDbSchemaAction": "Исправить схему БД",
+  "repairDbSchemaSuccess": "Схема базы данных успешно исправлена",
+  "repairDbSchemaFailed": "Не удалось исправить схему базы данных: {error}",
+  "@repairDbSchemaFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "resetFailed": "Не удалось выполнить сброс: {error}",
   "@resetFailed": {
     "placeholders": {
@@ -975,5 +1048,27 @@
       }
     }
   },
-  "tutorial": "Учебное пособие"
+  "tutorial": "Учебное пособие",
+  "addConcurrentDnsServer": "Добавить параллельный DNS-сервер",
+  "addSerialDnsServer": "Добавить последовательный DNS-сервер",
+  "concurrentDnsServerType": "Параллельный DNS-сервер",
+  "serialDnsServerType": "Последовательный DNS-сервер",
+  "useSystemDnsResolver": "Использовать системный DNS-резолвер",
+  "alwaysReturnEmptyDnsAnswer": "Всегда возвращать пустой DNS-ответ",
+  "dnsPool": "Пул",
+  "dnsServers": "DNS-серверы",
+  "invalidInterval": "Неверный интервал",
+  "addresses": "Адреса",
+  "clientIp": "IP клиента",
+  "lruSize": "Размер LRU",
+  "useGoRuntimeDnsResolver": "Использовать DNS-резолвер Go runtime.",
+  "alwaysReturnEmptyDnsResponse": "Всегда возвращать пустой ответ на DNS-запросы.",
+  "dnsTypeFake": "Fake",
+  "dnsTypePlain": "UDP/TCP",
+  "dnsTypeDoh": "HTTPS",
+  "dnsTypeTls": "TLS",
+  "dnsTypeQuic": "QUIC",
+  "dnsTypeGo": "Go",
+  "dnsTypeEmpty": "Empty",
+  "reservedDnsServerName": "Имя DNS-сервера \"hijack\" зарезервировано"
 }

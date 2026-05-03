@@ -132,6 +132,18 @@ class $SubscriptionsTable extends Subscriptions
     ),
     defaultValue: const Constant(false),
   );
+  static const VerificationMeta _shareLinkQueryExtraMeta =
+      const VerificationMeta('shareLinkQueryExtra');
+  @override
+  late final GeneratedColumn<String> shareLinkQueryExtra =
+      GeneratedColumn<String>(
+        'share_link_query_extra',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant(''),
+      );
   @override
   List<GeneratedColumn> get $columns => [
     updatedAt,
@@ -145,6 +157,7 @@ class $SubscriptionsTable extends Subscriptions
     lastUpdate,
     lastSuccessUpdate,
     placeOnTop,
+    shareLinkQueryExtra,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -241,6 +254,15 @@ class $SubscriptionsTable extends Subscriptions
         ),
       );
     }
+    if (data.containsKey('share_link_query_extra')) {
+      context.handle(
+        _shareLinkQueryExtraMeta,
+        shareLinkQueryExtra.isAcceptableOrUnknown(
+          data['share_link_query_extra']!,
+          _shareLinkQueryExtraMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -294,6 +316,10 @@ class $SubscriptionsTable extends Subscriptions
         DriftSqlType.bool,
         data['${effectivePrefix}place_on_top'],
       )!,
+      shareLinkQueryExtra: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}share_link_query_extra'],
+      )!,
     );
   }
 
@@ -315,6 +341,9 @@ class Subscription extends DataClass implements Insertable<Subscription> {
   final int lastUpdate;
   final int lastSuccessUpdate;
   final bool placeOnTop;
+
+  /// Merged into each share link line before decode (e.g. vless://...). Format: tx=10&foo=bar
+  final String shareLinkQueryExtra;
   const Subscription({
     this.updatedAt,
     required this.id,
@@ -327,6 +356,7 @@ class Subscription extends DataClass implements Insertable<Subscription> {
     required this.lastUpdate,
     required this.lastSuccessUpdate,
     required this.placeOnTop,
+    required this.shareLinkQueryExtra,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -348,6 +378,7 @@ class Subscription extends DataClass implements Insertable<Subscription> {
     map['last_update'] = Variable<int>(lastUpdate);
     map['last_success_update'] = Variable<int>(lastSuccessUpdate);
     map['place_on_top'] = Variable<bool>(placeOnTop);
+    map['share_link_query_extra'] = Variable<String>(shareLinkQueryExtra);
     return map;
   }
 
@@ -370,6 +401,7 @@ class Subscription extends DataClass implements Insertable<Subscription> {
       lastUpdate: Value(lastUpdate),
       lastSuccessUpdate: Value(lastSuccessUpdate),
       placeOnTop: Value(placeOnTop),
+      shareLinkQueryExtra: Value(shareLinkQueryExtra),
     );
   }
 
@@ -390,6 +422,9 @@ class Subscription extends DataClass implements Insertable<Subscription> {
       lastUpdate: serializer.fromJson<int>(json['lastUpdate']),
       lastSuccessUpdate: serializer.fromJson<int>(json['lastSuccessUpdate']),
       placeOnTop: serializer.fromJson<bool>(json['placeOnTop']),
+      shareLinkQueryExtra: serializer.fromJson<String>(
+        json['shareLinkQueryExtra'],
+      ),
     );
   }
   @override
@@ -407,6 +442,7 @@ class Subscription extends DataClass implements Insertable<Subscription> {
       'lastUpdate': serializer.toJson<int>(lastUpdate),
       'lastSuccessUpdate': serializer.toJson<int>(lastSuccessUpdate),
       'placeOnTop': serializer.toJson<bool>(placeOnTop),
+      'shareLinkQueryExtra': serializer.toJson<String>(shareLinkQueryExtra),
     };
   }
 
@@ -422,6 +458,7 @@ class Subscription extends DataClass implements Insertable<Subscription> {
     int? lastUpdate,
     int? lastSuccessUpdate,
     bool? placeOnTop,
+    String? shareLinkQueryExtra,
   }) => Subscription(
     updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
     id: id ?? this.id,
@@ -436,6 +473,7 @@ class Subscription extends DataClass implements Insertable<Subscription> {
     lastUpdate: lastUpdate ?? this.lastUpdate,
     lastSuccessUpdate: lastSuccessUpdate ?? this.lastSuccessUpdate,
     placeOnTop: placeOnTop ?? this.placeOnTop,
+    shareLinkQueryExtra: shareLinkQueryExtra ?? this.shareLinkQueryExtra,
   );
   Subscription copyWithCompanion(SubscriptionsCompanion data) {
     return Subscription(
@@ -460,6 +498,9 @@ class Subscription extends DataClass implements Insertable<Subscription> {
       placeOnTop: data.placeOnTop.present
           ? data.placeOnTop.value
           : this.placeOnTop,
+      shareLinkQueryExtra: data.shareLinkQueryExtra.present
+          ? data.shareLinkQueryExtra.value
+          : this.shareLinkQueryExtra,
     );
   }
 
@@ -476,7 +517,8 @@ class Subscription extends DataClass implements Insertable<Subscription> {
           ..write('description: $description, ')
           ..write('lastUpdate: $lastUpdate, ')
           ..write('lastSuccessUpdate: $lastSuccessUpdate, ')
-          ..write('placeOnTop: $placeOnTop')
+          ..write('placeOnTop: $placeOnTop, ')
+          ..write('shareLinkQueryExtra: $shareLinkQueryExtra')
           ..write(')'))
         .toString();
   }
@@ -494,6 +536,7 @@ class Subscription extends DataClass implements Insertable<Subscription> {
     lastUpdate,
     lastSuccessUpdate,
     placeOnTop,
+    shareLinkQueryExtra,
   );
   @override
   bool operator ==(Object other) =>
@@ -509,7 +552,8 @@ class Subscription extends DataClass implements Insertable<Subscription> {
           other.description == this.description &&
           other.lastUpdate == this.lastUpdate &&
           other.lastSuccessUpdate == this.lastSuccessUpdate &&
-          other.placeOnTop == this.placeOnTop);
+          other.placeOnTop == this.placeOnTop &&
+          other.shareLinkQueryExtra == this.shareLinkQueryExtra);
 }
 
 class SubscriptionsCompanion extends UpdateCompanion<Subscription> {
@@ -524,6 +568,7 @@ class SubscriptionsCompanion extends UpdateCompanion<Subscription> {
   final Value<int> lastUpdate;
   final Value<int> lastSuccessUpdate;
   final Value<bool> placeOnTop;
+  final Value<String> shareLinkQueryExtra;
   const SubscriptionsCompanion({
     this.updatedAt = const Value.absent(),
     this.id = const Value.absent(),
@@ -536,6 +581,7 @@ class SubscriptionsCompanion extends UpdateCompanion<Subscription> {
     this.lastUpdate = const Value.absent(),
     this.lastSuccessUpdate = const Value.absent(),
     this.placeOnTop = const Value.absent(),
+    this.shareLinkQueryExtra = const Value.absent(),
   });
   SubscriptionsCompanion.insert({
     this.updatedAt = const Value.absent(),
@@ -549,6 +595,7 @@ class SubscriptionsCompanion extends UpdateCompanion<Subscription> {
     required int lastUpdate,
     required int lastSuccessUpdate,
     this.placeOnTop = const Value.absent(),
+    this.shareLinkQueryExtra = const Value.absent(),
   }) : name = Value(name),
        link = Value(link),
        lastUpdate = Value(lastUpdate),
@@ -565,6 +612,7 @@ class SubscriptionsCompanion extends UpdateCompanion<Subscription> {
     Expression<int>? lastUpdate,
     Expression<int>? lastSuccessUpdate,
     Expression<bool>? placeOnTop,
+    Expression<String>? shareLinkQueryExtra,
   }) {
     return RawValuesInsertable({
       if (updatedAt != null) 'updated_at': updatedAt,
@@ -578,6 +626,8 @@ class SubscriptionsCompanion extends UpdateCompanion<Subscription> {
       if (lastUpdate != null) 'last_update': lastUpdate,
       if (lastSuccessUpdate != null) 'last_success_update': lastSuccessUpdate,
       if (placeOnTop != null) 'place_on_top': placeOnTop,
+      if (shareLinkQueryExtra != null)
+        'share_link_query_extra': shareLinkQueryExtra,
     });
   }
 
@@ -593,6 +643,7 @@ class SubscriptionsCompanion extends UpdateCompanion<Subscription> {
     Value<int>? lastUpdate,
     Value<int>? lastSuccessUpdate,
     Value<bool>? placeOnTop,
+    Value<String>? shareLinkQueryExtra,
   }) {
     return SubscriptionsCompanion(
       updatedAt: updatedAt ?? this.updatedAt,
@@ -606,6 +657,7 @@ class SubscriptionsCompanion extends UpdateCompanion<Subscription> {
       lastUpdate: lastUpdate ?? this.lastUpdate,
       lastSuccessUpdate: lastSuccessUpdate ?? this.lastSuccessUpdate,
       placeOnTop: placeOnTop ?? this.placeOnTop,
+      shareLinkQueryExtra: shareLinkQueryExtra ?? this.shareLinkQueryExtra,
     );
   }
 
@@ -645,6 +697,11 @@ class SubscriptionsCompanion extends UpdateCompanion<Subscription> {
     if (placeOnTop.present) {
       map['place_on_top'] = Variable<bool>(placeOnTop.value);
     }
+    if (shareLinkQueryExtra.present) {
+      map['share_link_query_extra'] = Variable<String>(
+        shareLinkQueryExtra.value,
+      );
+    }
     return map;
   }
 
@@ -661,7 +718,8 @@ class SubscriptionsCompanion extends UpdateCompanion<Subscription> {
           ..write('description: $description, ')
           ..write('lastUpdate: $lastUpdate, ')
           ..write('lastSuccessUpdate: $lastSuccessUpdate, ')
-          ..write('placeOnTop: $placeOnTop')
+          ..write('placeOnTop: $placeOnTop, ')
+          ..write('shareLinkQueryExtra: $shareLinkQueryExtra')
           ..write(')'))
         .toString();
   }
@@ -5688,16 +5746,50 @@ class $DnsServersTable extends DnsServers
     defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
   );
   @override
-  late final GeneratedColumnWithTypeConverter<dns.DnsServerConfig, Uint8List>
+  late final GeneratedColumnWithTypeConverter<dns.DnsServerConfig?, Uint8List>
   dnsServer = GeneratedColumn<Uint8List>(
     'dns_server',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.blob,
-    requiredDuringInsert: true,
-  ).withConverter<dns.DnsServerConfig>($DnsServersTable.$converterdnsServer);
+    requiredDuringInsert: false,
+  ).withConverter<dns.DnsServerConfig?>($DnsServersTable.$converterdnsServern);
   @override
-  List<GeneratedColumn> get $columns => [updatedAt, id, name, dnsServer];
+  late final GeneratedColumnWithTypeConverter<
+    dns.ConcurrentDnsServer?,
+    Uint8List
+  >
+  concurrentDnsServer =
+      GeneratedColumn<Uint8List>(
+        'concurrent_dns_server',
+        aliasedName,
+        true,
+        type: DriftSqlType.blob,
+        requiredDuringInsert: false,
+      ).withConverter<dns.ConcurrentDnsServer?>(
+        $DnsServersTable.$converterconcurrentDnsServern,
+      );
+  @override
+  late final GeneratedColumnWithTypeConverter<dns.SerialDnsServer?, Uint8List>
+  serialDnsServer =
+      GeneratedColumn<Uint8List>(
+        'serial_dns_server',
+        aliasedName,
+        true,
+        type: DriftSqlType.blob,
+        requiredDuringInsert: false,
+      ).withConverter<dns.SerialDnsServer?>(
+        $DnsServersTable.$converterserialDnsServern,
+      );
+  @override
+  List<GeneratedColumn> get $columns => [
+    updatedAt,
+    id,
+    name,
+    dnsServer,
+    concurrentDnsServer,
+    serialDnsServer,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -5744,11 +5836,24 @@ class $DnsServersTable extends DnsServers
         DriftSqlType.string,
         data['${effectivePrefix}name'],
       )!,
-      dnsServer: $DnsServersTable.$converterdnsServer.fromSql(
+      dnsServer: $DnsServersTable.$converterdnsServern.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.blob,
           data['${effectivePrefix}dns_server'],
-        )!,
+        ),
+      ),
+      concurrentDnsServer: $DnsServersTable.$converterconcurrentDnsServern
+          .fromSql(
+            attachedDatabase.typeMapping.read(
+              DriftSqlType.blob,
+              data['${effectivePrefix}concurrent_dns_server'],
+            ),
+          ),
+      serialDnsServer: $DnsServersTable.$converterserialDnsServern.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.blob,
+          data['${effectivePrefix}serial_dns_server'],
+        ),
       ),
       updatedAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
@@ -5764,37 +5869,61 @@ class $DnsServersTable extends DnsServers
 
   static TypeConverter<dns.DnsServerConfig, Uint8List> $converterdnsServer =
       const DnsServerConverter();
+  static TypeConverter<dns.DnsServerConfig?, Uint8List?> $converterdnsServern =
+      NullAwareTypeConverter.wrap($converterdnsServer);
+  static TypeConverter<dns.ConcurrentDnsServer, Uint8List>
+  $converterconcurrentDnsServer = const ConcurrentDnsServerConverter();
+  static TypeConverter<dns.ConcurrentDnsServer?, Uint8List?>
+  $converterconcurrentDnsServern = NullAwareTypeConverter.wrap(
+    $converterconcurrentDnsServer,
+  );
+  static TypeConverter<dns.SerialDnsServer, Uint8List>
+  $converterserialDnsServer = const SerialDnsServerConverter();
+  static TypeConverter<dns.SerialDnsServer?, Uint8List?>
+  $converterserialDnsServern = NullAwareTypeConverter.wrap(
+    $converterserialDnsServer,
+  );
 }
 
 class DnsServersCompanion extends UpdateCompanion<DnsServer> {
   final Value<DateTime?> updatedAt;
   final Value<int> id;
   final Value<String> name;
-  final Value<dns.DnsServerConfig> dnsServer;
+  final Value<dns.DnsServerConfig?> dnsServer;
+  final Value<dns.ConcurrentDnsServer?> concurrentDnsServer;
+  final Value<dns.SerialDnsServer?> serialDnsServer;
   const DnsServersCompanion({
     this.updatedAt = const Value.absent(),
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.dnsServer = const Value.absent(),
+    this.concurrentDnsServer = const Value.absent(),
+    this.serialDnsServer = const Value.absent(),
   });
   DnsServersCompanion.insert({
     this.updatedAt = const Value.absent(),
     this.id = const Value.absent(),
     required String name,
-    required dns.DnsServerConfig dnsServer,
-  }) : name = Value(name),
-       dnsServer = Value(dnsServer);
+    this.dnsServer = const Value.absent(),
+    this.concurrentDnsServer = const Value.absent(),
+    this.serialDnsServer = const Value.absent(),
+  }) : name = Value(name);
   static Insertable<DnsServer> custom({
     Expression<DateTime>? updatedAt,
     Expression<int>? id,
     Expression<String>? name,
     Expression<Uint8List>? dnsServer,
+    Expression<Uint8List>? concurrentDnsServer,
+    Expression<Uint8List>? serialDnsServer,
   }) {
     return RawValuesInsertable({
       if (updatedAt != null) 'updated_at': updatedAt,
       if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (dnsServer != null) 'dns_server': dnsServer,
+      if (concurrentDnsServer != null)
+        'concurrent_dns_server': concurrentDnsServer,
+      if (serialDnsServer != null) 'serial_dns_server': serialDnsServer,
     });
   }
 
@@ -5802,13 +5931,17 @@ class DnsServersCompanion extends UpdateCompanion<DnsServer> {
     Value<DateTime?>? updatedAt,
     Value<int>? id,
     Value<String>? name,
-    Value<dns.DnsServerConfig>? dnsServer,
+    Value<dns.DnsServerConfig?>? dnsServer,
+    Value<dns.ConcurrentDnsServer?>? concurrentDnsServer,
+    Value<dns.SerialDnsServer?>? serialDnsServer,
   }) {
     return DnsServersCompanion(
       updatedAt: updatedAt ?? this.updatedAt,
       id: id ?? this.id,
       name: name ?? this.name,
       dnsServer: dnsServer ?? this.dnsServer,
+      concurrentDnsServer: concurrentDnsServer ?? this.concurrentDnsServer,
+      serialDnsServer: serialDnsServer ?? this.serialDnsServer,
     );
   }
 
@@ -5826,7 +5959,21 @@ class DnsServersCompanion extends UpdateCompanion<DnsServer> {
     }
     if (dnsServer.present) {
       map['dns_server'] = Variable<Uint8List>(
-        $DnsServersTable.$converterdnsServer.toSql(dnsServer.value),
+        $DnsServersTable.$converterdnsServern.toSql(dnsServer.value),
+      );
+    }
+    if (concurrentDnsServer.present) {
+      map['concurrent_dns_server'] = Variable<Uint8List>(
+        $DnsServersTable.$converterconcurrentDnsServern.toSql(
+          concurrentDnsServer.value,
+        ),
+      );
+    }
+    if (serialDnsServer.present) {
+      map['serial_dns_server'] = Variable<Uint8List>(
+        $DnsServersTable.$converterserialDnsServern.toSql(
+          serialDnsServer.value,
+        ),
       );
     }
     return map;
@@ -5838,7 +5985,9 @@ class DnsServersCompanion extends UpdateCompanion<DnsServer> {
           ..write('updatedAt: $updatedAt, ')
           ..write('id: $id, ')
           ..write('name: $name, ')
-          ..write('dnsServer: $dnsServer')
+          ..write('dnsServer: $dnsServer, ')
+          ..write('concurrentDnsServer: $concurrentDnsServer, ')
+          ..write('serialDnsServer: $serialDnsServer')
           ..write(')'))
         .toString();
   }
@@ -6064,6 +6213,7 @@ typedef $$SubscriptionsTableCreateCompanionBuilder =
       required int lastUpdate,
       required int lastSuccessUpdate,
       Value<bool> placeOnTop,
+      Value<String> shareLinkQueryExtra,
     });
 typedef $$SubscriptionsTableUpdateCompanionBuilder =
     SubscriptionsCompanion Function({
@@ -6078,6 +6228,7 @@ typedef $$SubscriptionsTableUpdateCompanionBuilder =
       Value<int> lastUpdate,
       Value<int> lastSuccessUpdate,
       Value<bool> placeOnTop,
+      Value<String> shareLinkQueryExtra,
     });
 
 final class $$SubscriptionsTableReferences
@@ -6204,6 +6355,11 @@ class $$SubscriptionsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<String> get shareLinkQueryExtra => $composableBuilder(
+    column: $table.shareLinkQueryExtra,
+    builder: (column) => ColumnFilters(column),
+  );
+
   Expression<bool> outboundHandlersRefs(
     Expression<bool> Function($$OutboundHandlersTableFilterComposer f) f,
   ) {
@@ -6322,6 +6478,11 @@ class $$SubscriptionsTableOrderingComposer
     column: $table.placeOnTop,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get shareLinkQueryExtra => $composableBuilder(
+    column: $table.shareLinkQueryExtra,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$SubscriptionsTableAnnotationComposer
@@ -6373,6 +6534,11 @@ class $$SubscriptionsTableAnnotationComposer
 
   GeneratedColumn<bool> get placeOnTop => $composableBuilder(
     column: $table.placeOnTop,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get shareLinkQueryExtra => $composableBuilder(
+    column: $table.shareLinkQueryExtra,
     builder: (column) => column,
   );
 
@@ -6473,6 +6639,7 @@ class $$SubscriptionsTableTableManager
                 Value<int> lastUpdate = const Value.absent(),
                 Value<int> lastSuccessUpdate = const Value.absent(),
                 Value<bool> placeOnTop = const Value.absent(),
+                Value<String> shareLinkQueryExtra = const Value.absent(),
               }) => SubscriptionsCompanion(
                 updatedAt: updatedAt,
                 id: id,
@@ -6485,6 +6652,7 @@ class $$SubscriptionsTableTableManager
                 lastUpdate: lastUpdate,
                 lastSuccessUpdate: lastSuccessUpdate,
                 placeOnTop: placeOnTop,
+                shareLinkQueryExtra: shareLinkQueryExtra,
               ),
           createCompanionCallback:
               ({
@@ -6499,6 +6667,7 @@ class $$SubscriptionsTableTableManager
                 required int lastUpdate,
                 required int lastSuccessUpdate,
                 Value<bool> placeOnTop = const Value.absent(),
+                Value<String> shareLinkQueryExtra = const Value.absent(),
               }) => SubscriptionsCompanion.insert(
                 updatedAt: updatedAt,
                 id: id,
@@ -6511,6 +6680,7 @@ class $$SubscriptionsTableTableManager
                 lastUpdate: lastUpdate,
                 lastSuccessUpdate: lastSuccessUpdate,
                 placeOnTop: placeOnTop,
+                shareLinkQueryExtra: shareLinkQueryExtra,
               ),
           withReferenceMapper: (p0) => p0
               .map(
@@ -12831,14 +13001,18 @@ typedef $$DnsServersTableCreateCompanionBuilder =
       Value<DateTime?> updatedAt,
       Value<int> id,
       required String name,
-      required dns.DnsServerConfig dnsServer,
+      Value<dns.DnsServerConfig?> dnsServer,
+      Value<dns.ConcurrentDnsServer?> concurrentDnsServer,
+      Value<dns.SerialDnsServer?> serialDnsServer,
     });
 typedef $$DnsServersTableUpdateCompanionBuilder =
     DnsServersCompanion Function({
       Value<DateTime?> updatedAt,
       Value<int> id,
       Value<String> name,
-      Value<dns.DnsServerConfig> dnsServer,
+      Value<dns.DnsServerConfig?> dnsServer,
+      Value<dns.ConcurrentDnsServer?> concurrentDnsServer,
+      Value<dns.SerialDnsServer?> serialDnsServer,
     });
 
 class $$DnsServersTableFilterComposer
@@ -12866,12 +13040,32 @@ class $$DnsServersTableFilterComposer
   );
 
   ColumnWithTypeConverterFilters<
-    dns.DnsServerConfig,
+    dns.DnsServerConfig?,
     dns.DnsServerConfig,
     Uint8List
   >
   get dnsServer => $composableBuilder(
     column: $table.dnsServer,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<
+    dns.ConcurrentDnsServer?,
+    dns.ConcurrentDnsServer,
+    Uint8List
+  >
+  get concurrentDnsServer => $composableBuilder(
+    column: $table.concurrentDnsServer,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<
+    dns.SerialDnsServer?,
+    dns.SerialDnsServer,
+    Uint8List
+  >
+  get serialDnsServer => $composableBuilder(
+    column: $table.serialDnsServer,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 }
@@ -12904,6 +13098,16 @@ class $$DnsServersTableOrderingComposer
     column: $table.dnsServer,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<Uint8List> get concurrentDnsServer => $composableBuilder(
+    column: $table.concurrentDnsServer,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<Uint8List> get serialDnsServer => $composableBuilder(
+    column: $table.serialDnsServer,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$DnsServersTableAnnotationComposer
@@ -12924,9 +13128,21 @@ class $$DnsServersTableAnnotationComposer
   GeneratedColumn<String> get name =>
       $composableBuilder(column: $table.name, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<dns.DnsServerConfig, Uint8List>
+  GeneratedColumnWithTypeConverter<dns.DnsServerConfig?, Uint8List>
   get dnsServer =>
       $composableBuilder(column: $table.dnsServer, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<dns.ConcurrentDnsServer?, Uint8List>
+  get concurrentDnsServer => $composableBuilder(
+    column: $table.concurrentDnsServer,
+    builder: (column) => column,
+  );
+
+  GeneratedColumnWithTypeConverter<dns.SerialDnsServer?, Uint8List>
+  get serialDnsServer => $composableBuilder(
+    column: $table.serialDnsServer,
+    builder: (column) => column,
+  );
 }
 
 class $$DnsServersTableTableManager
@@ -12963,24 +13179,36 @@ class $$DnsServersTableTableManager
                 Value<DateTime?> updatedAt = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 Value<String> name = const Value.absent(),
-                Value<dns.DnsServerConfig> dnsServer = const Value.absent(),
+                Value<dns.DnsServerConfig?> dnsServer = const Value.absent(),
+                Value<dns.ConcurrentDnsServer?> concurrentDnsServer =
+                    const Value.absent(),
+                Value<dns.SerialDnsServer?> serialDnsServer =
+                    const Value.absent(),
               }) => DnsServersCompanion(
                 updatedAt: updatedAt,
                 id: id,
                 name: name,
                 dnsServer: dnsServer,
+                concurrentDnsServer: concurrentDnsServer,
+                serialDnsServer: serialDnsServer,
               ),
           createCompanionCallback:
               ({
                 Value<DateTime?> updatedAt = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 required String name,
-                required dns.DnsServerConfig dnsServer,
+                Value<dns.DnsServerConfig?> dnsServer = const Value.absent(),
+                Value<dns.ConcurrentDnsServer?> concurrentDnsServer =
+                    const Value.absent(),
+                Value<dns.SerialDnsServer?> serialDnsServer =
+                    const Value.absent(),
               }) => DnsServersCompanion.insert(
                 updatedAt: updatedAt,
                 id: id,
                 name: name,
                 dnsServer: dnsServer,
+                concurrentDnsServer: concurrentDnsServer,
+                serialDnsServer: serialDnsServer,
               ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

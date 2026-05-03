@@ -327,6 +327,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get subscriptionAddress => 'Subscription Address';
 
   @override
+  String get subscriptionShareLinkQueryExtra => 'Extra link query';
+
+  @override
+  String get subscriptionShareLinkQueryExtraHint => 'tx=10&foo=1&sig=a1b2';
+
+  @override
+  String get subscriptionShareLinkQueryExtraHelper => 'Appended to each node URL before parsing.';
+
+  @override
+  String get subscriptionShareLinkQueryExtraInvalid => 'Use a valid JSON object or query string (e.g. key=value&key2=value2)';
+
+  @override
   String get empty => 'Empty';
 
   @override
@@ -805,7 +817,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get startFailedReasonTunNeedAdmin => 'Tun inbound is only available when running as administrator. Rerun VX as administrator or change inbound mode.';
+  String get startFailedReasonTunNeedAdmin => 'To use TUN mode, please run VX as an administrator or install Service (the installation button is in Settings page)';
 
   @override
   String get startFailedReasonNoNode => 'No node';
@@ -826,6 +838,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tunNeedAdmin => 'To use tun, rerun VX as administrator';
+
+  @override
+  String get windowsServiceRequiresAdmin => 'This action requires administrator permission. Restart VX as administrator and try again.';
+
+  @override
+  String windowsServiceInstallFailed(String error) {
+    return 'VX Service installation failed: $error';
+  }
+
+  @override
+  String get windowsServiceInstalled => 'Windows service installed';
+
+  @override
+  String get windowsServiceRemoved => 'Windows service removed';
+
+  @override
+  String get windowsServiceInstall => 'Install VX Service';
+
+  @override
+  String get windowsServiceRemove => 'Remove VX Service';
 
   @override
   String decodeResult(num value1, num value2) {
@@ -1674,6 +1706,60 @@ class AppLocalizationsEn extends AppLocalizations {
   String get randomPorts => 'Random Ports';
 
   @override
+  String get outboundPortStrategyRandomAllPortsSameTime => 'Random (all ports at same time)';
+
+  @override
+  String get outboundNameCannotBeDirectOrDns => 'Name cannot be \"direct\" or \"dns\"';
+
+  @override
+  String get outboundServerAddressCannotBeEmpty => 'Server address cannot be empty';
+
+  @override
+  String get outboundPortCannotBeEmpty => 'Port cannot be empty';
+
+  @override
+  String get outboundPortHintExample => '443,444,1080-1090';
+
+  @override
+  String get outboundPortSelectStrategy => 'Port Select Strategy';
+
+  @override
+  String get outboundPortStrategyOneSwitchByInterval => 'One (switch port by interval)';
+
+  @override
+  String get outboundSetIntervalOrMinMax => 'Set interval, or min/max interval';
+
+  @override
+  String get outboundPortSwitchIntervalSeconds => 'Interval (seconds)';
+
+  @override
+  String get outboundPortSwitchIntervalHelper => 'Use this for fixed switch interval';
+
+  @override
+  String get outboundRequiredWhenIntervalEmpty => 'Required when interval is empty';
+
+  @override
+  String get outboundMinIntervalMustBeLeqMax => 'Must be <= max interval';
+
+  @override
+  String get outboundMinIntervalSeconds => 'Min Interval (seconds)';
+
+  @override
+  String get outboundMaxIntervalMustBeGeqMin => 'Must be >= min interval';
+
+  @override
+  String get outboundMaxIntervalSeconds => 'Max Interval (seconds)';
+
+  @override
+  String get outboundMux => 'Mux';
+
+  @override
+  String get outboundUdpOverTcp => 'UDP over TCP';
+
+  @override
+  String get outboundStream => 'Stream';
+
+  @override
   String get staticPorts => 'Static Ports';
 
   @override
@@ -1717,6 +1803,47 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get selectorSetting => 'Selector Settings';
+
+  @override
+  String selectorTestFieldsTitle(String tag) {
+    return 'Edit $tag';
+  }
+
+  @override
+  String get selectorTestSpeedTestSizeLabel => 'Speed test size';
+
+  @override
+  String get selectorTestByteSuffix => 'Byte';
+
+  @override
+  String get selectorTestSpeedTestSizeHelper => '1000000 Byte = 1 MB';
+
+  @override
+  String get selectorTestSpeedTestIntervalLabel => 'Speed test interval';
+
+  @override
+  String get selectorTestMinutesSuffix => 'min';
+
+  @override
+  String get selectorTestSpeedTestIntervalHelper => 'Periodically test speed of all filtered handlers';
+
+  @override
+  String get selectorTestPingTestIntervalLabel => 'Ping test interval';
+
+  @override
+  String get selectorTestPingTestIntervalHelper => 'Periodically test ping of all filtered handlers';
+
+  @override
+  String get selectorTestUnusableTestIntervalLabel => 'Unusable test interval';
+
+  @override
+  String get selectorTestUnusableTestIntervalHelper => 'Periodically test filtered but unusable handlers whether they are usable or not';
+
+  @override
+  String get selectorTestMustBeNonNegativeInteger => 'Must be a non-negative integer';
+
+  @override
+  String get selectorTestMustBeAtMostUint32Max => 'Must be at most 4294967295';
 
   @override
   String get serverKey => 'Server/Key';
@@ -2170,6 +2297,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get realtimeLatencyDesc => 'Observerd latency of the node: the time used to get a response';
 
   @override
+  String get realtimeSpeedSamplingInterval => 'Realtime speed sampling interval';
+
+  @override
+  String realtimeSpeedSamplingSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count seconds',
+      one: '1 second',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get download => 'Download';
 
   @override
@@ -2400,6 +2541,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resetCompletedMessage => 'Database and preferences have been reset. Restart VX to continue.';
 
   @override
+  String get repairDbSchemaTitle => 'Repair database schema';
+
+  @override
+  String get repairDbSchemaAction => 'Repair DB Schema';
+
+  @override
+  String get repairDbSchemaSuccess => 'Database schema repaired successfully';
+
+  @override
+  String repairDbSchemaFailed(String error) {
+    return 'Failed to repair database schema: $error';
+  }
+
+  @override
   String resetFailed(String error) {
     return 'Failed to reset: $error';
   }
@@ -2439,4 +2594,70 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get selectGroup => 'Select Group';
+
+  @override
+  String get addConcurrentDnsServer => 'Add Concurrent DNS Server';
+
+  @override
+  String get addSerialDnsServer => 'Add Serial DNS Server';
+
+  @override
+  String get concurrentDnsServerType => 'Concurrent DNS Server';
+
+  @override
+  String get serialDnsServerType => 'Serial DNS Server';
+
+  @override
+  String get useSystemDnsResolver => 'Use system DNS resolver';
+
+  @override
+  String get alwaysReturnEmptyDnsAnswer => 'Always return empty DNS answer';
+
+  @override
+  String get dnsPool => 'Pool';
+
+  @override
+  String get dnsServers => 'DNS Servers';
+
+  @override
+  String get invalidInterval => 'Invalid interval';
+
+  @override
+  String get addresses => 'Addresses';
+
+  @override
+  String get clientIp => 'Client IP';
+
+  @override
+  String get lruSize => 'LRU Size';
+
+  @override
+  String get useGoRuntimeDnsResolver => 'Use Go runtime DNS resolver.';
+
+  @override
+  String get alwaysReturnEmptyDnsResponse => 'Always returns empty response for DNS queries.';
+
+  @override
+  String get dnsTypeFake => 'Fake';
+
+  @override
+  String get dnsTypePlain => 'UDP/TCP';
+
+  @override
+  String get dnsTypeDoh => 'HTTPS';
+
+  @override
+  String get dnsTypeTls => 'TLS';
+
+  @override
+  String get dnsTypeQuic => 'QUIC';
+
+  @override
+  String get dnsTypeGo => 'Go';
+
+  @override
+  String get dnsTypeEmpty => 'Empty';
+
+  @override
+  String get reservedDnsServerName => 'DNS server name \"hijack\" is reserved';
 }

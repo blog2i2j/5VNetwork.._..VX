@@ -993,6 +993,24 @@ void snack(String? message, {Duration? duration}) {
   );
 }
 
+void dialog(String message) {
+  if (rootNavigationKey.currentContext == null) {
+    return;
+  }
+  showDialog(
+    context: rootNavigationKey.currentContext!,
+    builder: (context) => AlertDialog(
+      content: Text(message),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(AppLocalizations.of(context)!.close),
+        ),
+      ],
+    ),
+  );
+}
+
 AppLocalizations? rootLocalizations() {
   if (rootNavigationKey.currentContext == null) {
     return null;

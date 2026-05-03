@@ -48,7 +48,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "D:\a\vx\vx\build\windows\x64\runner\Release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "D:\a\vx\vx\service_install.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\a\vx\vx\vx_service.exe"; DestDir: "{app}"; Flags: ignoreversion
+; Source: "D:\a\vx\vx\vx_service.exe"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
@@ -59,7 +59,7 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 ; 🔹 Install the service during setup
 ;  ""{app}""
 Filename: "{app}\service_install.exe"; \
-    Parameters: "install"; \
+    Parameters: "install ""{app}\data\flutter_assets\packages\tm_windows\assets\vx_service.exe"""; \
     Flags: waituntilterminated runhidden
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 

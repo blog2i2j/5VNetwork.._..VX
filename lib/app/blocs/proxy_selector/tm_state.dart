@@ -55,7 +55,6 @@ class ProxySelectorState extends Equatable {
     ProxySelectorMode? outboundMode,
     ManualNodeSetting? manualNodeSetting,
     SelectorConfig? autoNodeSetting,
-    bool? useLandHandlers,
   }) {
     return ProxySelectorState(
       routeMode: routeMode ?? this.routeMode,

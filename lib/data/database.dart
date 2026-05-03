@@ -18,10 +18,10 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
-import 'package:drift_flutter/drift_flutter.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Table, Column, RouterConfig;
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,7 +37,6 @@ import 'package:vx/app/server/add_server.dart';
 import 'package:vx/app/blocs/proxy_selector/proxy_selector_bloc.dart';
 import 'package:vx/common/common.dart';
 import 'package:vx/common/config.dart';
-import 'package:flutter_common/util/net.dart';
 import 'package:vx/common/net.dart';
 import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 import 'package:sqlite3/sqlite3.dart';
@@ -93,7 +92,7 @@ class AppDatabase extends _$AppDatabase {
   }) : super(executor ?? _openConnection(path, interceptor));
 
   @override
-  int get schemaVersion => 13;
+  int get schemaVersion => 15;
 
   static QueryExecutor _openConnection(
     String path,
@@ -162,6 +161,86 @@ class AppDatabase extends _$AppDatabase {
       AtomicDomainSetsCompanion(name: Value('Fallback')),
       mode: InsertMode.insertOrIgnore,
     );
+  }
+
+  Future<Set<String>> _tableColumnNames(String table) async {
+    final columns = await customSelect("PRAGMA table_info('$table')").get();
+    return columns.map((row) => row.data['name']).whereType<String>().toSet();
+  }
+
+  Future<Map<String, Map<String, String>>> _readSchemaFromCleanDb() async {
+    final blob = await rootBundle.load('assets/clean.db');
+    final tempDir = await Directory.systemTemp.createTemp('vx-clean-db-');
+    final cleanDbPath = '${tempDir.path}${Platform.pathSeparator}clean.db';
+    await File(cleanDbPath).writeAsBytes(
+      blob.buffer.asUint8List(blob.offsetInBytes, blob.lengthInBytes),
+    );
+
+    final clean = sqlite3.open(cleanDbPath);
+    try {
+      final tables = clean.select(
+        "SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'",
+      );
+      final schema = <String, Map<String, String>>{};
+      for (final table in tables) {
+        final tableName = table['name'] as String;
+        final cols = clean.select("PRAGMA table_info('$tableName')");
+        final colMap = <String, String>{};
+        for (final col in cols) {
+          final colName = col['name'] as String?;
+          if (colName == null || colName.isEmpty) {
+            continue;
+          }
+          colMap[colName] = ((col['type'] as String?) ?? '').trim();
+        }
+        schema[tableName] = colMap;
+      }
+      logger.d('schema: $schema');
+      return schema;
+    } finally {
+      clean.dispose();
+      try {
+        await tempDir.delete(recursive: true);
+      } catch (_) {}
+    }
+  }
+
+  Future<void> _selfHealMissingColumnsFromCleanDb() async {
+    final cleanSchema = await _readSchemaFromCleanDb();
+    for (final table in allTables) {
+      final tableName = table.actualTableName;
+      final expectedColumns = cleanSchema[tableName];
+      if (expectedColumns == null || expectedColumns.isEmpty) {
+        continue;
+      }
+      final existingColumns = await _tableColumnNames(tableName);
+      for (final entry in expectedColumns.entries) {
+        if (existingColumns.contains(entry.key)) {
+          continue;
+        }
+        final sqlType = entry.value.isEmpty ? 'BLOB' : entry.value;
+        logger.w(
+          'Missing column detected via clean.db, applying self-heal: '
+          '$tableName.${entry.key} ($sqlType)',
+        );
+        await customStatement(
+          'ALTER TABLE $tableName ADD COLUMN ${entry.key} $sqlType',
+        );
+      }
+    }
+  }
+
+  Future<void> _selfHealSchema() async {
+    try {
+      await _selfHealMissingColumnsFromCleanDb();
+    } catch (e) {
+      reportError("selfHealSchema", e);
+      rethrow;
+    }
+  }
+
+  Future<void> repairSchemaFromCleanDb() async {
+    await _selfHealSchema();
   }
 
   // Database Open
@@ -268,6 +347,24 @@ class AppDatabase extends _$AppDatabase {
               from: from,
               to: to,
               steps: migrationSteps(
+                from14To15: (m, schema) async {
+                  await m.addColumn(
+                    schema.subscriptions,
+                    schema.subscriptions.shareLinkQueryExtra,
+                  );
+                },
+                from13To14: (m, schema) async {
+                  // alterTable copies all target columns; add new ones on disk first.
+                  await m.addColumn(
+                    schema.dnsServers,
+                    schema.dnsServers.concurrentDnsServer,
+                  );
+                  await m.addColumn(
+                    schema.dnsServers,
+                    schema.dnsServers.serialDnsServer,
+                  );
+                  await m.alterTable(TableMigration(schema.dnsServers));
+                },
                 from12To13: (m, schema) async {
                   logger.d('from12To13');
                   await m.addColumn(schema.apps, schema.apps.name);
@@ -669,11 +766,14 @@ class AppDatabase extends _$AppDatabase {
                   );
                 },
                 from7To8: (m, schema) async {
-                  m.addColumn(
+                  await m.addColumn(
                     schema.atomicDomainSets,
                     schema.atomicDomainSets.geoUrl,
                   );
-                  m.addColumn(schema.atomicIpSets, schema.atomicIpSets.geoUrl);
+                  await m.addColumn(
+                    schema.atomicIpSets,
+                    schema.atomicIpSets.geoUrl,
+                  );
                 },
                 from8To9: (m, schema) async {
                   // m.addColumn(
@@ -740,6 +840,7 @@ class AppDatabase extends _$AppDatabase {
           }
         } catch (e) {
           reportError("onUpgrade: $from -> $to", e);
+          rethrow;
         }
       },
     );
@@ -794,40 +895,36 @@ class AppDatabase extends _$AppDatabase {
   }
 
   Future<SelectorConfig> selectorToConfig(HandlerSelector selector) async {
-    final config = SelectorConfig(
-      tag: selector.name,
-      strategy: selector.config.strategy,
-      balanceStrategy: selector.config.balanceStrategy,
-      landHandlers: selector.config.landHandlers,
-      filter: selector.config.filter.all
-          ? SelectorConfig_Filter(all: true)
-          : SelectorConfig_Filter(
-              prefixes: selector.config.filter.prefixes,
-              subStrings: selector.config.filter.subStrings,
-              countryCodes: selector.config.filter.countryCodes,
-              handlerIds:
-                  (await (select(
-                            selectorHandlerRelations,
-                          )..where((s) => s.selectorName.equals(selector.name)))
-                          .get())
-                      .map((e) => Int64(e.handlerId))
-                      .toList(),
-              groupTags:
-                  (await (select(
-                            selectorHandlerGroupRelations,
-                          )..where((s) => s.selectorName.equals(selector.name)))
-                          .get())
-                      .map((e) => e.groupName)
-                      .toList(),
-              subIds:
-                  (await (select(
-                            selectorSubscriptionRelations,
-                          )..where((s) => s.selectorName.equals(selector.name)))
-                          .get())
-                      .map((e) => Int64(e.subscriptionId))
-                      .toList(),
-            ),
-    );
+    final config = selector.config.deepCopy();
+    config.tag = selector.name;
+    config.filter = selector.config.filter.all
+        ? SelectorConfig_Filter(all: true)
+        : SelectorConfig_Filter(
+            prefixes: selector.config.filter.prefixes,
+            subStrings: selector.config.filter.subStrings,
+            countryCodes: selector.config.filter.countryCodes,
+            handlerIds:
+                (await (select(
+                          selectorHandlerRelations,
+                        )..where((s) => s.selectorName.equals(selector.name)))
+                        .get())
+                    .map((e) => Int64(e.handlerId))
+                    .toList(),
+            groupTags:
+                (await (select(
+                          selectorHandlerGroupRelations,
+                        )..where((s) => s.selectorName.equals(selector.name)))
+                        .get())
+                    .map((e) => e.groupName)
+                    .toList(),
+            subIds:
+                (await (select(
+                          selectorSubscriptionRelations,
+                        )..where((s) => s.selectorName.equals(selector.name)))
+                        .get())
+                    .map((e) => Int64(e.subscriptionId))
+                    .toList(),
+          );
     return config;
   }
 
@@ -1230,6 +1327,9 @@ class Subscriptions extends Table with TableMixin {
   // miliseconds
   IntColumn get lastSuccessUpdate => integer()();
   BoolColumn get placeOnTop => boolean().withDefault(const Constant(false))();
+  /// Merged into each share link line before decode (e.g. vless://...). Format: tx=10&foo=bar
+  TextColumn get shareLinkQueryExtra =>
+      text().withDefault(const Constant(''))();
 
   @override
   Set<Column<Object>> get primaryKey => {id};
@@ -1639,7 +1739,12 @@ class SelectorSubscriptionRelations extends Table {
 class DnsServers extends Table with TableMixin {
   IntColumn get id => integer()();
   TextColumn get name => text().unique()();
-  BlobColumn get dnsServer => blob().map(const DnsServerConverter())();
+  BlobColumn get dnsServer =>
+      blob().map(const DnsServerConverter()).nullable()();
+  BlobColumn get concurrentDnsServer =>
+      blob().map(const ConcurrentDnsServerConverter()).nullable()();
+  BlobColumn get serialDnsServer =>
+      blob().map(const SerialDnsServerConverter()).nullable()();
 
   @override
   Set<Column<Object>> get primaryKey => {id};
@@ -1654,6 +1759,30 @@ class DnsServerConverter extends TypeConverter<dns.DnsServerConfig, Uint8List> {
 
   @override
   Uint8List toSql(dns.DnsServerConfig fromDart) => fromDart.writeToBuffer();
+}
+
+class ConcurrentDnsServerConverter
+    extends TypeConverter<dns.ConcurrentDnsServer, Uint8List> {
+  const ConcurrentDnsServerConverter();
+
+  @override
+  dns.ConcurrentDnsServer fromSql(Uint8List fromSql) =>
+      dns.ConcurrentDnsServer.fromBuffer(fromSql);
+
+  @override
+  Uint8List toSql(dns.ConcurrentDnsServer fromDart) => fromDart.writeToBuffer();
+}
+
+class SerialDnsServerConverter
+    extends TypeConverter<dns.SerialDnsServer, Uint8List> {
+  const SerialDnsServerConverter();
+
+  @override
+  dns.SerialDnsServer fromSql(Uint8List fromSql) =>
+      dns.SerialDnsServer.fromBuffer(fromSql);
+
+  @override
+  Uint8List toSql(dns.SerialDnsServer fromDart) => fromDart.writeToBuffer();
 }
 
 abstract class ToJson {

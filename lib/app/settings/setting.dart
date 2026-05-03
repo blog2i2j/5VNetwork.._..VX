@@ -33,9 +33,9 @@ import 'package:vx/app/outbound/outbounds_bloc.dart';
 import 'package:vx/app/settings/ads.dart';
 import 'package:vx/app/settings/debug.dart';
 import 'package:vx/app/settings/general/general.dart';
+import 'package:vx/app/settings/service.dart';
 import 'package:vx/app/x_controller.dart';
 import 'package:vx/common/common.dart';
-import 'package:vx/data/database.dart' as db;
 import 'package:vx/data/database_provider.dart';
 import 'package:vx/iap/pro.dart';
 import 'package:vx/l10n/app_localizations.dart';
@@ -167,6 +167,24 @@ Future<void> _reset(BuildContext context) async {
   final pref = context.read<SharedPreferences>();
   await pref.clear();
   await _resetDatabaseFromCleanAsset(context);
+}
+
+Future<void> _repairDatabaseSchema(BuildContext context) async {
+  final l10n = AppLocalizations.of(context)!;
+  final database = context.read<DatabaseProvider>().database;
+  await context.read<XController>().stop();
+
+  try {
+    await database.repairSchemaFromCleanDb();
+    snack(l10n.repairDbSchemaSuccess);
+  } catch (e, stackTrace) {
+    logger.e(
+      'Failed to repair database schema',
+      error: e,
+      stackTrace: stackTrace,
+    );
+    snack(l10n.repairDbSchemaFailed(e.toString()));
+  }
 }
 
 Future<void> _resetDatabaseFromCleanAsset(BuildContext context) async {
@@ -361,7 +379,7 @@ List<Widget> _getBottomButtons(BuildContext context, User? user) {
     if ((user == null || (user.lifetimePro == false)) &&
         !context.watch<AuthBloc>().state.isActivated)
       Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5),
+        padding: const EdgeInsets.only(left: 5, right: 5, bottom: 5),
         child: OutlinedButton.icon(
           onPressed: () {
             if (useStripe) {
@@ -472,11 +490,25 @@ List<Widget> _getBottomButtons(BuildContext context, User? user) {
     Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: OutlinedButton.icon(
+        onPressed: () => _repairDatabaseSchema(context),
+        icon: const Icon(Icons.build_circle_outlined),
+        label: Text(AppLocalizations.of(context)!.repairDbSchemaAction),
+      ),
+    ),
+    const SizedBox(height: 5),
+    Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5),
+      child: OutlinedButton.icon(
         onPressed: () => _reset(context),
         icon: Icon(Icons.restart_alt_rounded),
         label: Text(AppLocalizations.of(context)!.reset),
       ),
     ),
+    if (isWinStore)
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        child: WindowsServiceButtons(),
+      ),
     const Gap(5),
     const Version(),
     const Gap(5),

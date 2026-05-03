@@ -14,9 +14,12 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'dart:async';
+import 'dart:ffi';
+import 'dart:io';
 
 import 'package:drift/native.dart';
 import 'package:drift/remote.dart';
+import 'package:ffi/ffi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,11 +27,14 @@ import 'package:vx/app/routing/default.dart';
 import 'package:vx/app/blocs/proxy_selector/proxy_selector_bloc.dart';
 import 'package:vx/app/x_controller.dart';
 import 'package:vx/auth/auth_bloc.dart';
+import 'package:vx/common/common.dart';
 import 'package:vx/l10n/app_localizations.dart';
 import 'package:vx/main.dart';
 import 'package:vx/pref_helper.dart';
 import 'package:vx/utils/logger.dart';
+import 'package:vx/utils/path.dart';
 import 'package:vx/xconfig_helper.dart';
+import 'package:tm_windows/tm_windows_bindings_generated.dart';
 
 enum StartCloseButtonSize {
   small(24, 16),
@@ -75,7 +81,7 @@ class StartCloseCubit extends Cubit<XStatus> {
   }
 
   /// returns a non-null string if cannot start
-  String? _canStart() {
+  Future<String?> _canStart() async {
     if (_pref.routingMode == null) {
       return rootLocalizations()?.pleaseSelectARoutingMode;
     }
@@ -87,11 +93,40 @@ class StartCloseCubit extends Cubit<XStatus> {
         )) {
       return rootLocalizations()?.freeUserCannotUseCustomRoutingMode;
     }
+    if (isProduction() &&
+        Platform.isWindows &&
+        _pref.inboundMode == InboundMode.tun &&
+        !isRunningAsAdmin &&
+        isWinStore) {
+      if (!await _serviceInstalled()) {
+        return rootLocalizations()?.startFailedReasonTunNeedAdmin;
+      }
+    }
+
     return null;
   }
 
+  Future<bool> _serviceInstalled() async {
+    final tmWindowsBindings = TmWindowsBindings(
+      DynamicLibrary.open(getDllPath()),
+    );
+    const serviceName = "vx";
+    final serviceNamePtr = serviceName.toNativeUtf8();
+    final resultPtr = tmWindowsBindings.GetServiceStatus(
+      serviceNamePtr.cast<Char>(),
+    );
+    final result = resultPtr.cast<Utf8>().toDartString();
+    tmWindowsBindings.FreeString(resultPtr);
+    calloc.free(serviceNamePtr);
+    if (result == "uninstalled") {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   Future<void> start() async {
-    final canStartError = _canStart();
+    final canStartError = await _canStart();
     if (canStartError != null) {
       snack(
         rootLocalizations()?.startFailedWithReason(canStartError, ''),

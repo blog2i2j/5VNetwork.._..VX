@@ -13,8 +13,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'dart:developer';
-
 import 'package:drift/drift.dart';
 import 'package:tm/protos/vx/common/geo/geo.pb.dart';
 import 'package:tm/protos/vx/dns/dns.pb.dart';
@@ -146,6 +144,27 @@ abstract class DnsRepo {
   });
   Future<void> removeDnsServer(DnsServer ds);
   Stream<List<DnsServer>> getDnsServersStream();
+  Future<List<DnsServer>> getConcurrentDnsServers();
+  Future<DnsServer> addConcurrentDnsServer(
+    String name,
+    ConcurrentDnsServer config,
+  );
+  Future<void> updateConcurrentDnsServer(
+    DnsServer row, {
+    String? name,
+    ConcurrentDnsServer? config,
+  });
+  Future<void> removeConcurrentDnsServer(DnsServer row);
+  Stream<List<DnsServer>> getConcurrentDnsServersStream();
+  Future<List<DnsServer>> getSerialDnsServers();
+  Future<DnsServer> addSerialDnsServer(String name, SerialDnsServer config);
+  Future<void> updateSerialDnsServer(
+    DnsServer row, {
+    String? name,
+    SerialDnsServer? config,
+  });
+  Future<void> removeSerialDnsServer(DnsServer row);
+  Stream<List<DnsServer>> getSerialDnsServersStream();
 
   Future<DnsRecord> addDnsRecord(Record record);
   Future<void> updateDnsRecord(DnsRecord record, Record newRecord);
@@ -157,7 +176,18 @@ class DbHelper implements SelectorRepo, RouteRepo, SetRepo, DnsRepo {
   DbHelper({required DatabaseProvider databaseProvider})
     : _databaseProvider = databaseProvider;
 
+  static const String _reservedDnsServerName = 'hijack';
   final DatabaseProvider _databaseProvider;
+
+  void _validateDnsServerName(String name) {
+    if (name.trim().toLowerCase() == _reservedDnsServerName) {
+      throw ArgumentError.value(
+        name,
+        'name',
+        'DNS server name "hijack" is reserved',
+      );
+    }
+  }
 
   Future<List<AtomicIpSet>> getAtomicIpSets() async {
     return await _databaseProvider.database.managers.atomicIpSets.get();
@@ -177,9 +207,23 @@ class DbHelper implements SelectorRepo, RouteRepo, SetRepo, DnsRepo {
 
   @override
   Stream<List<DnsServer>> getDnsServersStream() {
-    return _databaseProvider.database
-        .select(_databaseProvider.database.dnsServers)
-        .watch();
+    return (_databaseProvider.database.select(
+      _databaseProvider.database.dnsServers,
+    )..where((tbl) => tbl.dnsServer.isNotNull())).watch();
+  }
+
+  @override
+  Stream<List<DnsServer>> getConcurrentDnsServersStream() {
+    return (_databaseProvider.database.select(
+      _databaseProvider.database.dnsServers,
+    )..where((tbl) => tbl.concurrentDnsServer.isNotNull())).watch();
+  }
+
+  @override
+  Stream<List<DnsServer>> getSerialDnsServersStream() {
+    return (_databaseProvider.database.select(
+      _databaseProvider.database.dnsServers,
+    )..where((tbl) => tbl.serialDnsServer.isNotNull())).watch();
   }
 
   @override
@@ -611,7 +655,23 @@ class DbHelper implements SelectorRepo, RouteRepo, SetRepo, DnsRepo {
   // DnsRepo
   @override
   Future<List<DnsServer>> getDnsServers() async {
-    return await _databaseProvider.database.managers.dnsServers.get();
+    return await (_databaseProvider.database.select(
+      _databaseProvider.database.dnsServers,
+    )).get();
+  }
+
+  @override
+  Future<List<DnsServer>> getConcurrentDnsServers() async {
+    return await (_databaseProvider.database.select(
+      _databaseProvider.database.dnsServers,
+    )..where((tbl) => tbl.concurrentDnsServer.isNotNull())).get();
+  }
+
+  @override
+  Future<List<DnsServer>> getSerialDnsServers() async {
+    return await (_databaseProvider.database.select(
+      _databaseProvider.database.dnsServers,
+    )..where((tbl) => tbl.serialDnsServer.isNotNull())).get();
   }
 
   @override
@@ -620,6 +680,9 @@ class DbHelper implements SelectorRepo, RouteRepo, SetRepo, DnsRepo {
     String? dnsServerName,
     DnsServerConfig? dnsServer,
   }) async {
+    if (dnsServerName != null) {
+      _validateDnsServerName(dnsServerName);
+    }
     // await _databaseProvider.database.managers.dnsServers.filter((f) => f.id(ds.id)).update((o) =>
     //     o(
     //         name: dnsServerName != null
@@ -635,6 +698,8 @@ class DbHelper implements SelectorRepo, RouteRepo, SetRepo, DnsRepo {
             ? Value(dnsServerName)
             : const Value.absent(),
         dnsServer: dnsServer != null ? Value(dnsServer) : const Value.absent(),
+        concurrentDnsServer: const Value.absent(),
+        serialDnsServer: const Value.absent(),
       ),
     );
   }
@@ -644,6 +709,7 @@ class DbHelper implements SelectorRepo, RouteRepo, SetRepo, DnsRepo {
     String dnsServerName,
     DnsServerConfig dnsServer,
   ) async {
+    _validateDnsServerName(dnsServerName);
     // final data = DnsServersCompanion(
     //   name: Value(dnsServerName),
     //   dnsServer: Value(dnsServer),
@@ -655,6 +721,8 @@ class DbHelper implements SelectorRepo, RouteRepo, SetRepo, DnsRepo {
         id: Value(SnowflakeId.generate()),
         name: Value(dnsServerName),
         dnsServer: Value(dnsServer),
+        concurrentDnsServer: const Value.absent(),
+        serialDnsServer: const Value.absent(),
       ),
     );
   }
@@ -665,6 +733,102 @@ class DbHelper implements SelectorRepo, RouteRepo, SetRepo, DnsRepo {
     await _databaseProvider.database.deleteByName(
       _databaseProvider.database.dnsServers,
       ds.name,
+    );
+  }
+
+  @override
+  Future<DnsServer> addConcurrentDnsServer(
+    String name,
+    ConcurrentDnsServer config,
+  ) async {
+    _validateDnsServerName(name);
+    return await _databaseProvider.database.insertReturning(
+      _databaseProvider.database.dnsServers,
+      DnsServersCompanion(
+        id: Value(SnowflakeId.generate()),
+        name: Value(name),
+        dnsServer: const Value.absent(),
+        concurrentDnsServer: Value(config),
+        serialDnsServer: const Value.absent(),
+      ),
+    );
+  }
+
+  @override
+  Future<void> updateConcurrentDnsServer(
+    DnsServer row, {
+    String? name,
+    ConcurrentDnsServer? config,
+  }) async {
+    if (name != null) {
+      _validateDnsServerName(name);
+    }
+    await _databaseProvider.database.updateById(
+      _databaseProvider.database.dnsServers,
+      row.id,
+      DnsServersCompanion(
+        name: name != null ? Value(name) : const Value.absent(),
+        dnsServer: const Value.absent(),
+        concurrentDnsServer: config != null
+            ? Value(config)
+            : const Value.absent(),
+        serialDnsServer: const Value.absent(),
+      ),
+    );
+  }
+
+  @override
+  Future<void> removeConcurrentDnsServer(DnsServer row) async {
+    await _databaseProvider.database.deleteByName(
+      _databaseProvider.database.dnsServers,
+      row.name,
+    );
+  }
+
+  @override
+  Future<DnsServer> addSerialDnsServer(
+    String name,
+    SerialDnsServer config,
+  ) async {
+    _validateDnsServerName(name);
+    return await _databaseProvider.database.insertReturning(
+      _databaseProvider.database.dnsServers,
+      DnsServersCompanion(
+        id: Value(SnowflakeId.generate()),
+        name: Value(name),
+        dnsServer: const Value.absent(),
+        concurrentDnsServer: const Value.absent(),
+        serialDnsServer: Value(config),
+      ),
+    );
+  }
+
+  @override
+  Future<void> updateSerialDnsServer(
+    DnsServer row, {
+    String? name,
+    SerialDnsServer? config,
+  }) async {
+    if (name != null) {
+      _validateDnsServerName(name);
+    }
+    await _databaseProvider.database.updateById(
+      _databaseProvider.database.dnsServers,
+      row.id,
+      DnsServersCompanion(
+        name: name != null ? Value(name) : const Value.absent(),
+        dnsServer: const Value.absent(),
+        concurrentDnsServer: const Value.absent(),
+        serialDnsServer: config != null ? Value(config) : const Value.absent(),
+      ),
+    );
+  }
+
+  @override
+  Future<void> removeSerialDnsServer(DnsServer row) async {
+    await _databaseProvider.database.deleteByName(
+      _databaseProvider.database.dnsServers,
+      row.name,
     );
   }
 
@@ -877,12 +1041,11 @@ class DbHelper implements SelectorRepo, RouteRepo, SetRepo, DnsRepo {
 
   @override
   Stream<List<App>> getAppsStream(String appSetName) {
-    return (_databaseProvider.database.select(_databaseProvider.database.apps)
-          ..where((t) => t.appSetName.equals(appSetName)))
-        .watch()
-        .map((query) {
-          return query.toList();
-        });
+    return (_databaseProvider.database.select(
+      _databaseProvider.database.apps,
+    )..where((t) => t.appSetName.equals(appSetName))).watch().map((query) {
+      return query.toList();
+    });
   }
 
   @override

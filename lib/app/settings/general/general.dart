@@ -20,12 +20,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vx/app/home/home.dart';
 import 'package:vx/app/settings/general/language.dart';
 import 'package:vx/app/settings/general/sync.dart';
-import 'package:vx/common/common.dart';
 import 'package:vx/l10n/app_localizations.dart';
 import 'package:vx/pref_helper.dart';
 import 'package:vx/main.dart';
@@ -33,7 +32,6 @@ import 'package:vx/utils/logger.dart';
 import 'package:vx/utils/node_test_service.dart';
 import 'package:vx/utils/geodata.dart';
 import 'package:vx/widgets/circular_progress_indicator.dart';
-import 'package:flutter_common/services/auto_update.dart';
 // import 'package:flutter_sparkle/flutter_sparkle.dart';
 
 class GeneralSettingPage extends StatelessWidget {
@@ -142,6 +140,16 @@ class GeneralSettingPage extends StatelessWidget {
                 right: 16,
               ),
               child: NodeTestSettings(),
+            ),
+            const Divider(),
+            const Padding(
+              padding: EdgeInsets.only(
+                top: 10,
+                bottom: 10,
+                left: 16,
+                right: 16,
+              ),
+              child: RealtimeSpeedSamplingSetting(),
             ),
             if (Platform.isWindows)
               const Column(
@@ -558,6 +566,63 @@ class NodeTestSettings extends StatefulWidget {
 
   @override
   State<NodeTestSettings> createState() => _NodeTestSettingsState();
+}
+
+class RealtimeSpeedSamplingSetting extends StatefulWidget {
+  const RealtimeSpeedSamplingSetting({super.key});
+
+  @override
+  State<RealtimeSpeedSamplingSetting> createState() =>
+      _RealtimeSpeedSamplingSettingState();
+}
+
+class _RealtimeSpeedSamplingSettingState
+    extends State<RealtimeSpeedSamplingSetting> {
+  static const List<int> _options = [1, 2, 3, 5, 10];
+  int _interval = 3;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _interval = context.read<RealtimeSpeedNotifier>().sampleIntervalSeconds;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          AppLocalizations.of(context)!.realtimeSpeedSamplingInterval,
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
+        const Gap(10),
+        DropdownMenu<int>(
+          initialSelection: _interval,
+          requestFocusOnTap: false,
+          dropdownMenuEntries: _options
+              .map(
+                (seconds) => DropdownMenuEntry<int>(
+                  value: seconds,
+                  label: AppLocalizations.of(
+                    context,
+                  )!.realtimeSpeedSamplingSeconds(seconds),
+                ),
+              )
+              .toList(),
+          onSelected: (value) async {
+            final next = value ?? _interval;
+            setState(() {
+              _interval = next;
+            });
+            await context.read<RealtimeSpeedNotifier>().setSampleIntervalSeconds(
+              next,
+            );
+          },
+        ),
+      ],
+    );
+  }
 }
 
 class _NodeTestSettingsState extends State<NodeTestSettings> {

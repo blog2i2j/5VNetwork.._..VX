@@ -105,7 +105,7 @@ class Downloader {
         await xApiClient.download(
           DownloadRequest(
             url: url,
-            handlers: configs.sublist(0, max(5, configs.length)),
+            handlers: configs.sublist(0, min(5, configs.length)),
             dest: dest,
           ),
         );

@@ -224,11 +224,13 @@ class _NodesHelperState extends State<NodesHelper> {
   }
 
   void _onHandlerBeingUsed(HandlerBeingUsed used) {
-    final id4 = _parseHandlerId(used.tag4);
-    final id6 = _parseHandlerId(used.tag6);
+    // only update recently used node id if there is only one
+    if (used.tags.length != 1) return;
     final pref = context.read<SharedPreferences>();
-    if (id4 > 0) pref.addRecentlyUsedNodeId(id4);
-    if (id6 > 0 && id6 != id4) pref.addRecentlyUsedNodeId(id6);
+    for (final tag in used.tags) {
+      final id = _parseHandlerId(tag);
+      if (id > 0) pref.addRecentlyUsedNodeId(id);
+    }
     if (mounted && _selectedSegment == NodesHelperSegment.recent) {
       _loadRecentHandlers();
     }
