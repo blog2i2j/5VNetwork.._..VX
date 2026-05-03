@@ -109,6 +109,7 @@ jobs:
       - name: create x.dll in tm_windows
         run: |
           touch ../tm-plugin/tm_windows/assets/x.dll
+          touch ../tm-plugin/tm_windows/assets/vx_service.exe
           mkdir -p assets/ads
 
       - name: Package DEB
@@ -322,6 +323,7 @@ jobs:
       - name: create x.dll in tm_windows
         run: |
           touch ../tm-plugin/tm_windows/assets/x.dll
+          touch ../tm-plugin/tm_windows/assets/vx_service.exe
           mkdir -p assets/ads
 
       - name: Package DEB
