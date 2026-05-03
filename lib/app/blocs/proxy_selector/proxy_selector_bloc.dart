@@ -42,7 +42,7 @@ class ProxySelectorBloc extends Bloc<ProxySelectorEvent, ProxySelectorState> {
     required SharedPreferences pref,
     required XController xConfigController,
     required DatabaseProvider databaseProvider,
-    required AuthBloc authBloc,
+    required bool pro,
   }) : _pref = pref,
        _xController = xConfigController,
        _databaseProvider = databaseProvider,
@@ -52,13 +52,18 @@ class ProxySelectorBloc extends Bloc<ProxySelectorEvent, ProxySelectorState> {
            showProxySelector: pref.routingMode is DefaultRouteMode
                ? true
                : null,
-           proxySelectorEnabled: authBloc.state.pro,
-           proxySelectorMode: pref.proxySelectorMode,
-           manualNodeSetting: ManualNodeSetting(
-             nodeMode: pref.proxySelectorManualMode,
-             balanceStrategy: pref.proxySelectorManualMultipleBalanceStrategy,
-             landHandlers: pref.proxySelectorManualLandHandlers,
-           ),
+           proxySelectorEnabled: pro,
+           proxySelectorMode: pro
+               ? pref.proxySelectorMode
+               : ProxySelectorMode.manual,
+           manualNodeSetting: pro
+               ? ManualNodeSetting(
+                   nodeMode: pref.proxySelectorManualMode,
+                   balanceStrategy:
+                       pref.proxySelectorManualMultipleBalanceStrategy,
+                   landHandlers: pref.proxySelectorManualLandHandlers,
+                 )
+               : ManualNodeSetting(landHandlers: []),
          ),
        ) {
     on<XBlocInitialEvent>(_initial);
@@ -71,6 +76,9 @@ class ProxySelectorBloc extends Bloc<ProxySelectorEvent, ProxySelectorState> {
     on<ManualNodeBalanceStrategyChangeEvent>(_manualNodeBalanceStrategyChange);
     on<ManualModeLandHandlersChangeEvent>(_manualModeLandHandlersChange);
     on<AutoNodeSelectorConfigChangeEvent>(_autoNodeSelectorConfigChange);
+    {
+      makeSureConssitency(pro, null);
+    }
   }
   final SharedPreferences _pref;
   final XController _xController;
@@ -131,11 +139,11 @@ class ProxySelectorBloc extends Bloc<ProxySelectorEvent, ProxySelectorState> {
 
   Future<void> makeSureConssitency(
     bool unlockPro,
-    Emitter<ProxySelectorState> emit,
+    Emitter<ProxySelectorState>? emit,
   ) async {
     logger.d("makeSureConssitency: $unlockPro");
     if (unlockPro) {
-      emit(state.copyWith(proxySelectorEnabled: true));
+      emit?.call(state.copyWith(proxySelectorEnabled: true));
     } else {
       bool ideal = true;
       if (state.proxySelectorMode != ProxySelectorMode.manual ||
@@ -166,20 +174,20 @@ class ProxySelectorBloc extends Bloc<ProxySelectorEvent, ProxySelectorState> {
         ideal = false;
       }
       if (ideal) {
-        emit(
+        emit?.call(
           state.copyWith(proxySelectorEnabled: false, showProxySelector: true),
         );
-        return;
+      } else {
+        // await _xController.stop();
+        emit?.call(
+          state.copyWith(
+            outboundMode: ProxySelectorMode.manual,
+            manualNodeSetting: ManualNodeSetting(landHandlers: []),
+            proxySelectorEnabled: false,
+            showProxySelector: true,
+          ),
+        );
       }
-      await _xController.stop();
-      emit(
-        state.copyWith(
-          outboundMode: ProxySelectorMode.manual,
-          manualNodeSetting: const ManualNodeSetting(),
-          proxySelectorEnabled: false,
-          showProxySelector: true,
-        ),
-      );
     }
   }
 

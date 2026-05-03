@@ -481,12 +481,18 @@ void main() async {
         ),
       ),
       BlocProvider(
-        create: (ctx) => ProxySelectorBloc(
-          pref: pref,
-          databaseProvider: ctx.read<DatabaseProvider>(),
-          xConfigController: ctx.read<XController>(),
-          authBloc: ctx.read<AuthBloc>(),
-        )..add(XBlocInitialEvent()),
+        create: (ctx) {
+          final proxySelectorBloc = ProxySelectorBloc(
+            pref: pref,
+            databaseProvider: ctx.read<DatabaseProvider>(),
+            xConfigController: ctx.read<XController>(),
+            pro: ctx.read<AuthBloc>().state.pro,
+          )..add(XBlocInitialEvent());
+          ctx.read<AuthBloc>().stream.listen((state) {
+            proxySelectorBloc.add(AuthUserChangedEvent(state.pro));
+          });
+          return proxySelectorBloc;
+        },
       ),
       BlocProvider(
         create: (ctx) {
@@ -914,9 +920,6 @@ class _AppState extends State<App> with WidgetsBindingObserver {
       child: BlocConsumer<AuthBloc, AuthState>(
         listenWhen: (previous, current) => previous.pro != current.pro,
         listener: (context, state) {
-          context.read<ProxySelectorBloc>().add(
-            AuthUserChangedEvent(state.pro),
-          );
           if (!state.pro) {
             context.read<OutboundBloc>().add(const UserIsNotProEvent());
           } else {}
