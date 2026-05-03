@@ -220,5 +220,7 @@ msix_config:
 sentry:
   upload_debug_symbols: true
   upload_source_maps: true
+  # Avoid set-commits failure when CI checks out a branch without the prior release SHA.
+  ignore_missing: true
   project: flutter
   org: 5v-network-llc
