@@ -214,7 +214,6 @@ class Inbound extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final disableTun = Platform.isWindows && !isRunningAsAdmin && isWinStore;
     return Card(
       elevation: 0,
       color: Theme.of(context).colorScheme.surfaceContainer,
@@ -241,11 +240,9 @@ class Inbound extends StatelessWidget {
                     ChoiceChip(
                       label: Text(InboundMode.tun.toLocalString(context)),
                       selected: mode == InboundMode.tun,
-                      onSelected: disableTun
-                          ? null
-                          : (value) => context
-                                .read<InboundCubit>()
-                                .setInboundMode(InboundMode.tun),
+                      onSelected: (value) => context
+                          .read<InboundCubit>()
+                          .setInboundMode(InboundMode.tun),
                     ),
                     ChoiceChip(
                       label: Text(
@@ -258,16 +255,6 @@ class Inbound extends StatelessWidget {
                     ),
                   ],
                 ),
-                if (disableTun)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5),
-                    child: Text(
-                      AppLocalizations.of(context)!.tunNeedAdmin,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ),
               ],
             );
           },
@@ -438,7 +425,6 @@ class _DefaultProxySelectorControlState
 
   @override
   Widget build(BuildContext context) {
-
     return Card(
       elevation: 0,
       color: Theme.of(context).colorScheme.surfaceContainer,
